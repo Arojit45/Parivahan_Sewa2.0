@@ -1,0 +1,12 @@
+@import "tailwindcss";
+
+/* Custom utility classes or theme configuration can go here */
+@theme {
+  --color-primary: #1e40af;
+  --color-secondary: #0f172a;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  @apply bg-slate-50 text-slate-900;
+}
