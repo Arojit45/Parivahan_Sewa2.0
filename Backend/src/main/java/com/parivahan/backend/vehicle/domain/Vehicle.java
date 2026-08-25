@@ -6,6 +6,9 @@ import com.parivahan.backend.vehicle.enums.VehicleStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
+import java.util.List;
+
 @Entity
 @Table(name = "vehicles")
 @Data
@@ -22,12 +25,22 @@ public class Vehicle extends BaseEntity {
     @Column(nullable = false, unique = true)
     private String registrationNumber;
 
+    private String nickname;
     private String manufacturer;
     private String model;
     private String vehicleClass;
     private String fuelType;
     private String registrationDate;
     private String rto;
+    private String insuranceProvider;
+    private String vehicleImageUrl;
+
+    // Compliance dates
+    private LocalDate insuranceValidTill;
+    private LocalDate pucValidTill;
+    private LocalDate taxValidTill;
+    private LocalDate permitValidTill;   // null = Not Applicable
+    private LocalDate fitnessValidTill;  // null = Not Applicable
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -36,4 +49,7 @@ public class Vehicle extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    @OneToMany(mappedBy = "vehicle", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Challan> challans;
 }
