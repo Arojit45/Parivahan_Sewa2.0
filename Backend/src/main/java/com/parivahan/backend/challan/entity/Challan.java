@@ -1,6 +1,8 @@
-package com.parivahan.backend.vehicle.domain;
+package com.parivahan.backend.challan.entity;
 
+import com.parivahan.backend.challan.enums.ChallanStatus;
 import com.parivahan.backend.common.entity.BaseEntity;
+import com.parivahan.backend.vehicle.domain.Vehicle;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -24,6 +26,7 @@ public class Challan extends BaseEntity {
     @JoinColumn(name = "vehicle_id", nullable = false)
     private Vehicle vehicle;
 
+    @Column(nullable = false)
     private String offence;
 
     @Column(nullable = false)
@@ -31,6 +34,12 @@ public class Challan extends BaseEntity {
 
     private LocalDate challanDate;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     @Builder.Default
-    private boolean paid = false;
+    private ChallanStatus status = ChallanStatus.PENDING;
+
+    // Set when paid
+    private LocalDate paymentDate;
+    private String transactionId;
 }

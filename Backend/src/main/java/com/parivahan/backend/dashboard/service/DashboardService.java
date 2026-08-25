@@ -5,11 +5,10 @@ import com.parivahan.backend.dashboard.dto.*;
 import com.parivahan.backend.dashboard.dto.ComplianceItemDto.ComplianceStatus;
 import com.parivahan.backend.user.domain.User;
 import com.parivahan.backend.user.repository.UserRepository;
-import com.parivahan.backend.vehicle.domain.Challan;
+import com.parivahan.backend.challan.entity.Challan;
+import com.parivahan.backend.challan.service.ChallanService;
 import com.parivahan.backend.vehicle.domain.Vehicle;
-import com.parivahan.backend.vehicle.livelocation.dto.VehicleTwinDto;
 import com.parivahan.backend.vehicle.livelocation.service.VehicleLocationService;
-import com.parivahan.backend.vehicle.repository.ChallanRepository;
 import com.parivahan.backend.vehicle.repository.VehicleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,7 +25,7 @@ import java.util.stream.Collectors;
 public class DashboardService {
 
     private final VehicleRepository vehicleRepository;
-    private final ChallanRepository challanRepository;
+    private final ChallanService challanService;
     private final UserRepository userRepository;
     private final VehicleLocationService vehicleLocationService;
     private final HealthScoreCalculator healthScoreCalculator;
@@ -43,7 +42,7 @@ public class DashboardService {
             throw new SecurityException("Access denied: You do not own this vehicle");
         }
 
-        List<Challan> pendingChallans = challanRepository.findByVehicleIdAndPaidFalse(vehicleId);
+        List<Challan> pendingChallans = challanService.getPendingChallansForVehicle(vehicleId);
         ComplianceStatusDto compliance = buildCompliance(vehicle);
         int healthScore = healthScoreCalculator.calculate(compliance);
 

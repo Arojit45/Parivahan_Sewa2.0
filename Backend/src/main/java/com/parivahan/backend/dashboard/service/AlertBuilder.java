@@ -5,7 +5,7 @@ import com.parivahan.backend.dashboard.dto.AlertDto.AlertType;
 import com.parivahan.backend.dashboard.dto.ComplianceItemDto;
 import com.parivahan.backend.dashboard.dto.ComplianceItemDto.ComplianceStatus;
 import com.parivahan.backend.dashboard.dto.ComplianceStatusDto;
-import com.parivahan.backend.vehicle.domain.Challan;
+import com.parivahan.backend.challan.entity.Challan;
 import org.springframework.stereotype.Component;
 
 import java.time.format.DateTimeFormatter;

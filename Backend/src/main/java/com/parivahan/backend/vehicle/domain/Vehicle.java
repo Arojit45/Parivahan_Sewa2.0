@@ -1,5 +1,6 @@
 package com.parivahan.backend.vehicle.domain;
 
+import com.parivahan.backend.challan.entity.Challan;
 import com.parivahan.backend.common.entity.BaseEntity;
 import com.parivahan.backend.user.domain.User;
 import com.parivahan.backend.vehicle.enums.VehicleStatus;
