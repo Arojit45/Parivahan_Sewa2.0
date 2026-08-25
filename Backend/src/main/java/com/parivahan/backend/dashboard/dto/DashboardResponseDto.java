@@ -1,6 +1,6 @@
 package com.parivahan.backend.dashboard.dto;
 
-import com.parivahan.backend.vehicle.livelocation.dto.VehicleTwinDto;
+import com.parivahan.backend.livelocation.dto.VehicleTwinDto;
 import lombok.Builder;
 import lombok.Data;
 

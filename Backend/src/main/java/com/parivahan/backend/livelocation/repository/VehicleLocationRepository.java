@@ -1,6 +1,6 @@
-package com.parivahan.backend.vehicle.livelocation.repository;
+package com.parivahan.backend.livelocation.repository;
 
-import com.parivahan.backend.vehicle.livelocation.domain.VehicleLocation;
+import com.parivahan.backend.livelocation.entity.VehicleLocation;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

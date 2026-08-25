@@ -1,4 +1,4 @@
-package com.parivahan.backend.vehicle.livelocation.dto;
+package com.parivahan.backend.livelocation.dto;
 
 import lombok.Builder;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package com.parivahan.backend.vehicle.livelocation.domain;
+package com.parivahan.backend.livelocation.entity;
 
 import com.parivahan.backend.common.entity.BaseEntity;
 import com.parivahan.backend.vehicle.domain.Vehicle;

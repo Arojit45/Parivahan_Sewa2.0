@@ -1,7 +1,7 @@
-package com.parivahan.backend.vehicle.livelocation.service;
+package com.parivahan.backend.livelocation.service;
 
-import com.parivahan.backend.vehicle.livelocation.dto.VehicleTwinDto;
-import com.parivahan.backend.vehicle.livelocation.repository.VehicleLocationRepository;
+import com.parivahan.backend.livelocation.dto.VehicleTwinDto;
+import com.parivahan.backend.livelocation.repository.VehicleLocationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
