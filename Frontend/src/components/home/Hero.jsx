@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, MapPin, Bell, Shield, Bot, FileText } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import CarModelViewer from '../CarModelViewer';
+
 
 const Hero = () => {
   return (
@@ -73,7 +73,9 @@ const Hero = () => {
           >
             {/* Illustration Base */}
             <div className="absolute inset-0 m-auto flex items-center justify-center z-10 w-full h-[450px] lg:h-[600px]">
-               <CarModelViewer />
+               {/* Texture element */}
+               <div className="absolute inset-10 bg-gradient-to-tr from-blue-400/20 via-transparent to-emerald-400/20 rounded-full blur-3xl -z-10"></div>
+               <img src="/heroSectionIllustration.png" alt="Hero Vehicle Illustration" className="w-[110%] h-[110%] max-w-none object-contain drop-shadow-2xl relative z-10" />
             </div>
 
             {/* Floating Badges */}
