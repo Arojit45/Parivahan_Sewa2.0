@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Globe, Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Link } from 'react-router-dom';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -73,9 +74,9 @@ const Navbar = () => {
             <Globe className="w-4 h-4" />
             English
           </button>
-          <button className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg text-sm font-medium transition-colors shadow-lg shadow-blue-600/20 flex items-center gap-2">
+          <Link to="/auth" className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg text-sm font-medium transition-colors shadow-lg shadow-blue-600/20 flex items-center gap-2">
             Login / Register
-          </button>
+          </Link>
         </div>
 
         {/* Mobile Menu Toggle */}
@@ -111,9 +112,9 @@ const Navbar = () => {
                   <Globe className="w-4 h-4" />
                   English
                 </button>
-                <button className="bg-blue-600 text-white px-5 py-2.5 rounded-lg text-sm font-medium w-full">
+                <Link to="/auth" className="bg-blue-600 text-center text-white px-5 py-2.5 rounded-lg text-sm font-medium w-full block">
                   Login / Register
-                </button>
+                </Link>
               </div>
             </div>
           </motion.div>

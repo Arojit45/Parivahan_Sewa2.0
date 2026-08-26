@@ -1,6 +1,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, MapPin, Bell, Shield, Bot, FileText } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import CarModelViewer from '../CarModelViewer';
 
 const Hero = () => {
   return (
@@ -35,10 +37,10 @@ const Hero = () => {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 mb-12">
-              <button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl font-medium transition-all shadow-lg shadow-blue-600/20 flex items-center justify-center gap-2">
+              <Link to="/dashboard" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl font-medium transition-all shadow-lg shadow-blue-600/20 flex items-center justify-center gap-2">
                 Explore Dashboard
                 <ArrowRight className="w-5 h-5" />
-              </button>
+              </Link>
               <button className="bg-white hover:bg-slate-50 text-blue-600 border-2 border-blue-100 hover:border-blue-200 px-8 py-4 rounded-xl font-medium transition-all flex items-center justify-center gap-2 shadow-sm">
                 View All Services
                 <ArrowRight className="w-5 h-5" />
@@ -70,8 +72,8 @@ const Hero = () => {
             className="relative h-[500px] lg:h-[600px] w-full"
           >
             {/* Illustration Base */}
-            <div className="absolute inset-0 m-auto flex items-center justify-center z-10">
-               <img src="/heroSectionIllustration.png" alt="Vehicles" className="w-[450px] lg:w-[600px] object-contain drop-shadow-2xl" />
+            <div className="absolute inset-0 m-auto flex items-center justify-center z-10 w-full h-[450px] lg:h-[600px]">
+               <CarModelViewer />
             </div>
 
             {/* Floating Badges */}
