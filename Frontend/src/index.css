@@ -9,28 +9,4 @@
 body {
   font-family: 'Poppins', system-ui, -apple-system, sans-serif;
   @apply bg-slate-50 text-slate-900;
-  top: 0 !important; /* Prevent body shift from translation banner */
-}
-
-/* Hide Google Translate Top Banner */
-.goog-te-banner-frame,
-iframe.goog-te-banner-frame {
-  display: none !important;
-  visibility: hidden !important;
-}
-
-body {
-  top: 0 !important;
-  position: static !important;
-}
-
-/* Hide Google Translate Hover Tooltip */
-#goog-gt-tt, .goog-te-balloon-frame {
-  display: none !important;
-}
-
-/* Remove hover highlight from translated text */
-.goog-text-highlight {
-  background-color: transparent !important;
-  box-shadow: none !important;
 }

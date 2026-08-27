@@ -1,10 +1,19 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Upload, Mail, Lock, User, Phone, Globe, Image as ImageIcon } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { ArrowLeft, Upload, Mail, Lock, User, Phone, Globe, Image as ImageIcon, Loader2 } from 'lucide-react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 
 const AuthPage = () => {
-  const [isLogin, setIsLogin] = useState(true);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { login } = useAuth();
+  
+  const [isLogin, setIsLogin] = useState(!location.state?.register);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  
+  const from = location.state?.from?.pathname || '/dashboard';
 
   // Form States
   const [loginForm, setLoginForm] = useState({ email: '', password: '' });
@@ -32,16 +41,53 @@ const AuthPage = () => {
     }
   };
 
-  const handleLoginSubmit = (e) => {
+  const handleLoginSubmit = async (e) => {
     e.preventDefault();
-    console.log('Login Payload:', loginForm);
-    // Integration goes here
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await fetch('http://localhost:8080/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(loginForm)
+      });
+      
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message || 'Login failed');
+      
+      login(data);
+      navigate(from, { replace: true });
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleRegisterSubmit = (e) => {
+  const handleRegisterSubmit = async (e) => {
     e.preventDefault();
-    console.log('Register Payload:', registerForm);
-    // Integration goes here
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await fetch('http://localhost:8080/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...registerForm,
+          role: 'CITIZEN' // Default role for now
+        })
+      });
+      
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message || 'Registration failed');
+      
+      login(data);
+      navigate(from, { replace: true });
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -135,6 +181,12 @@ const AuthPage = () => {
                   <h3 className="text-2xl font-bold text-slate-900 mb-2">Sign in to your account</h3>
                   <p className="text-sm text-slate-500">Access all your vehicle details in one place.</p>
                 </div>
+                
+                {error && (
+                  <div className="mb-6 p-4 bg-red-50 border border-red-100 rounded-xl text-red-600 text-sm font-medium">
+                    {error}
+                  </div>
+                )}
 
                 <form onSubmit={handleLoginSubmit} className="space-y-5">
                   <div className="space-y-1.5">
@@ -172,7 +224,8 @@ const AuthPage = () => {
                     </div>
                   </div>
 
-                  <button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3.5 rounded-xl shadow-lg shadow-blue-600/20 transition-all mt-4">
+                  <button disabled={loading} type="submit" className="w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3.5 rounded-xl shadow-lg shadow-blue-600/20 transition-all mt-4 disabled:opacity-70">
+                    {loading && <Loader2 className="w-5 h-5 animate-spin" />}
                     Sign In
                   </button>
                 </form>
@@ -189,6 +242,12 @@ const AuthPage = () => {
                   <h3 className="text-2xl font-bold text-slate-900 mb-2">Create an account</h3>
                   <p className="text-sm text-slate-500">Join Parivahan Sewa to manage your vehicles.</p>
                 </div>
+
+                {error && (
+                  <div className="mb-6 p-4 bg-red-50 border border-red-100 rounded-xl text-red-600 text-sm font-medium">
+                    {error}
+                  </div>
+                )}
 
                 <form onSubmit={handleRegisterSubmit} className="space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -272,7 +331,8 @@ const AuthPage = () => {
                     </label>
                   </div>
 
-                  <button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3.5 rounded-xl shadow-lg shadow-blue-600/20 transition-all mt-6">
+                  <button disabled={loading} type="submit" className="w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3.5 rounded-xl shadow-lg shadow-blue-600/20 transition-all mt-6 disabled:opacity-70">
+                    {loading && <Loader2 className="w-5 h-5 animate-spin" />}
                     Create Account
                   </button>
                 </form>

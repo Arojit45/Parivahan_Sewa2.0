@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Sidebar from '../components/dashboard/Sidebar';
 import Topbar from '../components/dashboard/Topbar';
 import Footer from '../components/layout/Footer';
@@ -78,89 +78,66 @@ const DrivingLicensePage = () => {
     or: "ନମସ୍କାର ଅମିତ କୁମାର। ପରିବହନ ସେବା ଡ୍ରାଇଭିଂ ଲାଇସେନ୍ସ ପୋର୍ଟାଲକୁ ସ୍ୱାଗତ। ମୁଁ ଆପଣଙ୍କର ଅଡିଓ ଗାଇଡ୍। ଆପଣଙ୍କର ଡ୍ରାଇଭିଂ ଲାଇସେନ୍ସ ପାଇବାକୁ, ଆପଣଙ୍କୁ କିଛି ସରଳ ପଦକ୍ଷେପ ଅନୁସରଣ କରିବାକୁ ପଡିବ। ପ୍ରଥମେ, ଆପଣଙ୍କ ରାଜ୍ୟ ଏବଂ ଆରଟିଓ ବାଛନ୍ତୁ। ପରବର୍ତ୍ତୀ ସମୟରେ, ଯାନର ପ୍ରକାର ବାଛନ୍ତୁ। ତାପରେ, ଆପଣଙ୍କର ଯୋଗ୍ୟତା ଯାଞ୍ଚ କରନ୍ତୁ ଏବଂ ଯଦି ଆପଣଙ୍କ ପାଖରେ ଲର୍ଣ୍ଣର୍ସ ଲାଇସେନ୍ସ ନାହିଁ ତେବେ ଆବେଦନ କରନ୍ତୁ। ନିଶ୍ଚିତ କରନ୍ତୁ ଯେ ଆପଣଙ୍କର ଆଧାର କାର୍ଡ ଏବଂ ଅନ୍ୟାନ୍ୟ ଆବଶ୍ୟକୀୟ ଦସ୍ତାବେଜଗୁଡିକ ସ୍ପଷ୍ଟ ଭାବରେ ସ୍କାନ ହୋଇଛି ଏବଂ ପ୍ରସ୍ତୁତ ଅଛି। ଅସ୍ପଷ୍ଟ ଚିତ୍ର ଅପଲୋଡ୍ କରନ୍ତୁ ନାହିଁ। ବଟନ୍ କୁ ପୁନର୍ବାର କ୍ଲିକ୍ କରି ଆପଣ ଯେକୌଣସି ସମୟରେ ଏହି ଅଡିଓ କୁ ବିରତି ଦେଇପାରିବେ। ଆସନ୍ତୁ ଆପଣଙ୍କ ଯାତ୍ରା ଆରମ୍ଭ କରିବା!"
   };
 
-  const startSpeech = () => {
-  const synth = window.speechSynthesis;
+  const audioRef = useRef(null);
 
-  synth.cancel();
+  const startSpeech = async () => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+    }
 
-  const languageConfig = {
-    en: 'en-IN',
-    hi: 'hi-IN',
-    bn: 'bn-IN',
-    mr: 'mr-IN',
-    ta: 'ta-IN',
-    te: 'te-IN',
-    kn: 'kn-IN',
-    ml: 'ml-IN',
-    gu: 'gu-IN',
-    pa: 'pa-IN',
-    or: 'or-IN'
-  };
-
-  const langCode = languageConfig[language] || 'en-IN';
-
-  const text = audioScripts[language] || audioScripts.en;
-
-  const voices = synth.getVoices();
-
-  console.log('Selected language:', language);
-  console.log('Required voice:', langCode);
-  console.log('Available voices:', voices);
-
-  // First try exact language
-  let matchingVoice = voices.find(
-    voice => voice.lang.toLowerCase() === langCode.toLowerCase()
-  );
-
-  // Then try language without region
-  if (!matchingVoice) {
-    const baseLanguage = langCode.split('-')[0];
-
-    matchingVoice = voices.find(
-      voice => voice.lang.toLowerCase().startsWith(baseLanguage)
-    );
-  }
-
-  const utterance = new SpeechSynthesisUtterance(text);
-
-  utterance.lang = langCode;
-
-  if (matchingVoice) {
-    utterance.voice = matchingVoice;
-
-    console.log(
-      `Using voice: ${matchingVoice.name} (${matchingVoice.lang})`
-    );
-  } else {
-    console.warn(
-      `No voice found for ${langCode}. Browser may not support this language.`
-    );
-  }
-
-  utterance.rate = 0.8;
-
-  utterance.onstart = () => {
+    const text = audioScripts[language] || audioScripts.en;
+    
     setAudioState('PLAYING');
-  };
+    
+    try {
+      // Calls the backend to securely synthesize speech using a Cloud TTS provider (e.g. Azure TTS)
+      // that supports all 11 required Indian languages natively.
+      const response = await fetch('/api/v1/tts/synthesize', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token') || sessionStorage.getItem('token')}`
+        },
+        body: JSON.stringify({ text, language })
+      });
+      
+      if (!response.ok) {
+        console.error("TTS configuration is missing or backend failed. Please configure your Cloud TTS provider API keys in the backend.");
+        setAudioState('IDLE');
+        return;
+      }
+      
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      
+      const audio = new Audio(url);
+      
+      audio.onended = () => {
+        setAudioState('IDLE');
+      };
+      
+      audio.onerror = (e) => {
+        console.error("TTS Audio Playback Error", e);
+        setAudioState('IDLE');
+      };
 
-  utterance.onend = () => {
-    setAudioState('IDLE');
+      audioRef.current = audio;
+      audio.play().catch(e => {
+        console.error("Autoplay blocked or error:", e);
+        setAudioState('IDLE');
+      });
+    } catch (error) {
+      console.error("Failed to connect to TTS backend service. Ensure /api/v1/tts/synthesize is implemented.");
+      setAudioState('IDLE');
+    }
   };
-
-  utterance.onerror = (event) => {
-    console.error('Speech synthesis error:', event);
-    setAudioState('IDLE');
-  };
-
-  synth.speak(utterance);
-};
 
   const handlePlayPause = () => {
     if (audioState === 'PLAYING') {
-      window.speechSynthesis.pause();
+      if (audioRef.current) audioRef.current.pause();
       setAudioState('PAUSED');
     } else if (audioState === 'PAUSED') {
-      window.speechSynthesis.resume();
+      if (audioRef.current) audioRef.current.play();
       setAudioState('PLAYING');
     } else {
       startSpeech();
@@ -168,7 +145,10 @@ const DrivingLicensePage = () => {
   };
 
   const handleReplay = () => {
-    window.speechSynthesis.cancel();
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+    }
     setAudioState('IDLE');
     setTimeout(startSpeech, 100);
   };

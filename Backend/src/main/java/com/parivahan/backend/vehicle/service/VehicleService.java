@@ -5,7 +5,7 @@ import com.parivahan.backend.common.exception.ResourceNotFoundException;
 import com.parivahan.backend.user.domain.User;
 import com.parivahan.backend.user.repository.UserRepository;
 import com.parivahan.backend.vehicle.domain.Vehicle;
-import com.parivahan.backend.vehicle.dto.CashfreeRcResponse;
+
 import com.parivahan.backend.vehicle.dto.VehiclePublicResponse;
 import com.parivahan.backend.vehicle.dto.VehicleOwnerResponse;
 import com.parivahan.backend.vehicle.domain.RcRegistry;
@@ -38,14 +38,7 @@ public class VehicleService {
     private final RcRegistryRepository rcRegistryRepository;
     private final OtpService otpService;
 
-    @Value("${cashfree.api.url}")
-    private String cashfreeApiUrl;
 
-    @Value("${cashfree.client.id}")
-    private String clientId;
-
-    @Value("${cashfree.client.secret}")
-    private String clientSecret;
 
     @Transactional
     public String initRegistration(InitRegisterRequest request) {

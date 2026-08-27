@@ -12,8 +12,15 @@ import java.time.LocalDate;
 public class ChallanSummaryDto {
     private Long id;
     private String registrationNumber;
+    private String vehicleModel;       // "Tata Motors Nexon"
+    private String vehicleNickname;    // "My Nexon"
     private String offence;
+    private String location;           // mocked per-challan
     private BigDecimal amount;
     private LocalDate challanDate;
+    private LocalDate dueDate;         // challanDate + 30 days
+    private LocalDate paymentDate;
+    private String transactionId;
     private ChallanStatus status;
+    private boolean hasActiveDispute;
 }

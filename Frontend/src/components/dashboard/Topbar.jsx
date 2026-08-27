@@ -1,9 +1,11 @@
 import React from 'react';
 import { Search, Bell, HelpCircle, ChevronDown, Globe } from 'lucide-react';
 import { useLanguage } from '../../contexts/LanguageContext';
+import { useAuth } from '../../contexts/AuthContext';
 
 const Topbar = () => {
   const { language, setLanguage } = useLanguage();
+  const { user } = useAuth();
 
   const languages = [
     { code: 'en', label: 'English' },
@@ -23,14 +25,14 @@ const Topbar = () => {
 
   return (
     <header className="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 sticky top-0 z-40 shrink-0">
-      
+
       {/* Search */}
       <div className="flex-1 max-w-2xl">
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-          <input 
-            type="text" 
-            placeholder="Search anything..." 
+          <input
+            type="text"
+            placeholder="Search anything..."
             className="w-full bg-slate-50 border border-slate-200 rounded-lg pl-10 pr-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-300 transition-all"
           />
         </div>
@@ -38,7 +40,7 @@ const Topbar = () => {
 
       {/* Right Actions */}
       <div className="flex items-center gap-6 ml-4">
-        
+
         {/* Language Selector — 11 languages */}
         <div className="relative group">
           <button
@@ -49,7 +51,7 @@ const Topbar = () => {
             <span className="truncate max-w-[80px]">{currentLabel}</span>
             <ChevronDown className="w-3.5 h-3.5 text-slate-400 shrink-0" />
           </button>
-          
+
           <div className="absolute right-0 top-full pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
             <div className="w-40 bg-white rounded-xl shadow-lg border border-slate-100 py-2 max-h-72 overflow-y-auto">
               {languages.map(lang => (
@@ -57,11 +59,10 @@ const Topbar = () => {
                   key={lang.code}
                   id={`lang-option-${lang.code}`}
                   onClick={() => setLanguage(lang.code)}
-                  className={`w-full text-left px-4 py-2 text-sm hover:bg-slate-50 transition-colors ${
-                    language === lang.code
+                  className={`w-full text-left px-4 py-2 text-sm hover:bg-slate-50 transition-colors ${language === lang.code
                       ? 'text-blue-600 font-semibold bg-blue-50'
                       : 'text-slate-700 font-medium'
-                  }`}
+                    }`}
                 >
                   {lang.label}
                 </button>
@@ -85,8 +86,8 @@ const Topbar = () => {
           <div className="w-8 h-8 rounded-full bg-indigo-100 border border-indigo-200 overflow-hidden">
             <img src="https://i.pravatar.cc/150?img=11" alt="Profile" className="w-full h-full object-cover" />
           </div>
-          <div className="flex items-center gap-1 text-sm font-semibold text-slate-700 group-hover:text-blue-600 transition-colors notranslate">
-            Amit Kumar <ChevronDown className="w-4 h-4 text-slate-400" />
+          <div className="flex items-center gap-1 text-sm font-semibold text-slate-700 group-hover:text-blue-600 transition-colors">
+            {user?.fullName || 'Citizen'} <ChevronDown className="w-4 h-4 text-slate-400" />
           </div>
         </button>
 

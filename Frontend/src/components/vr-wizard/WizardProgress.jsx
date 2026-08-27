@@ -1,20 +1,22 @@
 import React from 'react';
 import { Check } from 'lucide-react';
 import { useVRWizard } from '../../contexts/VRWizardContext';
+import { useLanguage } from '../../contexts/LanguageContext';
 
 const STEPS = [
-  { num: 1, title: 'RTO Selection', short: 'RTO' },
-  { num: 2, title: 'Eligibility Check', short: 'Eligibility' },
-  { num: 3, title: 'Documents', short: 'Documents' },
-  { num: 4, title: 'Fees', short: 'Fees' },
-  { num: 5, title: 'Appointment', short: 'Appointment' },
-  { num: 6, title: 'Vehicle Inspection', short: 'Inspection' },
-  { num: 7, title: 'Approval', short: 'Approval' },
-  { num: 8, title: 'RC Issued', short: 'Completed' }
+  { num: 1 },
+  { num: 2 },
+  { num: 3 },
+  { num: 4 },
+  { num: 5 },
+  { num: 6 },
+  { num: 7 },
+  { num: 8 }
 ];
 
 const WizardProgress = () => {
   const { wizard, goToStep } = useVRWizard();
+  const { t } = useLanguage();
   const { currentStep, lastCompletedStep } = wizard;
 
   return (
@@ -57,7 +59,7 @@ const WizardProgress = () => {
                     Step {s.num}
                   </p>
                   <p className={`text-xs ${textColor} leading-tight`}>
-                    {s.title}
+                    {t.vr.progress[s.num]}
                   </p>
                 </div>
               </button>

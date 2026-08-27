@@ -1,9 +1,9 @@
-/**
+﻿/**
  * assistantApi.js
  * Utility for calling the Ask My Vehicle backend endpoint.
  *
  * Security: JWT is read from localStorage and sent as Bearer header.
- * The Gemini API key is NEVER included here — it stays on the server.
+ * The Gemini API key is NEVER included here - it stays on the server.
  */
 
 const BASE_URL = '/api/vehicles';
@@ -11,13 +11,14 @@ const BASE_URL = '/api/vehicles';
 /**
  * Send a question to the AI assistant for a specific vehicle.
  *
- * @param {number} vehicleId - The vehicle's database ID
- * @param {string} message   - The user's natural-language question
+ * @param {number} vehicleId - The vehicle database ID
+ * @param {string} message   - The user natural-language question
  * @param {Array}  history   - Optional conversation history [{role, content}]
  * @returns {Promise<{answer, intent, actions, sources, fallback}>}
  */
 export async function askVehicle(vehicleId, message, history = []) {
-  const token = localStorage.getItem('authToken');
+  // Token key must match what AuthContext saves — it saves as 'token'
+  const token = localStorage.getItem('token');
 
   const response = await fetch(`${BASE_URL}/${vehicleId}/assistant`, {
     method: 'POST',
@@ -43,7 +44,7 @@ export async function askVehicle(vehicleId, message, history = []) {
 }
 
 /**
- * Controlled action router — maps action strings from AI response to app routes.
+ * Controlled action router - maps action strings from AI response to app routes.
  * NEVER executes arbitrary strings as URLs or code.
  */
 export const ACTION_ROUTES = {

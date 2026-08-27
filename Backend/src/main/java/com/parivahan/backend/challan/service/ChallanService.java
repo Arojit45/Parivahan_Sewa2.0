@@ -103,14 +103,32 @@ public class ChallanService {
         return challan;
     }
 
+    private static final java.util.Map<String, String> OFFENCE_LOCATION_MAP = java.util.Map.of(
+        "Over Speeding",  "Silk Board Junction, Bengaluru",
+        "Signal Jumping", "Marathahalli Bridge, Bengaluru",
+        "No Parking",     "MG Road, Bengaluru",
+        "Wrong Parking",  "Koramangala 4th Block, Bengaluru",
+        "No Helmet",      "Indiranagar 100ft Road, Bengaluru",
+        "Triple Riding",  "Whitefield Main Road, Bengaluru"
+    );
+
     private ChallanSummaryDto toSummaryDto(Challan c) {
+        boolean hasDispute = challanDisputeRepository.findByChallanId(c.getId()).isPresent();
+        String location = OFFENCE_LOCATION_MAP.getOrDefault(c.getOffence(), "Bengaluru, Karnataka");
         return ChallanSummaryDto.builder()
                 .id(c.getId())
                 .registrationNumber(c.getVehicle().getRegistrationNumber())
+                .vehicleModel(c.getVehicle().getManufacturer() + " " + c.getVehicle().getModel())
+                .vehicleNickname(c.getVehicle().getNickname())
                 .offence(c.getOffence())
+                .location(location)
                 .amount(c.getAmount())
                 .challanDate(c.getChallanDate())
+                .dueDate(c.getChallanDate() != null ? c.getChallanDate().plusDays(30) : null)
+                .paymentDate(c.getPaymentDate())
+                .transactionId(c.getTransactionId())
                 .status(c.getStatus())
+                .hasActiveDispute(hasDispute)
                 .build();
     }
 

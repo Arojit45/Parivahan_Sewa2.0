@@ -1,41 +1,38 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Bot, Send, ArrowLeft, Sparkles, MapPin, FileText, AlertCircle, 
-         Heart, Car, Zap, Globe, ChevronDown, RotateCcw, ExternalLink } from 'lucide-react';
-import { askVehicle, resolveActionRoute } from '../utils/assistantApi';
-import { useLanguage } from '../contexts/LanguageContext';
+import React, { useState, useRef, useEffect, useCallback } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import {
+  Bot, Send, ArrowLeft, Sparkles, MapPin, FileText, AlertCircle,
+  Heart, Car, Zap, Globe, ChevronDown, RotateCcw, ExternalLink, Loader2,
+} from "lucide-react";
+import { askVehicle, resolveActionRoute } from "../utils/assistantApi";
+import { getMyVehicles } from "../utils/api";
+import { useLanguage } from "../contexts/LanguageContext";
 
 // ─────────────────────────────────────────────
 // Constants
 // ─────────────────────────────────────────────
 
-// TODO: Replace with real vehicleId from auth context / route params
-const VEHICLE_ID = 1;
-
-const VEHICLE_NAME  = 'Hyundai Creta';
-const VEHICLE_REG   = 'WB12AB1234';
-
 const QUICK_QUESTIONS = [
-  { label: 'Is my vehicle okay?',         icon: Heart },
-  { label: 'What needs my attention?',    icon: AlertCircle },
-  { label: 'When does my PUC expire?',    icon: FileText },
-  { label: 'Do I have pending challans?', icon: Zap },
-  { label: 'Where is my vehicle?',        icon: MapPin },
-  { label: 'What should I do today?',     icon: Sparkles },
+  { label: "Is my vehicle okay?",         icon: Heart },
+  { label: "What needs my attention?",    icon: AlertCircle },
+  { label: "When does my PUC expire?",    icon: FileText },
+  { label: "Do I have pending challans?", icon: Zap },
+  { label: "Where is my vehicle?",        icon: MapPin },
+  { label: "What should I do today?",     icon: Sparkles },
 ];
 
 const LANGUAGES = [
-  { code: 'en', label: 'English' },
-  { code: 'hi', label: 'हिन्दी' },
-  { code: 'bn', label: 'বাংলা' },
-  { code: 'mr', label: 'मराठी' },
-  { code: 'ta', label: 'தமிழ்' },
-  { code: 'te', label: 'తెలుగు' },
-  { code: 'kn', label: 'ಕನ್ನಡ' },
-  { code: 'ml', label: 'മലയാളം' },
-  { code: 'gu', label: 'ગુજરાતી' },
-  { code: 'pa', label: 'ਪੰਜਾਬੀ' },
-  { code: 'or', label: 'ଓଡ଼ିଆ' },
+  { code: "en", label: "English" },
+  { code: "hi", label: "हिन्दी" },
+  { code: "bn", label: "বাংলা" },
+  { code: "mr", label: "मराठी" },
+  { code: "ta", label: "தமிழ்" },
+  { code: "te", label: "తెలుగు" },
+  { code: "kn", label: "ಕನ್ನಡ" },
+  { code: "ml", label: "മലയാളം" },
+  { code: "gu", label: "ગુજરાતી" },
+  { code: "pa", label: "ਪੰਜਾਬੀ" },
+  { code: "or", label: "ଓଡ଼ିଆ" },
 ];
 
 // ─────────────────────────────────────────────
@@ -49,9 +46,9 @@ const TypingIndicator = () => (
     </div>
     <div className="bg-white border border-slate-200 rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm">
       <div className="flex gap-1.5 items-center h-5">
-        <span className="w-2 h-2 rounded-full bg-blue-400 animate-bounce" style={{ animationDelay: '0ms' }} />
-        <span className="w-2 h-2 rounded-full bg-blue-400 animate-bounce" style={{ animationDelay: '150ms' }} />
-        <span className="w-2 h-2 rounded-full bg-blue-400 animate-bounce" style={{ animationDelay: '300ms' }} />
+        <span className="w-2 h-2 rounded-full bg-blue-400 animate-bounce" style={{ animationDelay: "0ms" }} />
+        <span className="w-2 h-2 rounded-full bg-blue-400 animate-bounce" style={{ animationDelay: "150ms" }} />
+        <span className="w-2 h-2 rounded-full bg-blue-400 animate-bounce" style={{ animationDelay: "300ms" }} />
       </div>
     </div>
   </div>
@@ -63,7 +60,7 @@ const ActionButton = ({ action, label, navigate }) => {
   return (
     <button
       onClick={() => navigate(route)}
-      className="inline-flex items-center gap-1.5 text-xs font-semibold text-blue-700 bg-blue-50 border border-blue-200 
+      className="inline-flex items-center gap-1.5 text-xs font-semibold text-blue-700 bg-blue-50 border border-blue-200
                  px-3 py-1.5 rounded-full hover:bg-blue-100 hover:border-blue-300 transition-all"
     >
       {label}
@@ -79,16 +76,14 @@ const AssistantBubble = ({ msg, navigate }) => (
     </div>
     <div className="max-w-[85%]">
       <div className={`rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm text-sm leading-relaxed whitespace-pre-wrap
-        ${msg.fallback ? 'bg-amber-50 border border-amber-200 text-amber-900' : 'bg-white border border-slate-200 text-slate-800'}`}>
+        ${msg.fallback ? "bg-amber-50 border border-amber-200 text-amber-900" : "bg-white border border-slate-200 text-slate-800"}`}>
         {msg.answer}
       </div>
-      {/* Sources */}
       {msg.sources && msg.sources.length > 0 && (
         <p className="text-[10px] text-slate-400 font-medium mt-1.5 px-1">
-          Based on: {msg.sources.join(' · ')}
+          Based on: {msg.sources.join(" · ")}
         </p>
       )}
-      {/* Action buttons */}
       {msg.actions && msg.actions.length > 0 && (
         <div className="flex flex-wrap gap-2 mt-2">
           {msg.actions.map((a, i) => (
@@ -117,57 +112,113 @@ const UserBubble = ({ text }) => (
 
 const AskMyVehiclePage = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { language, setLanguage } = useLanguage();
-  const [messages, setMessages] = useState([
-    {
-      role: 'assistant',
-      answer: `Hi! 👋 I'm your vehicle assistant for ${VEHICLE_NAME} (${VEHICLE_REG}).\n\nI can help you understand your vehicle's health, documents, challans, alerts, and live status. What would you like to know?`,
-      actions: [],
-      sources: [],
-    }
-  ]);
-  const [input, setInput] = useState('');
+
+  // Load real vehicles from API
+  const [vehicles, setVehicles] = useState([]);
+  const [loadingVehicles, setLoadingVehicles] = useState(true);
+
+  // Selected vehicle — default to query param from dashboard widget, or first vehicle
+  const queryVehicleId = searchParams.get("vehicleId") ? Number(searchParams.get("vehicleId")) : null;
+  const [selectedVehicleId, setSelectedVehicleId] = useState(queryVehicleId);
+
+  const selectedVehicle = vehicles.find((v) => v.id === selectedVehicleId) || vehicles[0] || null;
+  const vehicleName = selectedVehicle ? `${selectedVehicle.manufacturer} ${selectedVehicle.model}` : "your vehicle";
+  const vehicleReg  = selectedVehicle?.registrationNumber ?? "";
+
+  // Messages
+  const makeGreeting = useCallback((name, reg) => ({
+    role: "assistant",
+    answer: `Hi! 👋 I'm your vehicle assistant for ${name}${reg ? ` (${reg})` : ""}.\n\nI can help you understand your vehicle's health, documents, challans, alerts, and live status. What would you like to know?`,
+    actions: [],
+    sources: [],
+  }), []);
+
+  const [messages, setMessages] = useState([makeGreeting(vehicleName, vehicleReg)]);
+  const [input, setInput]     = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [showLangMenu, setShowLangMenu] = useState(false);
+  const [showVehicleMenu, setShowVehicleMenu] = useState(false);
   const messagesEndRef = useRef(null);
-  const inputRef = useRef(null);
+  const inputRef       = useRef(null);
+
+  // Fetch vehicle list on mount
+  useEffect(() => {
+    getMyVehicles()
+      .then((data) => {
+        const list = data ?? [];
+        setVehicles(list);
+        if (!selectedVehicleId && list.length > 0) {
+          setSelectedVehicleId(list[0].id);
+        }
+      })
+      .catch(() => {})
+      .finally(() => setLoadingVehicles(false));
+  }, []);
+
+  // Reset chat when vehicle switches or load from session
+  useEffect(() => {
+    if (!selectedVehicle) return;
+    const saved = sessionStorage.getItem(`askMyVehicleMessages_${selectedVehicleId}`);
+    if (saved) {
+      try {
+        setMessages(JSON.parse(saved));
+        return;
+      } catch (e) {}
+    }
+    setMessages([makeGreeting(
+      `${selectedVehicle.manufacturer} ${selectedVehicle.model}`,
+      selectedVehicle.registrationNumber
+    )]);
+  }, [selectedVehicleId, selectedVehicle, makeGreeting]);
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isLoading]);
 
   const sendMessage = async (text) => {
-    if (!text?.trim() || isLoading) return;
+    if (!text?.trim() || isLoading || !selectedVehicleId) return;
     const question = text.trim();
-    setInput('');
+    setInput("");
 
-    // Add user message
-    setMessages(prev => [...prev, { role: 'user', text: question }]);
+    setMessages((prev) => {
+      const next = [...prev, { role: "user", text: question }];
+      sessionStorage.setItem(`askMyVehicleMessages_${selectedVehicleId}`, JSON.stringify(next));
+      return next;
+    });
     setIsLoading(true);
 
-    // Build conversation history (last 6 turns for context)
     const history = messages
-      .filter(m => m.role === 'user' || m.role === 'assistant')
+      .filter((m) => m.role === "user" || m.role === "assistant")
       .slice(-6)
-      .map(m => ({
-        role: m.role,
-        content: m.role === 'user' ? m.text : m.answer,
-      }));
+      .map((m) => ({ role: m.role, content: m.role === "user" ? m.text : m.answer }));
 
     try {
-      const response = await askVehicle(VEHICLE_ID, question, history);
-      setMessages(prev => [...prev, { role: 'assistant', ...response }]);
+      const response = await askVehicle(selectedVehicleId, question, history);
+      setMessages((prev) => {
+        const next = [...prev, { role: "assistant", ...response }];
+        sessionStorage.setItem(`askMyVehicleMessages_${selectedVehicleId}`, JSON.stringify(next));
+        return next;
+      });
     } catch (err) {
-      const isAccessDenied = err.message === 'ACCESS_DENIED';
-      setMessages(prev => [...prev, {
-        role: 'assistant',
-        answer: isAccessDenied
-          ? "You don't have access to this vehicle's information."
-          : "I'm unable to reach the vehicle assistant right now. Your vehicle information is still available on the dashboard.",
-        actions: [{ label: 'Back to Dashboard', action: 'OPEN_DASHBOARD' }],
-        sources: [],
-        fallback: true,
-      }]);
+      const isAccessDenied = err.message === "ACCESS_DENIED";
+      setMessages((prev) => {
+        const next = [
+          ...prev,
+          {
+            role: "assistant",
+            answer: isAccessDenied
+              ? "You don't have access to this vehicle's information."
+              : "I'm unable to reach the vehicle assistant right now. Your vehicle information is still available on the dashboard.",
+            actions: [{ label: "Back to Dashboard", action: "OPEN_DASHBOARD" }],
+            sources: [],
+            fallback: true,
+          },
+        ];
+        sessionStorage.setItem(`askMyVehicleMessages_${selectedVehicleId}`, JSON.stringify(next));
+        return next;
+      });
     } finally {
       setIsLoading(false);
       setTimeout(() => inputRef.current?.focus(), 100);
@@ -175,32 +226,36 @@ const AskMyVehiclePage = () => {
   };
 
   const handleKeyDown = (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       sendMessage(input);
     }
   };
 
   const handleReset = () => {
-    setMessages([{
-      role: 'assistant',
-      answer: `Hi! 👋 I'm your vehicle assistant for ${VEHICLE_NAME} (${VEHICLE_REG}).\n\nI can help you understand your vehicle's health, documents, challans, alerts, and live status. What would you like to know?`,
-      actions: [], sources: [],
-    }]);
+    setMessages([makeGreeting(vehicleName, vehicleReg)]);
+    if (selectedVehicleId) {
+      sessionStorage.removeItem(`askMyVehicleMessages_${selectedVehicleId}`);
+    }
   };
 
-  const currentLangLabel = LANGUAGES.find(l => l.code === language)?.label || 'English';
+  const handleSelectVehicle = (v) => {
+    setSelectedVehicleId(v.id);
+    setShowVehicleMenu(false);
+  };
+
+  const currentLangLabel = LANGUAGES.find((l) => l.code === language)?.label || "English";
 
   return (
     <div className="flex h-screen bg-slate-50 font-['Poppins'] overflow-hidden">
 
-      {/* ── Left Panel (branding + quick questions) ── */}
+      {/* ── Left Panel ── */}
       <div className="hidden lg:flex w-80 xl:w-96 flex-col bg-gradient-to-b from-[#0f172a] to-[#1e293b] text-white shrink-0">
-        
+
         {/* Back button */}
         <div className="p-6 pb-0">
           <button
-            onClick={() => navigate('/dashboard')}
+            onClick={() => navigate("/dashboard")}
             className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors text-sm font-medium group"
           >
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
@@ -208,9 +263,8 @@ const AskMyVehiclePage = () => {
           </button>
         </div>
 
-        {/* Header */}
-        <div className="p-6 flex-1">
-          {/* AI Logo */}
+        <div className="p-6 flex-1 overflow-y-auto">
+          {/* AI logo */}
           <div className="flex items-center gap-3 mb-6">
             <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg">
               <Bot className="w-6 h-6 text-white" />
@@ -221,16 +275,59 @@ const AskMyVehiclePage = () => {
             </div>
           </div>
 
-          {/* Vehicle badge */}
-          <div className="bg-white/5 border border-white/10 rounded-xl p-4 mb-8 flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center">
-              <Car className="w-5 h-5 text-blue-400" />
+          {/* Vehicle selector */}
+          {loadingVehicles ? (
+            <div className="bg-white/5 border border-white/10 rounded-xl p-4 mb-8 flex items-center gap-3 animate-pulse">
+              <div className="w-10 h-10 rounded-xl bg-white/10" />
+              <div className="flex-1 space-y-2">
+                <div className="h-3 bg-white/10 rounded w-3/4" />
+                <div className="h-2 bg-white/10 rounded w-1/2" />
+              </div>
             </div>
-            <div>
-              <p className="font-semibold text-sm">{VEHICLE_NAME}</p>
-              <p className="font-mono text-xs text-slate-400">{VEHICLE_REG}</p>
+          ) : vehicles.length === 0 ? (
+            <div className="bg-white/5 border border-white/10 rounded-xl p-4 mb-8 text-slate-400 text-sm">
+              No vehicles found. Please register a vehicle first.
             </div>
-          </div>
+          ) : (
+            <div className="relative mb-8">
+              <button
+                onClick={() => setShowVehicleMenu(!showVehicleMenu)}
+                className="w-full bg-white/5 border border-white/10 rounded-xl p-4 flex items-center gap-3 hover:bg-white/10 transition-all"
+              >
+                <div className="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center shrink-0">
+                  <Car className="w-5 h-5 text-blue-400" />
+                </div>
+                <div className="flex-1 text-left min-w-0">
+                  <p className="font-semibold text-sm truncate">{vehicleName}</p>
+                  <p className="font-mono text-xs text-slate-400">{vehicleReg}</p>
+                </div>
+                {vehicles.length > 1 && (
+                  <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform shrink-0 ${showVehicleMenu ? "rotate-180" : ""}`} />
+                )}
+              </button>
+              {showVehicleMenu && vehicles.length > 1 && (
+                <div className="absolute top-full left-0 right-0 mt-2 bg-[#1e293b] border border-white/10 rounded-xl py-2 shadow-2xl z-10 max-h-52 overflow-y-auto">
+                  {vehicles.map((v) => (
+                    <button
+                      key={v.id}
+                      onClick={() => handleSelectVehicle(v)}
+                      className={`w-full text-left px-4 py-3 flex items-center gap-3 transition-colors ${
+                        v.id === selectedVehicleId
+                          ? "text-blue-400 bg-blue-500/10"
+                          : "text-slate-300 hover:text-white hover:bg-white/5"
+                      }`}
+                    >
+                      <Car className="w-4 h-4 shrink-0" />
+                      <div className="min-w-0">
+                        <p className="font-semibold text-sm truncate">{v.manufacturer} {v.model}</p>
+                        <p className="font-mono text-[10px] text-slate-500">{v.registrationNumber}</p>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Quick questions */}
           <div>
@@ -240,9 +337,9 @@ const AskMyVehiclePage = () => {
                 <button
                   key={label}
                   onClick={() => sendMessage(label)}
-                  disabled={isLoading}
-                  className="w-full text-left text-sm text-slate-300 hover:text-white bg-white/5 hover:bg-white/10 
-                             border border-white/10 hover:border-white/20 rounded-xl px-4 py-2.5 transition-all 
+                  disabled={isLoading || !selectedVehicleId}
+                  className="w-full text-left text-sm text-slate-300 hover:text-white bg-white/5 hover:bg-white/10
+                             border border-white/10 hover:border-white/20 rounded-xl px-4 py-2.5 transition-all
                              flex items-center gap-3 group disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <Icon className="w-4 h-4 text-blue-400 shrink-0" />
@@ -253,30 +350,30 @@ const AskMyVehiclePage = () => {
           </div>
         </div>
 
-        {/* Language selector in panel */}
+        {/* Language selector */}
         <div className="p-6 border-t border-white/10">
           <div className="relative">
             <button
               onClick={() => setShowLangMenu(!showLangMenu)}
-              className="w-full flex items-center justify-between gap-2 text-sm text-slate-300 hover:text-white 
+              className="w-full flex items-center justify-between gap-2 text-sm text-slate-300 hover:text-white
                          bg-white/5 hover:bg-white/10 border border-white/10 px-4 py-2.5 rounded-xl transition-all"
             >
               <div className="flex items-center gap-2">
                 <Globe className="w-4 h-4 text-blue-400" />
                 <span className="font-medium">{currentLangLabel}</span>
               </div>
-              <ChevronDown className={`w-4 h-4 text-slate-500 transition-transform ${showLangMenu ? 'rotate-180' : ''}`} />
+              <ChevronDown className={`w-4 h-4 text-slate-500 transition-transform ${showLangMenu ? "rotate-180" : ""}`} />
             </button>
             {showLangMenu && (
               <div className="absolute bottom-full left-0 right-0 mb-2 bg-[#1e293b] border border-white/10 rounded-xl py-2 shadow-2xl max-h-64 overflow-y-auto">
-                {LANGUAGES.map(lang => (
+                {LANGUAGES.map((lang) => (
                   <button
                     key={lang.code}
                     onClick={() => { setLanguage(lang.code); setShowLangMenu(false); }}
                     className={`w-full text-left px-4 py-2 text-sm transition-colors ${
                       language === lang.code
-                        ? 'text-blue-400 font-semibold bg-blue-500/10'
-                        : 'text-slate-300 hover:text-white hover:bg-white/5'
+                        ? "text-blue-400 font-semibold bg-blue-500/10"
+                        : "text-slate-300 hover:text-white hover:bg-white/5"
                     }`}
                   >
                     {lang.label}
@@ -294,9 +391,8 @@ const AskMyVehiclePage = () => {
         {/* Chat topbar */}
         <div className="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 shrink-0 shadow-sm">
           <div className="flex items-center gap-3">
-            {/* Mobile back */}
             <button
-              onClick={() => navigate('/dashboard')}
+              onClick={() => navigate("/dashboard")}
               className="lg:hidden text-slate-400 hover:text-slate-700 mr-1"
             >
               <ArrowLeft className="w-5 h-5" />
@@ -306,7 +402,13 @@ const AskMyVehiclePage = () => {
             </div>
             <div>
               <h2 className="font-bold text-sm text-slate-900">Ask My Vehicle</h2>
-              <p className="text-[11px] text-slate-400">{VEHICLE_NAME} · {VEHICLE_REG}</p>
+              <p className="text-[11px] text-slate-400">
+                {loadingVehicles
+                  ? "Loading vehicle..."
+                  : selectedVehicle
+                  ? `${vehicleName} · ${vehicleReg}`
+                  : "No vehicle selected"}
+              </p>
             </div>
           </div>
           <div className="flex items-center gap-3">
@@ -327,12 +429,20 @@ const AskMyVehiclePage = () => {
         {/* Messages */}
         <div className="flex-1 overflow-y-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="max-w-3xl mx-auto">
-            {messages.map((msg, idx) =>
-              msg.role === 'user'
-                ? <UserBubble key={idx} text={msg.text} />
-                : <AssistantBubble key={idx} msg={msg} navigate={navigate} />
+            {loadingVehicles ? (
+              <div className="flex justify-center items-center h-full py-20">
+                <Loader2 className="w-8 h-8 text-blue-400 animate-spin" />
+              </div>
+            ) : (
+              <>
+                {messages.map((msg, idx) =>
+                  msg.role === "user"
+                    ? <UserBubble key={idx} text={msg.text} />
+                    : <AssistantBubble key={idx} msg={msg} navigate={navigate} />
+                )}
+                {isLoading && <TypingIndicator />}
+              </>
             )}
-            {isLoading && <TypingIndicator />}
             <div ref={messagesEndRef} />
           </div>
         </div>
@@ -344,8 +454,8 @@ const AskMyVehiclePage = () => {
               <button
                 key={label}
                 onClick={() => sendMessage(label)}
-                disabled={isLoading}
-                className="text-[11px] text-blue-700 bg-blue-50 border border-blue-200 px-3 py-1.5 rounded-full 
+                disabled={isLoading || !selectedVehicleId}
+                className="text-[11px] text-blue-700 bg-blue-50 border border-blue-200 px-3 py-1.5 rounded-full
                            hover:bg-blue-100 whitespace-nowrap shrink-0 transition-all disabled:opacity-50"
               >
                 {label}
@@ -363,23 +473,23 @@ const AskMyVehiclePage = () => {
                   ref={inputRef}
                   id="ask-my-vehicle-input"
                   value={input}
-                  onChange={e => setInput(e.target.value)}
+                  onChange={(e) => setInput(e.target.value)}
                   onKeyDown={handleKeyDown}
-                  placeholder="Ask anything about your vehicle..."
+                  placeholder={selectedVehicleId ? "Ask anything about your vehicle..." : "Select a vehicle first"}
                   rows={1}
-                  disabled={isLoading}
-                  className="w-full bg-slate-50 border border-slate-200 rounded-2xl pl-4 pr-4 py-3 text-sm 
-                             focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400 
+                  disabled={isLoading || !selectedVehicleId}
+                  className="w-full bg-slate-50 border border-slate-200 rounded-2xl pl-4 pr-4 py-3 text-sm
+                             focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400
                              transition-all shadow-inner resize-none disabled:opacity-60 leading-relaxed"
-                  style={{ minHeight: '48px', maxHeight: '120px' }}
+                  style={{ minHeight: "48px", maxHeight: "120px" }}
                 />
               </div>
               <button
                 id="ask-my-vehicle-send"
                 onClick={() => sendMessage(input)}
-                disabled={!input.trim() || isLoading}
-                className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-600 text-white 
-                           flex items-center justify-center shadow-lg hover:shadow-blue-200 hover:scale-105 
+                disabled={!input.trim() || isLoading || !selectedVehicleId}
+                className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-600 text-white
+                           flex items-center justify-center shadow-lg hover:shadow-blue-200 hover:scale-105
                            transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100 shrink-0"
               >
                 <Send className="w-4 h-4" />

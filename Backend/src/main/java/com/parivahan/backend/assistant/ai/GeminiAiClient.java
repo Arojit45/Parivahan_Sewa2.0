@@ -2,6 +2,7 @@ package com.parivahan.backend.assistant.ai;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -19,6 +20,7 @@ import java.util.Map;
  *  - It only receives a controlled text context from VehicleContextBuilder.
  */
 @Slf4j
+@Primary
 @Component
 public class GeminiAiClient implements AiClient {
 

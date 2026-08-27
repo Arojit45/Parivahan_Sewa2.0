@@ -4,87 +4,89 @@ import { useLanguage } from '../contexts/LanguageContext';
 
 const AudioGuide = ({ textToRead, readElementId }) => {
   const [isPlaying, setIsPlaying] = useState(false);
-  const [isSupported, setIsSupported] = useState(false);
   const { language } = useLanguage();
   const synthRef = useRef(window.speechSynthesis);
 
+  const audioRef = useRef(null);
+  const queueRef = useRef([]);
+  const isPausedRef = useRef(false);
+
+  // Cleanup audio on unmount
   useEffect(() => {
-    if ('speechSynthesis' in window) {
-      setIsSupported(true);
-    }
-    
-    // Stop speaking when component unmounts
     return () => {
-      if (synthRef.current) {
-        synthRef.current.cancel();
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
       }
     };
   }, []);
 
   // When text changes, stop current audio if playing
   useEffect(() => {
-    if (synthRef.current) {
-      synthRef.current.cancel();
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current = null;
       setIsPlaying(false);
     }
   }, [textToRead]);
 
-  const toggleSpeech = () => {
-    if (!isSupported) return;
-
+  const toggleSpeech = async () => {
     if (isPlaying) {
-      synthRef.current.cancel();
+      if (audioRef.current) audioRef.current.pause();
       setIsPlaying(false);
     } else {
       let finalContent = textToRead;
       
-      // If an element ID is provided, read the DOM text (which handles Google Translate)
       if (readElementId) {
         const el = document.getElementById(readElementId);
-        // Use textContent instead of innerText because layout properties might make innerText empty
         if (el) finalContent = el.textContent || el.innerText;
       }
 
       if (!finalContent) return;
       
-      const utterance = new SpeechSynthesisUtterance(finalContent);
-      
-      // Attempt to map our language code to browser voices
-      let langCode = 'en-US';
-      if (language === 'hi') langCode = 'hi-IN';
-      if (language === 'bn') langCode = 'bn-IN';
-      if (language === 'mr') langCode = 'mr-IN';
-      if (language === 'ta') langCode = 'ta-IN';
-      if (language === 'te') langCode = 'te-IN';
-      
-      const voices = window.speechSynthesis.getVoices();
-      let matchingVoice = voices.find(v => v.lang.startsWith(langCode) || v.lang.startsWith(langCode.split('-')[0]));
-      
-      // Fallback logic for AudioGuide: Since text is already translated by Google Translate on the DOM,
-      // if we fallback to Hindi/English voice to read Bengali text, it will sound like gibberish.
-      // However, gibberish/accented speech is a better debug signal than absolute silence, and if they 
-      // are lucky, Chrome's generic Google voice might attempt to parse it. 
-      // Ideally, the user's OS should have the language pack installed.
-      if (!matchingVoice && language !== 'en') {
-        matchingVoice = voices.find(v => v.lang.startsWith('hi')) || voices.find(v => v.lang.startsWith('en'));
-      }
-      
-      utterance.lang = matchingVoice ? matchingVoice.lang : langCode;
-      if (matchingVoice) {
-        utterance.voice = matchingVoice;
-      }
-      
-      utterance.rate = 0.9;
-      
-      utterance.onend = () => setIsPlaying(false);
-      utterance.onerror = () => setIsPlaying(false);
-      
       setIsPlaying(true);
-      synthRef.current.speak(utterance);
+      
+      try {
+        const response = await fetch('/api/v1/tts/synthesize', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token') || sessionStorage.getItem('token')}`
+          },
+          body: JSON.stringify({ text: finalContent, language })
+        });
+        
+        if (!response.ok) {
+          console.error("TTS configuration is missing or backend failed. Please configure your Cloud TTS provider API keys in the backend.");
+          setIsPlaying(false);
+          return;
+        }
+        
+        const blob = await response.blob();
+        const url = URL.createObjectURL(blob);
+        
+        const audio = new Audio(url);
+        
+        audio.onended = () => {
+          setIsPlaying(false);
+        };
+        
+        audio.onerror = (e) => {
+          console.error("TTS Audio Playback Error", e);
+          setIsPlaying(false);
+        };
+
+        audioRef.current = audio;
+        audio.play().catch(e => {
+          console.error("Autoplay blocked or error:", e);
+          setIsPlaying(false);
+        });
+      } catch (error) {
+        console.error("Failed to connect to TTS backend service. Ensure /api/v1/tts/synthesize is implemented.");
+        setIsPlaying(false);
+      }
     }
   };
-
-  if (!isSupported) return null;
 
   return (
     <button

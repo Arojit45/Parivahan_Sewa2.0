@@ -1,6 +1,7 @@
 package com.parivahan.backend.assistant.service;
 
 import com.parivahan.backend.assistant.ai.AiClient;
+import com.parivahan.backend.assistant.ai.ContextAwareAiClient;
 import com.parivahan.backend.assistant.context.VehicleContextBuilder;
 import com.parivahan.backend.assistant.dto.AssistantAction;
 import com.parivahan.backend.assistant.dto.VehicleAssistantResponse;
@@ -37,6 +38,7 @@ public class VehicleAssistantService {
     private final VehicleQuestionRouter questionRouter;
     private final VehicleContextBuilder contextBuilder;
     private final AiClient aiClient;
+    private final ContextAwareAiClient contextAwareAiClient; // fallback when Gemini is unavailable
     private final UserRepository userRepository;
 
     private static final String SYSTEM_PROMPT = """
@@ -103,15 +105,20 @@ public class VehicleAssistantService {
         // Build conversation history if provided
         String userQuestion = buildUserQuestion(request);
 
-        // Call Gemini
+        // Call Gemini — fall back to ContextAwareAiClient if Gemini is unavailable
         String answer;
         boolean fallback = false;
         try {
             answer = aiClient.generate(systemPromptWithLang, context, userQuestion);
         } catch (Exception e) {
-            log.warn("AI unavailable for vehicleId={}: {}", vehicleId, e.getMessage());
-            answer = "I'm unable to reach the vehicle assistant right now. Your vehicle information is still available on the dashboard.";
-            fallback = true;
+            log.warn("Gemini unavailable for vehicleId={}: {} — using context-aware fallback", vehicleId, e.getMessage());
+            try {
+                answer = contextAwareAiClient.generate(systemPromptWithLang, context, userQuestion);
+            } catch (Exception fallbackEx) {
+                log.error("Fallback AI also failed for vehicleId={}: {}", vehicleId, fallbackEx.getMessage());
+                answer = "I'm unable to process your question right now. Please check your vehicle's dashboard for the latest information.";
+                fallback = true;
+            }
         }
 
         // Build action suggestions based on intent

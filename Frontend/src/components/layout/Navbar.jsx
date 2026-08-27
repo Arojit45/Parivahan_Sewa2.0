@@ -33,11 +33,10 @@ const Navbar = () => {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
           ? 'bg-white/80 backdrop-blur-md shadow-sm py-3'
           : 'bg-white py-4 shadow-sm'
-      }`}
+        }`}
     >
       <div className="max-w-[1600px] mx-auto px-4 md:px-8 flex items-center justify-between">
         {/* Logo */}
@@ -61,11 +60,10 @@ const Navbar = () => {
             <Link
               key={index}
               to={link.href}
-              className={`text-sm font-semibold transition-colors hover:text-blue-600 flex items-center ${
-                link.name === t.navbar.home
+              className={`text-sm font-semibold transition-colors hover:text-blue-600 flex items-center ${link.name === t.navbar.home
                   ? 'text-blue-600 border-b-2 border-blue-600 pb-1'
                   : 'text-slate-600'
-              }`}
+                }`}
             >
               {link.name}
               {link.hasDropdown && (
@@ -84,23 +82,27 @@ const Navbar = () => {
               <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
             </button>
             <div className="absolute right-0 top-full pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
-               <div className="w-32 bg-white rounded-xl shadow-lg border border-slate-100 py-2">
-                 {languages.map(lang => (
-                   <button 
-                     key={lang.code}
-                     onClick={() => setLanguage(lang.code)}
-                     className={`w-full text-left px-4 py-2 text-sm hover:bg-slate-50 ${language === lang.code ? 'text-blue-600 font-semibold' : 'text-slate-700 font-medium'}`}
-                   >
-                     {lang.label}
-                   </button>
-                 ))}
-               </div>
+              <div className="w-32 bg-white rounded-xl shadow-lg border border-slate-100 py-2">
+                {languages.map(lang => (
+                  <button
+                    key={lang.code}
+                    onClick={() => setLanguage(lang.code)}
+                    className={`w-full text-left px-4 py-2 text-sm hover:bg-slate-50 ${language === lang.code ? 'text-blue-600 font-semibold' : 'text-slate-700 font-medium'}`}
+                  >
+                    {lang.label}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
-          
-          <div className="flex items-center gap-2 pl-4 border-l border-slate-200">
-             <img src="https://i.pravatar.cc/150?u=a042581f4e29026704d" alt="User" className="w-8 h-8 rounded-full border border-slate-200" />
-             <span className="text-sm font-medium text-slate-700">{t.navbar.hi}, Amit</span>
+
+          <div className="flex items-center gap-3 pl-4 border-l border-slate-200">
+            <Link to="/auth" className="text-sm font-semibold text-slate-600 hover:text-blue-600 px-3 py-2 transition-colors">
+              Login
+            </Link>
+            <Link to="/auth" state={{ register: true }} className="text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 px-5 py-2.5 rounded-full shadow-md shadow-blue-600/20 transition-all">
+              Sign Up
+            </Link>
           </div>
         </div>
 
@@ -134,15 +136,15 @@ const Navbar = () => {
               ))}
               <div className="flex flex-col gap-3 mt-4">
                 <div className="flex items-center gap-2 overflow-x-auto pb-2">
-                   {languages.map(lang => (
-                     <button 
-                       key={lang.code}
-                       onClick={() => { setLanguage(lang.code); setIsMobileMenuOpen(false); }}
-                       className={`px-4 py-2 rounded-lg border text-sm font-medium ${language === lang.code ? 'bg-blue-50 border-blue-200 text-blue-700' : 'border-slate-200 text-slate-600'}`}
-                     >
-                       {lang.label}
-                     </button>
-                   ))}
+                  {languages.map(lang => (
+                    <button
+                      key={lang.code}
+                      onClick={() => { setLanguage(lang.code); setIsMobileMenuOpen(false); }}
+                      className={`px-4 py-2 rounded-lg border text-sm font-medium ${language === lang.code ? 'bg-blue-50 border-blue-200 text-blue-700' : 'border-slate-200 text-slate-600'}`}
+                    >
+                      {lang.label}
+                    </button>
+                  ))}
                 </div>
               </div>
             </div>

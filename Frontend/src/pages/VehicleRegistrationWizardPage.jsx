@@ -2,6 +2,7 @@ import React from 'react';
 import Sidebar from '../components/dashboard/Sidebar';
 import Topbar from '../components/dashboard/Topbar';
 import { VRWizardProvider, useVRWizard } from '../contexts/VRWizardContext';
+import { useLanguage } from '../contexts/LanguageContext';
 import WizardProgress from '../components/vr-wizard/WizardProgress';
 import Step1State from '../components/vr-wizard/Step1State';
 import Step2RTO from '../components/vr-wizard/Step2RTO';
@@ -25,22 +26,14 @@ const STEP_COMPONENTS = {
   8: Step8Tracking,
 };
 
-const STEP_TITLES = {
-  1: "Where are you registering?",
-  2: "Select your RTO",
-  3: "Check Vehicle Eligibility",
-  4: "Upload Required Documents",
-  5: "Fee Estimation",
-  6: "Book RTO Inspection",
-  7: "Review & Submit",
-  8: "Track Registration Status",
-};
-
 const WizardContent = () => {
   const { wizard } = useVRWizard();
+  const { t } = useLanguage();
   const { currentStep, isResuming } = wizard;
 
   const ActiveStep = STEP_COMPONENTS[currentStep] || Step1State;
+  
+  const stepTitle = t.vr.steps[currentStep];
 
   return (
     <div className="flex h-screen bg-slate-50 overflow-hidden font-['Poppins']">
@@ -54,7 +47,7 @@ const WizardContent = () => {
           {isResuming && (
             <div className="bg-blue-600 text-white text-center py-2 px-4 text-sm font-semibold flex items-center justify-center gap-2 shrink-0">
               <RotateCcw className="w-4 h-4" />
-              Resuming your previous application from Step {currentStep} — your progress has been restored.
+              {t.vr.resumingBanner.replace('{step}', currentStep)}
             </div>
           )}
 
@@ -64,10 +57,10 @@ const WizardContent = () => {
               {/* Header */}
               <div className="px-4 pt-5 pb-3 border-b border-slate-100 flex justify-between items-start">
                 <div>
-                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Vehicle Registration</p>
-                  <h2 className="text-sm font-bold text-slate-800 mt-0.5">Registration Wizard</h2>
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{t.vr.wizardHeader}</p>
+                  <h2 className="text-sm font-bold text-slate-800 mt-0.5">{t.vr.wizardTitle}</h2>
                 </div>
-                <AudioGuide textToRead={STEP_TITLES[currentStep]} readElementId="vr-step-content" />
+                <AudioGuide textToRead={stepTitle} readElementId="vr-step-content" />
               </div>
 
               {/* Progress */}
@@ -77,7 +70,7 @@ const WizardContent = () => {
 
               {/* Footer */}
               <div className="px-4 py-3 border-t border-slate-100 text-[10px] text-slate-400 font-medium">
-                Step {currentStep} of 8
+                {t.vr.stepOf.replace('{current}', currentStep).replace('{total}', '8')}
               </div>
             </div>
 

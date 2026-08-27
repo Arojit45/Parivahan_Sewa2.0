@@ -70,7 +70,7 @@ const WizardContent = () => {
                   <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Driving Licence</p>
                   <h2 className="text-sm font-bold text-slate-800 mt-0.5">Application Wizard</h2>
                 </div>
-                <AudioGuide textToRead={STEP_TITLES[currentStep]} />
+                <AudioGuide textToRead={STEP_TITLES[currentStep]} readElementId="dl-step-content" />
               </div>
 
               {/* Progress */}
@@ -86,7 +86,7 @@ const WizardContent = () => {
 
             {/* Right — Active Step */}
             <div className="flex-1 flex flex-col overflow-hidden bg-slate-50">
-              <div className="flex-1 overflow-hidden bg-white m-4 rounded-2xl shadow-sm border border-slate-100 flex flex-col">
+              <div id="dl-step-content" className="flex-1 overflow-hidden bg-white m-4 rounded-2xl shadow-sm border border-slate-100 flex flex-col">
                 <ActiveStep />
               </div>
             </div>
