@@ -85,7 +85,7 @@ const Topbar = () => {
           <div className="w-8 h-8 rounded-full bg-indigo-100 border border-indigo-200 overflow-hidden">
             <img src="https://i.pravatar.cc/150?img=11" alt="Profile" className="w-full h-full object-cover" />
           </div>
-          <div className="flex items-center gap-1 text-sm font-semibold text-slate-700 group-hover:text-blue-600 transition-colors">
+          <div className="flex items-center gap-1 text-sm font-semibold text-slate-700 group-hover:text-blue-600 transition-colors notranslate">
             Amit Kumar <ChevronDown className="w-4 h-4 text-slate-400" />
           </div>
         </button>

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Volume2, VolumeX } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 
-const AudioGuide = ({ textToRead }) => {
+const AudioGuide = ({ textToRead, readElementId }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isSupported, setIsSupported] = useState(false);
   const { language } = useLanguage();
@@ -36,17 +36,45 @@ const AudioGuide = ({ textToRead }) => {
       synthRef.current.cancel();
       setIsPlaying(false);
     } else {
-      if (!textToRead) return;
+      let finalContent = textToRead;
       
-      const utterance = new SpeechSynthesisUtterance(textToRead);
+      // If an element ID is provided, read the DOM text (which handles Google Translate)
+      if (readElementId) {
+        const el = document.getElementById(readElementId);
+        // Use textContent instead of innerText because layout properties might make innerText empty
+        if (el) finalContent = el.textContent || el.innerText;
+      }
+
+      if (!finalContent) return;
       
-      // Attempt to map our language code (en, hi, bn) to browser voices
+      const utterance = new SpeechSynthesisUtterance(finalContent);
+      
+      // Attempt to map our language code to browser voices
       let langCode = 'en-US';
       if (language === 'hi') langCode = 'hi-IN';
       if (language === 'bn') langCode = 'bn-IN';
-      // etc for other languages, defaulting to generic if unsupported
+      if (language === 'mr') langCode = 'mr-IN';
+      if (language === 'ta') langCode = 'ta-IN';
+      if (language === 'te') langCode = 'te-IN';
       
-      utterance.lang = langCode;
+      const voices = window.speechSynthesis.getVoices();
+      let matchingVoice = voices.find(v => v.lang.startsWith(langCode) || v.lang.startsWith(langCode.split('-')[0]));
+      
+      // Fallback logic for AudioGuide: Since text is already translated by Google Translate on the DOM,
+      // if we fallback to Hindi/English voice to read Bengali text, it will sound like gibberish.
+      // However, gibberish/accented speech is a better debug signal than absolute silence, and if they 
+      // are lucky, Chrome's generic Google voice might attempt to parse it. 
+      // Ideally, the user's OS should have the language pack installed.
+      if (!matchingVoice && language !== 'en') {
+        matchingVoice = voices.find(v => v.lang.startsWith('hi')) || voices.find(v => v.lang.startsWith('en'));
+      }
+      
+      utterance.lang = matchingVoice ? matchingVoice.lang : langCode;
+      if (matchingVoice) {
+        utterance.voice = matchingVoice;
+      }
+      
+      utterance.rate = 0.9;
       
       utterance.onend = () => setIsPlaying(false);
       utterance.onerror = () => setIsPlaying(false);

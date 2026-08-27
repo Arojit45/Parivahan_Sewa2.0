@@ -30,6 +30,15 @@ export const LanguageProvider = ({ children }) => {
     if (!translations[lang]) return;
     setLanguageState(lang);
 
+    // Trigger Google Translate
+    setTimeout(() => {
+      const gtCombo = document.querySelector('.goog-te-combo');
+      if (gtCombo) {
+        gtCombo.value = lang === 'en' ? 'en' : lang; // Map if necessary
+        gtCombo.dispatchEvent(new Event('change'));
+      }
+    }, 100); // Small delay to ensure script is loaded
+
     // Persist to backend if authenticated
     const token = localStorage.getItem('authToken');
     if (token) {

@@ -65,7 +65,7 @@ const Sidebar = () => {
       <div className={`p-5 border-b border-slate-100 flex items-center ${isCollapsed ? 'justify-center' : 'gap-3'} shrink-0 h-24`}>
         <img src="/govtLogo.png" alt="Logo" className={`${isCollapsed ? 'h-10' : 'h-11'} w-auto transition-all`} />
         {!isCollapsed && (
-          <div className="overflow-hidden">
+          <div className="overflow-hidden notranslate">
             <h1 className="text-[17px] font-bold text-slate-900 leading-tight">
               PARIVAHAN SEWA
             </h1>

@@ -1,17 +1,177 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Sidebar from '../components/dashboard/Sidebar';
 import Topbar from '../components/dashboard/Topbar';
 import Footer from '../components/layout/Footer';
 import { useLanguage } from '../contexts/LanguageContext';
-import { Play, Pause, Headphones, ChevronDown, ChevronRight, MapPin, Building2, Car, ClipboardCheck, CreditCard, Crosshair, ArrowRight, ArrowLeft, MessageCircle, Phone, Map, Video, Search, CheckCircle2, Bot, Sparkles, Navigation, Shield, Globe } from 'lucide-react';
+import { Play, Pause, Headphones, ChevronDown, ChevronRight, MapPin, Building2, Car, ClipboardCheck, CreditCard, Crosshair, ArrowRight, ArrowLeft, MessageCircle, Phone, Map, Video, Search, CheckCircle2, Bot, Sparkles, Navigation, Shield, Globe, RotateCcw } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 
 const DrivingLicensePage = () => {
   const { t, language } = useLanguage();
   const navigate = useNavigate();
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [activeStep, setActiveStep] = useState(2);
+  const [audioState, setAudioState] = useState('IDLE'); // 'IDLE', 'PLAYING', 'PAUSED'
+  const [activeStep, setActiveStep] = useState(0);
+
+  useEffect(() => {
+    const fetchProgress = async () => {
+      const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+      if (!token) return;
+      try {
+        const res = await fetch('/api/v1/dl/application/in-progress', {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.lastCompletedStep !== undefined) {
+            setActiveStep(Math.min(data.lastCompletedStep, 5)); // max idx 5 (step 6)
+          }
+        }
+      } catch (e) {}
+    };
+    fetchProgress();
+  }, []);
+
+  // 2. ADD THIS HERE
+  useEffect(() => {
+    const synth = window.speechSynthesis;
+
+    const loadVoices = () => {
+      const voices = synth.getVoices();
+
+      console.log(
+        'Available voices:',
+        voices.map(v => `${v.name} - ${v.lang}`)
+      );
+    };
+
+    // Try immediately
+    loadVoices();
+
+    // Browser may load voices asynchronously
+    synth.addEventListener(
+      'voiceschanged',
+      loadVoices
+    );
+
+    return () => {
+      synth.removeEventListener(
+        'voiceschanged',
+        loadVoices
+      );
+
+      synth.cancel();
+    };
+  }, []);
+
+  const audioScripts = {
+    en: "Namaste Amit Kumar. Welcome to the Parivahan Sewa Driving License Portal. I am your audio guide. To get your driving license, you need to follow a few simple steps. First, select your State and RTO. Next, choose the type of vehicle. Then, verify your eligibility and apply for a Learner's License if you don't have one. Make sure to keep your Aadhaar Card and other necessary documents clearly scanned and ready. Do not upload blurry images. You can pause this audio anytime by clicking the button again. Let's start your journey!",
+    hi: "नमस्ते अमित कुमार। परिवहन सेवा ड्राइविंग लाइसेंस पोर्टल में आपका स्वागत है। मैं आपका ऑडियो गाइड हूँ। अपना ड्राइविंग लाइसेंस प्राप्त करने के लिए, आपको कुछ सरल चरणों का पालन करना होगा। सबसे पहले, अपना राज्य और आरटीओ चुनें। इसके बाद, वाहन का प्रकार चुनें। फिर, अपनी पात्रता की जांच करें और यदि आपके पास लर्नर्स लाइसेंस नहीं है तो उसके लिए आवेदन करें। सुनिश्चित करें कि आपका आधार कार्ड और अन्य आवश्यक दस्तावेज स्पष्ट रूप से स्कैन किए गए और तैयार हों। धुंधली छवियां अपलोड न करें। आप बटन को फिर से क्लिक करके इस ऑडियो को किसी भी समय रोक सकते हैं। चलिए आपकी यात्रा शुरू करते हैं!",
+    bn: "নমস্কার অমিত কুমার। পরিবহন সেবা ড্রাইভিং লাইসেন্স পোর্টালে আপনাকে স্বাগতম। আমি আপনার অডিও গাইড। আপনার ড্রাইভিং লাইসেন্স পেতে, আপনাকে কয়েকটি সহজ ধাপ অনুসরণ করতে হবে। প্রথমে, আপনার রাজ্য এবং আরটিও নির্বাচন করুন। এরপর, গাড়ির ধরন বেছে নিন। তারপর, আপনার যোগ্যতা যাচাই করুন এবং লার্নার্স লাইসেন্স না থাকলে আবেদন করুন। নিশ্চিত করুন যে আপনার আধার কার্ড এবং অন্যান্য প্রয়োজনীয় নথিগুলি পরিষ্কারভাবে স্ক্যান করা এবং প্রস্তুত আছে। অস্পষ্ট ছবি আপলোড করবেন না। আপনি বোতামটি আবার ক্লিক করে যেকোনো সময় এই অডিওটি পজ করতে পারেন। চলুন আপনার যাত্রা শুরু করি!",
+    mr: "नमस्कार अमित कुमार. परिवहन सेवा ड्रायव्हिंग लायसन्स पोर्टलवर आपले स्वागत आहे. मी तुमचा ऑडिओ मार्गदर्शक आहे. तुमचा ड्रायव्हिंग परवाना मिळवण्यासाठी, तुम्हाला काही सोप्या चरणांचे पालन करावे लागेल. प्रथम, तुमचे राज्य आणि आरटीओ निवडा. त्यानंतर, वाहनाचा प्रकार निवडा. मग, तुमची पात्रता तपासा आणि तुमच्याकडे शिकाऊ परवाना नसल्यास त्यासाठी अर्ज करा. तुमचे आधार कार्ड आणि इतर आवश्यक कागदपत्रे स्पष्टपणे स्कॅन करून तयार ठेवल्याची खात्री करा. अस्पष्ट चित्रे अपलोड करू नका. तुम्ही पुन्हा बटणावर क्लिक करून हा ऑडिओ कधीही थांबवू शकता. चला तुमचा प्रवास सुरू करूया!",
+    ta: "வணக்கம் அமித் குமார். பரிவஹன் சேவா ஓட்டுநர் உரிமம் தளத்திற்கு உங்களை வரவேற்கிறோம். நான் உங்கள் ஆடியோ வழிகாட்டி. உங்கள் ஓட்டுநர் உரிமத்தைப் பெற, சில எளிய வழிமுறைகளைப் பின்பற்ற வேண்டும். முதலில், உங்கள் மாநிலம் மற்றும் ஆர்.டி.ஓ-வை தேர்ந்தெடுக்கவும். அடுத்து, வாகனத்தின் வகையைத் தேர்வு செய்யவும். பின்னர், உங்கள் தகுதியைச் சரிபார்த்து, உங்களிடம் பழகுநர் உரிமம் இல்லையென்றால் அதற்கு விண்ணப்பிக்கவும். உங்கள் ஆதார் அட்டை மற்றும் பிற தேவையான ஆவணங்களை தெளிவாக ஸ்கேன் செய்து தயாராக வைத்திருப்பதை உறுதி செய்யவும். மங்கலான படங்களை பதிவேற்ற வேண்டாம். மீண்டும் பட்டனை கிளிக் செய்வதன் மூலம் எந்த நேரத்திலும் இந்த ஆடியோவை இடைநிறுத்தலாம். உங்கள் பயணத்தைத் தொடங்குவோம்!",
+    te: "నమస్కారం అమిత్ కుమార్. పరివహన్ సేవా డ్రైవింగ్ లైసెన్స్ పోర్టల్కు స్వాగతం. నేను మీ ఆడియో గైడ్. మీ డ్రైవింగ్ లైసెన్స్ పొందడానికి, మీరు కొన్ని సాధారణ దశలను అనుసరించాలి. ముందుగా, మీ రాష్ట్రం మరియు ఆర్టీఓని ఎంచుకోండి. ఆ తర్వాత, వాహనం రకాన్ని ఎంచుకోండి. ఆపై, మీ అర్హతను తనిఖీ చేసి, మీకు లెర్నర్స్ లైసెన్స్ లేకుంటే దరఖాస్తు చేయండి. మీ ఆధార్ కార్డు మరియు ఇతర అవసరమైన పత్రాలను స్పష్టంగా స్కాన్ చేసి సిద్ధంగా ఉంచండి. అస్పష్టమైన చిత్రాలను అప్‌లోడ్ చేయవద్దు. మీరు బటన్‌ను మళ్లీ క్లిక్ చేయడం ద్వారా ఎప్పుడైనా ఈ ఆడియోను పాజ్ చేయవచ్చు. మీ ప్రయాణాన్ని ప్రారంభిద్దాం!",
+    kn: "ನಮಸ್ಕಾರ ಅಮಿತ್ ಕುಮಾರ್. ಪರಿವಾಹನ್ ಸೇವಾ ಡ್ರೈವಿಂಗ್ ಲೈಸೆನ್ಸ್ ಪೋರ್ಟಲ್‌ಗೆ ಸುಸ್ವಾಗತ. ನಾನು ನಿಮ್ಮ ಆಡಿಯೋ ಮಾರ್ಗದರ್ಶಿ. ನಿಮ್ಮ ಡ್ರೈವಿಂಗ್ ಲೈಸೆನ್ಸ್ ಪಡೆಯಲು, ನೀವು ಕೆಲವು ಸರಳ ಹಂತಗಳನ್ನು ಅನುಸರಿಸಬೇಕು. ಮೊದಲು, ನಿಮ್ಮ ರಾಜ್ಯ ಮತ್ತು ಆರ್‌ಟಿಒ ಆಯ್ಕೆಮಾಡಿ. ಮುಂದೆ, ವಾಹನದ ಪ್ರಕಾರವನ್ನು ಆರಿಸಿ. ನಂತರ, ನಿಮ್ಮ ಅರ್ಹತೆಯನ್ನು ಪರಿಶೀಲಿಸಿ ಮತ್ತು ನಿಮ್ಮ ಬಳಿ ಲರ್ನರ್ಸ್ ಲೈಸೆನ್ಸ್ ಇಲ್ಲದಿದ್ದರೆ ಅರ್ಜಿ ಸಲ್ಲಿಸಿ. ನಿಮ್ಮ ಆಧಾರ್ ಕಾರ್ಡ್ ಮತ್ತು ಇತರ ಅಗತ್ಯ ದಾಖಲೆಗಳನ್ನು ಸ್ಪಷ್ಟವಾಗಿ ಸ್ಕ್ಯಾನ್ ಮಾಡಿ ಸಿದ್ಧವಾಗಿಟ್ಟುಕೊಳ್ಳಿ. ಅಸ್ಪಷ್ಟ ಚಿತ್ರಗಳನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡಬೇಡಿ. ನೀವು ಮತ್ತೆ ಬಟನ್ ಕ್ಲಿಕ್ ಮಾಡುವ ಮೂಲಕ ಯಾವುದೇ ಸಮಯದಲ್ಲಿ ಈ ಆಡಿಯೊವನ್ನು ವಿರಾಮಗೊಳಿಸಬಹುದು. ನಿಮ್ಮ ಪ್ರಯಾಣವನ್ನು ಪ್ರಾರಂಭಿಸೋಣ!",
+    ml: "നമസ്കാരം അമിത് കുമാർ. പരിവാഹൻ സേവാ ഡ്രൈവിംഗ് ലൈസൻസ് പോർട്ടലിലേക്ക് സ്വാഗതം. ഞാൻ നിങ്ങളുടെ ഓഡിയോ ഗൈഡാണ്. നിങ്ങളുടെ ഡ്രൈവിംഗ് ലൈസൻസ് ലഭിക്കുന്നതിന്, കുറച്ച് ലളിതമായ ഘട്ടങ്ങൾ പാലിക്കേണ്ടതുണ്ട്. ആദ്യം, നിങ്ങളുടെ സംസ്ഥാനവും ആർടിഒയും തിരഞ്ഞെടുക്കുക. അടുത്തതായി, വാഹനത്തിന്റെ തരം തിരഞ്ഞെടുക്കുക. തുടർന്ന്, നിങ്ങളുടെ യോഗ്യത പരിശോധിച്ച് നിങ്ങൾക്ക് ലേണേഴ്സ് ലൈസൻസ് ഇല്ലെങ്കിൽ അപേക്ഷിക്കുക. നിങ്ങളുടെ ആധാർ കാർഡും മറ്റ് ആവശ്യമായ രേഖകളും വ്യക്തമായി സ്കാൻ ചെയ്ത് തയ്യാറാക്കി വെക്കുക. വ്യക്തതയില്ലാത്ത ചിത്രങ്ങൾ അപ്‌ലോഡ് ചെയ്യരുത്. ബട്ടൺ വീണ്ടും ക്ലിക്കുചെയ്ത് നിങ്ങൾക്ക് എപ്പോൾ വേണമെങ്കിലും ഈ ഓഡിയോ താൽക്കാലികമായി നിർത്താം. നിങ്ങളുടെ യാത്ര ആരംഭിക്കാം!",
+    gu: "નમસ્તે અમિત કુમાર. પરિવહન સેવા ડ્રાઇવિંગ લાઇસન્સ પોર્ટલમાં તમારું સ્વાગત છે. હું તમારો ઑડિઓ માર્ગદર્શક છું. તમારું ડ્રાઇવિંગ લાઇસન્સ મેળવવા માટે, તમારે થોડા સરળ પગલાંઓનું પાલન કરવાની જરૂર છે. પ્રથમ, તમારું રાજ્ય અને આરટીઓ પસંદ કરો. આગળ, વાહનનો પ્રકાર પસંદ કરો. પછી, તમારી પાત્રતા ચકાસો અને જો તમારી પાસે લર્નર્સ લાઇસન્સ ન હોય તો અરજી કરો. ખાતરી કરો કે તમારું આધાર કાર્ડ અને અન્ય જરૂરી દસ્તાવેજો સ્પષ્ટ રીતે સ્કેન કરેલા અને તૈયાર છે. અસ્પષ્ટ છબીઓ અપલોડ કરશો નહીં. તમે ફરીથી બટન પર ક્લિક કરીને કોઈપણ સમયે આ ઑડિઓ થોભાવી શકો છો. ચાલો તમારી મુસાફરી શરૂ કરીએ!",
+    pa: "ਸਤਿ ਸ੍ਰੀ ਅਕਾਲ ਅਮਿਤ ਕੁਮਾਰ। ਪਰਿਵਹਨ ਸੇਵਾ ਡਰਾਈਵਿੰਗ ਲਾਇਸੈਂਸ ਪੋਰਟਲ ਵਿੱਚ ਤੁਹਾਡਾ ਸੁਆਗਤ ਹੈ। ਮੈਂ ਤੁਹਾਡਾ ਆਡੀਓ ਗਾਈਡ ਹਾਂ। ਆਪਣਾ ਡਰਾਈਵਿੰਗ ਲਾਇਸੈਂਸ ਪ੍ਰਾਪਤ ਕਰਨ ਲਈ, ਤੁਹਾਨੂੰ ਕੁਝ ਸਧਾਰਨ ਕਦਮਾਂ ਦੀ ਪਾਲਣਾ ਕਰਨੀ ਪਵੇਗੀ। ਪਹਿਲਾਂ, ਆਪਣਾ ਰਾਜ ਅਤੇ ਆਰ.ਟੀ.ਓ ਚੁਣੋ। ਅੱਗੇ, ਵਾਹਨ ਦੀ ਕਿਸਮ ਚੁਣੋ। ਫਿਰ, ਆਪਣੀ ਯੋਗਤਾ ਦੀ ਜਾਂਚ ਕਰੋ ਅਤੇ ਜੇਕਰ ਤੁਹਾਡੇ ਕੋਲ ਲਰਨਰ ਲਾਇਸੈਂਸ ਨਹੀਂ ਹੈ ਤਾਂ ਅਰਜ਼ੀ ਦਿਓ। ਇਹ ਯਕੀਨੀ ਬਣਾਓ ਕਿ ਤੁਹਾਡਾ ਆਧਾਰ ਕਾਰਡ ਅਤੇ ਹੋਰ ਲੋੜੀਂਦੇ ਦਸਤਾਵੇਜ਼ ਸਪਸ਼ਟ ਤੌਰ 'ਤੇ ਸਕੈਨ ਕੀਤੇ ਗਏ ਅਤੇ ਤਿਆਰ ਹਨ। ਧੁੰਦਲੀਆਂ ਤਸਵੀਰਾਂ ਅੱਪਲੋਡ ਨਾ ਕਰੋ। ਤੁਸੀਂ ਬਟਨ 'ਤੇ ਦੁਬਾਰਾ ਕਲਿੱਕ ਕਰਕੇ ਕਿਸੇ ਵੀ ਸਮੇਂ ਇਸ ਆਡੀਓ ਨੂੰ ਰੋਕ ਸਕਦੇ ਹੋ। ਆਓ ਤੁਹਾਡਾ ਸਫ਼ਰ ਸ਼ੁਰੂ ਕਰੀਏ!",
+    or: "ନମସ୍କାର ଅମିତ କୁମାର। ପରିବହନ ସେବା ଡ୍ରାଇଭିଂ ଲାଇସେନ୍ସ ପୋର୍ଟାଲକୁ ସ୍ୱାଗତ। ମୁଁ ଆପଣଙ୍କର ଅଡିଓ ଗାଇଡ୍। ଆପଣଙ୍କର ଡ୍ରାଇଭିଂ ଲାଇସେନ୍ସ ପାଇବାକୁ, ଆପଣଙ୍କୁ କିଛି ସରଳ ପଦକ୍ଷେପ ଅନୁସରଣ କରିବାକୁ ପଡିବ। ପ୍ରଥମେ, ଆପଣଙ୍କ ରାଜ୍ୟ ଏବଂ ଆରଟିଓ ବାଛନ୍ତୁ। ପରବର୍ତ୍ତୀ ସମୟରେ, ଯାନର ପ୍ରକାର ବାଛନ୍ତୁ। ତାପରେ, ଆପଣଙ୍କର ଯୋଗ୍ୟତା ଯାଞ୍ଚ କରନ୍ତୁ ଏବଂ ଯଦି ଆପଣଙ୍କ ପାଖରେ ଲର୍ଣ୍ଣର୍ସ ଲାଇସେନ୍ସ ନାହିଁ ତେବେ ଆବେଦନ କରନ୍ତୁ। ନିଶ୍ଚିତ କରନ୍ତୁ ଯେ ଆପଣଙ୍କର ଆଧାର କାର୍ଡ ଏବଂ ଅନ୍ୟାନ୍ୟ ଆବଶ୍ୟକୀୟ ଦସ୍ତାବେଜଗୁଡିକ ସ୍ପଷ୍ଟ ଭାବରେ ସ୍କାନ ହୋଇଛି ଏବଂ ପ୍ରସ୍ତୁତ ଅଛି। ଅସ୍ପଷ୍ଟ ଚିତ୍ର ଅପଲୋଡ୍ କରନ୍ତୁ ନାହିଁ। ବଟନ୍ କୁ ପୁନର୍ବାର କ୍ଲିକ୍ କରି ଆପଣ ଯେକୌଣସି ସମୟରେ ଏହି ଅଡିଓ କୁ ବିରତି ଦେଇପାରିବେ। ଆସନ୍ତୁ ଆପଣଙ୍କ ଯାତ୍ରା ଆରମ୍ଭ କରିବା!"
+  };
+
+  const startSpeech = () => {
+  const synth = window.speechSynthesis;
+
+  synth.cancel();
+
+  const languageConfig = {
+    en: 'en-IN',
+    hi: 'hi-IN',
+    bn: 'bn-IN',
+    mr: 'mr-IN',
+    ta: 'ta-IN',
+    te: 'te-IN',
+    kn: 'kn-IN',
+    ml: 'ml-IN',
+    gu: 'gu-IN',
+    pa: 'pa-IN',
+    or: 'or-IN'
+  };
+
+  const langCode = languageConfig[language] || 'en-IN';
+
+  const text = audioScripts[language] || audioScripts.en;
+
+  const voices = synth.getVoices();
+
+  console.log('Selected language:', language);
+  console.log('Required voice:', langCode);
+  console.log('Available voices:', voices);
+
+  // First try exact language
+  let matchingVoice = voices.find(
+    voice => voice.lang.toLowerCase() === langCode.toLowerCase()
+  );
+
+  // Then try language without region
+  if (!matchingVoice) {
+    const baseLanguage = langCode.split('-')[0];
+
+    matchingVoice = voices.find(
+      voice => voice.lang.toLowerCase().startsWith(baseLanguage)
+    );
+  }
+
+  const utterance = new SpeechSynthesisUtterance(text);
+
+  utterance.lang = langCode;
+
+  if (matchingVoice) {
+    utterance.voice = matchingVoice;
+
+    console.log(
+      `Using voice: ${matchingVoice.name} (${matchingVoice.lang})`
+    );
+  } else {
+    console.warn(
+      `No voice found for ${langCode}. Browser may not support this language.`
+    );
+  }
+
+  utterance.rate = 0.8;
+
+  utterance.onstart = () => {
+    setAudioState('PLAYING');
+  };
+
+  utterance.onend = () => {
+    setAudioState('IDLE');
+  };
+
+  utterance.onerror = (event) => {
+    console.error('Speech synthesis error:', event);
+    setAudioState('IDLE');
+  };
+
+  synth.speak(utterance);
+};
+
+  const handlePlayPause = () => {
+    if (audioState === 'PLAYING') {
+      window.speechSynthesis.pause();
+      setAudioState('PAUSED');
+    } else if (audioState === 'PAUSED') {
+      window.speechSynthesis.resume();
+      setAudioState('PLAYING');
+    } else {
+      startSpeech();
+    }
+  };
+
+  const handleReplay = () => {
+    window.speechSynthesis.cancel();
+    setAudioState('IDLE');
+    setTimeout(startSpeech, 100);
+  };
 
   const steps = [
     { num: "01", title: t.dl.steps.s1.title, desc: t.dl.steps.s1.desc, icon: MapPin },
@@ -67,7 +227,7 @@ const DrivingLicensePage = () => {
               onClick={() => navigate('/driving-license/apply')}
               className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3.5 rounded-xl font-semibold text-lg flex items-center gap-3 transition-colors shadow-xl shadow-blue-600/20"
             >
-              {t.dl.startJourney} <ArrowRight className="w-5 h-5" />
+              Start Application <ArrowRight className="w-5 h-5" />
             </button>
             
             <div className="flex items-center gap-2 mt-8 text-sm font-semibold text-slate-500">
@@ -92,38 +252,36 @@ const DrivingLicensePage = () => {
           </div>
           
           <div className="flex-1 flex items-center justify-center gap-6 w-full md:w-auto">
-            <div className="flex items-center gap-2 bg-slate-50 px-3 py-1.5 rounded-full border border-slate-200 text-sm font-semibold text-slate-700">
-              <img src="https://flagcdn.com/w20/gb.png" alt="English" className="w-4" /> English
-            </div>
             
-            <button 
-              onClick={() => setIsPlaying(!isPlaying)}
-              className="w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center hover:bg-blue-700 transition-colors shadow-md shrink-0"
-            >
-              {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 ml-0.5" />}
-            </button>
+            <div className="flex items-center gap-3">
+              <button 
+                onClick={handlePlayPause}
+                className="w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center hover:bg-blue-700 transition-colors shadow-md shrink-0"
+              >
+                {audioState === 'PLAYING' ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 ml-0.5" />}
+              </button>
+
+              {(audioState === 'PLAYING' || audioState === 'PAUSED') && (
+                <button
+                  onClick={handleReplay}
+                  title="Replay"
+                  className="w-10 h-10 bg-slate-100 text-slate-600 rounded-full flex items-center justify-center hover:bg-slate-200 transition-colors shrink-0"
+                >
+                  <RotateCcw className="w-4 h-4" />
+                </button>
+              )}
+            </div>
 
             <div className="hidden sm:flex items-center gap-1 h-8 px-2 overflow-hidden w-32 md:w-48">
                {[...Array(24)].map((_, i) => (
                   <motion.div 
                     key={i}
-                    animate={isPlaying ? { height: [8, Math.random() * 24 + 8, 8] } : { height: 4 }}
-                    transition={isPlaying ? { repeat: Infinity, duration: 0.5 + Math.random(), ease: "easeInOut" } : {}}
-                    className={`w-1 rounded-full ${isPlaying ? 'bg-blue-500' : 'bg-slate-300'}`}
+                    animate={audioState === 'PLAYING' ? { height: [8, Math.random() * 24 + 8, 8] } : { height: 4 }}
+                    transition={audioState === 'PLAYING' ? { repeat: Infinity, duration: 0.5 + Math.random(), ease: "easeInOut" } : {}}
+                    className={`w-1 rounded-full ${audioState === 'PLAYING' ? 'bg-blue-500' : 'bg-slate-300'}`}
                   />
                ))}
             </div>
-          </div>
-
-          <div className="flex items-center gap-2 flex-wrap justify-center">
-            {['हिंदी', 'বাংলা', 'मराठी', 'தமிழ்', 'తెలుగు'].map((lang, idx) => (
-              <button key={idx} className="px-3 py-1.5 border border-slate-200 rounded-full text-xs font-semibold text-slate-600 hover:bg-slate-50 hover:text-blue-600 transition-colors">
-                {lang}
-              </button>
-            ))}
-            <button className="px-3 py-1.5 border border-slate-200 rounded-full text-xs font-semibold text-slate-600 hover:bg-slate-50 flex items-center gap-1 transition-colors">
-              {t.dl.more} <ChevronDown className="w-3 h-3" />
-            </button>
           </div>
         </div>
       </section>
