@@ -1,0 +1,36 @@
+export const or = {
+  navbar: {
+    home: "ହୋମ", dashboard: "ଡ୍ୟାଶବୋର୍ଡ", services: "ସେବା",
+    track: "ଆବେଦନ ଟ୍ରାକ", help: "ସହାୟତା କେନ୍ଦ୍ର", hi: "ନମସ୍କାର",
+  },
+  dl: {
+    heroTitle1: "ଏକ ଯାତ୍ରା.", heroTitle2: "ଅନେକ ମାଇଲଫଳକ.",
+    heroSubtitle: "ଭାରତରେ ଯେ କୌଣସି ଜାଗାରେ ଡ୍ରାଇଭିଂ ଲାଇସେନ୍ସ ପାଇବାର ସହଜ ପ୍ରକ୍ରିୟା.",
+    startJourney: "ଯାତ୍ରା ଆରମ୍ଭ କରନ୍ତୁ",
+    features: "100% ଡିଜିଟାଲ୍ • ସୁରକ୍ଷିତ • ସହଜ • ବିଶ୍ୱସ୍ତ",
+    audioGuide: "ଅଡିଓ ଗାଇଡ୍", listenFollow: "ଶୁଣନ୍ତୁ & ଅନୁସରଣ", more: "ଅଧିକ",
+    journeyTitle: "ଆପଣଙ୍କ DL ଯାତ୍ରା", journeySubtitle: "ସହଜ ପଦକ୍ଷେପ!",
+    viewAllSteps: "ସମସ୍ତ ପଦକ୍ଷେପ",
+    steps: {
+      s1: { title: "ରାଜ୍ୟ", desc: "ରାଜ୍ୟ ବାଛନ୍ତୁ" },
+      s2: { title: "RTO", desc: "ନିକଟ RTO" },
+      s3: { title: "ଯାନ", desc: "ଯାନ ବାଛନ୍ତୁ" },
+      s4: { title: "ଯୋଗ୍ୟତା", desc: "ଯୋଗ୍ୟତା ଯାଞ୍ଚ" },
+      s5: { title: "LL", desc: "LL ପ୍ରାପ୍ତ" },
+      s6: { title: "DL", desc: "ପରୀକ୍ଷା & DL" },
+    },
+    youAreHere: "ଆପଣ ଏଠାରେ", tip: "ଅଗ୍ରଗତି ସଞ୍ଚୟ କରନ୍ତୁ।",
+    choosePath: "ପଥ ବାଛନ୍ତୁ", pathSubtitle: "ଆପଣଙ୍କ ପାଇଁ ଠିକ ବାଛନ୍ତୁ।",
+    haveLL: "LL ଅଛି", haveLLDesc: "DL ଆବେଦନ",
+    noLL: "LL ନାହିଁ", noLLDesc: "ପ୍ରଥମେ LL",
+    smartAssistant: "ସ୍ମାର୍ଟ ସହାୟକ",
+    askAnything: "DL ବିଷୟରେ ପଚାରନ୍ତୁ",
+    q1: "କାର DL ବୟସ?", q2: "DL ଦଲିଲ?",
+    q3: "ଟେଷ୍ଟ ବୁକ?", q4: "ଫେଲ ହେଲେ?",
+    typeQ: "ପ୍ରଶ୍ନ ଟାଇପ...", needHelp: "ସାହାଯ୍ୟ?",
+    weAreHere: "ଆମେ ଏଠାରେ", chat: "ଚ୍ୟାଟ", chatDesc: "ତୁରନ୍ତ ସାହାଯ୍ୟ",
+    call: "ହେଲ୍ପଲାଇନ", callDesc: "1800-11-5656",
+    locate: "RTO", locateDesc: "ନିକଟ RTO",
+    video: "ଭିଡିଓ", videoDesc: "ପଦକ୍ଷେପ ଦ୍ୱାରା",
+  }
+};

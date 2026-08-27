@@ -1,44 +1,160 @@
-import React from 'react';
-import { Bot, Send } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { Bot, Send, Maximize2, Loader2 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { askVehicle } from '../../utils/assistantApi';
+
+const VEHICLE_ID = 1; // TODO: get from context
+
+const QUICK_CHIPS = [
+  'When is my PUC expiry?',
+  'Pending challans?',
+  'Insurance renewal?',
+];
 
 const AiAssistantWidget = () => {
+  const navigate = useNavigate();
+  const [messages, setMessages] = useState([
+    {
+      role: 'assistant',
+      text: "Hello! 👋 Ask me anything about your vehicle — health, documents, challans, or live location."
+    }
+  ]);
+  const [input, setInput] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const messagesEndRef = useRef(null);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages, isLoading]);
+
+  const handleSend = async (text) => {
+    if (!text?.trim() || isLoading) return;
+    const question = text.trim();
+    setInput('');
+    
+    setMessages(prev => [...prev, { role: 'user', text: question }]);
+    setIsLoading(true);
+
+    const history = messages
+      .slice(-6)
+      .map(m => ({
+        role: m.role,
+        content: m.text,
+      }));
+
+    try {
+      const response = await askVehicle(VEHICLE_ID, question, history);
+      setMessages(prev => [...prev, { role: 'assistant', text: response.answer }]);
+    } catch (err) {
+      setMessages(prev => [...prev, { 
+        role: 'assistant', 
+        text: "I'm unable to reach the vehicle assistant right now. Please try again later." 
+      }]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSend(input);
+    }
+  };
+
   return (
-    <div className="bg-[#F8FAFC] rounded-[1.25rem] border border-slate-200 p-6 flex flex-col flex-1 shadow-[0_2px_10px_rgb(0,0,0,0.02)]">
-      <div className="flex items-center gap-3 mb-6">
-        <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center shrink-0">
-           <img src="/Ai asistance.png" alt="AI" className="w-full h-full object-contain drop-shadow-md" />
+    <div className="bg-white rounded-[1.25rem] h-[500px] border border-slate-200 p-5 shadow-sm flex flex-col relative overflow-hidden">
+      
+      {/* Header */}
+      <div className="flex items-center justify-between mb-4 shrink-0">
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg shrink-0">
+            <Bot className="w-5 h-5 text-white" />
+          </div>
+          <div>
+            <h2 className="text-[14px] font-bold text-slate-900 leading-tight">Ask My Vehicle</h2>
+            <p className="text-[10px] text-slate-500 font-medium leading-[1.2] mt-0.5">AI Assistant · Powered by Gemini</p>
+          </div>
         </div>
-        <div>
-          <h2 className="text-sm font-bold text-slate-900">Ask My Vehicle <span className="text-slate-500 font-normal">(AI Assistant)</span></h2>
-        </div>
+        
+        {/* Open Full Page Button */}
+        <button
+          onClick={() => navigate('/ask-my-vehicle')}
+          className="flex items-center gap-1.5 text-[11px] font-semibold text-blue-600 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 px-2.5 py-1.5 rounded-lg border border-blue-100 transition-colors"
+          title="Open in Full Page"
+        >
+          <Maximize2 className="w-3.5 h-3.5" />
+          <span>Full Page</span>
+        </button>
       </div>
 
-      <div className="flex-1 space-y-4 mb-4">
-        <div className="flex gap-3">
-           <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center shrink-0 mt-1">
-             <Bot className="w-3 h-3 text-blue-600" />
-           </div>
-           <div className="bg-white border border-slate-200 rounded-2xl rounded-tl-sm p-3 shadow-sm">
-             <p className="text-xs text-slate-700"><strong>Hello Amit! 👋</strong><br/><br/>I can help you with your vehicle. Ask me anything!</p>
-           </div>
-        </div>
-
-        <div className="flex flex-wrap gap-2 justify-end">
-          <button className="text-[10px] text-blue-700 bg-blue-50 border border-blue-100 px-3 py-1.5 rounded-full hover:bg-blue-100 transition-colors">When is my PUC expiry?</button>
-          <button className="text-[10px] text-blue-700 bg-blue-50 border border-blue-100 px-3 py-1.5 rounded-full hover:bg-blue-100 transition-colors">Do I have any pending challans?</button>
-          <button className="text-[10px] text-blue-700 bg-blue-50 border border-blue-100 px-3 py-1.5 rounded-full hover:bg-blue-100 transition-colors">When is my insurance renewal?</button>
-          <button className="text-[10px] text-blue-700 bg-blue-50 border border-blue-100 px-3 py-1.5 rounded-full hover:bg-blue-100 transition-colors">What documents do I need for RC renewal?</button>
-        </div>
+      {/* Chat Area */}
+      <div className="flex-1 overflow-y-auto mb-4 space-y-3 pr-2 h-[80px] min-h-[80px] scrollbar-hide">
+        {messages.map((msg, idx) => (
+          <div key={idx} className={`flex gap-2 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+            {msg.role === 'assistant' && (
+              <div className="w-6 h-6 rounded-full bg-blue-50 border border-blue-100 flex items-center justify-center shrink-0 mt-0.5">
+                <Bot className="w-3 h-3 text-blue-600" />
+              </div>
+            )}
+            <div className={`rounded-xl px-3 py-2 text-[12px] leading-relaxed max-w-[85%] whitespace-pre-wrap ${
+              msg.role === 'user' 
+                ? 'bg-blue-600 text-white rounded-tr-sm shadow-sm' 
+                : 'bg-slate-50 border border-slate-200 text-slate-700 rounded-tl-sm'
+            }`}>
+              {msg.text}
+            </div>
+          </div>
+        ))}
+        
+        {isLoading && (
+          <div className="flex gap-2 justify-start">
+            <div className="w-6 h-6 rounded-full bg-blue-50 border border-blue-100 flex items-center justify-center shrink-0 mt-0.5">
+              <Bot className="w-3 h-3 text-blue-600" />
+            </div>
+            <div className="bg-slate-50 border border-slate-200 rounded-xl rounded-tl-sm px-3 py-2 flex items-center">
+              <Loader2 className="w-3.5 h-3.5 text-blue-500 animate-spin" />
+            </div>
+          </div>
+        )}
+        <div ref={messagesEndRef} />
       </div>
 
-      <div className="relative mt-auto">
-        <input 
-          type="text" 
-          placeholder="Type your question..." 
-          className="w-full bg-white border border-slate-200 rounded-xl pl-4 pr-10 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-300 transition-all shadow-inner"
+      {/* Quick chips */}
+      {messages.length <= 2 && (
+        <div className="flex flex-wrap gap-1.5 mb-3 shrink-0">
+          {QUICK_CHIPS.map(chip => (
+            <button
+              key={chip}
+              onClick={() => handleSend(chip)}
+              disabled={isLoading}
+              className="text-[10px] text-slate-600 bg-slate-50 border border-slate-200 
+                         px-2.5 py-1.5 rounded-full hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 transition-colors disabled:opacity-50"
+            >
+              {chip}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {/* Input */}
+      <div className="relative mt-auto shrink-0">
+        <input
+          type="text"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={handleKeyDown}
+          disabled={isLoading}
+          placeholder="Ask anything..."
+          className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-4 pr-10 py-2.5 text-[12px] text-slate-800 
+                     focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-300 transition-all shadow-inner disabled:opacity-60"
         />
-        <button className="absolute right-3 top-1/2 -translate-y-1/2 text-blue-600 hover:text-blue-800 transition-colors">
-          <Send className="w-4 h-4" />
+        <button
+          onClick={() => handleSend(input)}
+          disabled={!input.trim() || isLoading}
+          className="absolute right-1.5 top-1/2 -translate-y-1/2 w-8 h-8 bg-white border border-slate-200 text-blue-600 rounded-lg flex items-center justify-center hover:bg-blue-50 transition-colors disabled:opacity-40 disabled:hover:bg-white shadow-sm"
+        >
+          <Send className="w-3.5 h-3.5" />
         </button>
       </div>
     </div>

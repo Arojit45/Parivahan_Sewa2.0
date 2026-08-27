@@ -14,15 +14,15 @@ const QuickActions = () => {
   ];
 
   return (
-    <div className="bg-white rounded-[1.25rem] border border-slate-200 p-6 shadow-sm h-full flex flex-col">
-      <h2 className="text-[15px] font-bold text-[#1e293b] mb-6">Quick Actions</h2>
-      <div className="grid grid-cols-4 gap-y-6 gap-x-2 flex-1 place-content-start">
+    <div className="bg-white rounded-[1.25rem] border border-slate-200 p-5 shadow-sm h-full flex flex-col">
+      <h2 className="text-[14px] font-bold text-[#1e293b] mb-5">Quick Actions</h2>
+      <div className="grid grid-cols-4 gap-y-5 gap-x-2 flex-1 place-content-start">
         {actions.map((action, idx) => (
-          <button key={idx} className="flex flex-col items-center gap-2 group">
-            <div className={`w-11 h-11 rounded-xl border flex items-center justify-center transition-transform group-hover:scale-105 ${action.bg}`}>
-              {action.icon}
+          <button key={idx} className="flex flex-col items-center gap-1.5 group">
+            <div className={`w-9 h-9 rounded-[10px] border flex items-center justify-center transition-transform group-hover:scale-105 ${action.bg}`}>
+              {React.cloneElement(action.icon, { className: 'w-4 h-4 ' + action.icon.props.className.replace('w-5 h-5 ', '') })}
             </div>
-            <span className="text-[11px] font-bold text-slate-700 text-center leading-tight px-1">{action.label}</span>
+            <span className="text-[10px] font-bold text-slate-700 text-center leading-[1.1] px-0.5">{action.label}</span>
           </button>
         ))}
       </div>

@@ -30,21 +30,21 @@ const PopularServices = () => {
   ];
 
   return (
-    <div className="bg-white rounded-[1.25rem] border border-slate-200 p-6 shadow-sm h-full flex flex-col">
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-[15px] font-bold text-[#1e293b]">Popular Services</h2>
-        <button className="text-[13px] font-bold text-blue-600 hover:underline">View All</button>
+    <div className="bg-white rounded-[1.25rem] border border-slate-200 p-5 shadow-sm h-full flex flex-col">
+      <div className="flex justify-between items-center mb-5">
+        <h2 className="text-[14px] font-bold text-[#1e293b]">Popular Services</h2>
+        <button className="text-[12px] font-bold text-blue-600 hover:underline">View All</button>
       </div>
 
       <div className="space-y-4 flex-1">
         {services.map((service, idx) => (
-          <div key={idx} className="flex items-center gap-3.5 cursor-pointer group">
-            <div className={`w-9 h-9 rounded-xl border flex items-center justify-center shrink-0 transition-transform group-hover:scale-105 ${service.bg}`}>
+          <div key={idx} className="flex items-center gap-3 cursor-pointer group">
+            <div className={`w-8 h-8 rounded-[10px] border flex items-center justify-center shrink-0 transition-transform group-hover:scale-105 ${service.bg}`}>
               {service.icon}
             </div>
-            <div>
-              <h4 className="text-[13px] font-bold text-slate-900 group-hover:text-blue-600 transition-colors">{service.title}</h4>
-              <p className="text-[11px] text-slate-500 font-medium mt-0.5">{service.desc}</p>
+            <div className="flex-1 min-w-0">
+              <h4 className="text-[12px] font-bold text-slate-900 group-hover:text-blue-600 transition-colors truncate">{service.title}</h4>
+              <p className="text-[10px] text-slate-500 font-medium mt-0.5 truncate">{service.desc}</p>
             </div>
           </div>
         ))}

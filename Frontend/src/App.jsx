@@ -7,6 +7,7 @@ import GuardianModePage from './pages/GuardianModePage';
 import DrivingLicensePage from './pages/DrivingLicensePage';
 import DrivingLicenseWizardPage from './pages/DrivingLicenseWizardPage';
 import ChallanPage from './pages/ChallanPage';
+import AskMyVehiclePage from './pages/AskMyVehiclePage';
 import { LanguageProvider } from './contexts/LanguageContext';
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
           <Route path="/driving-license" element={<DrivingLicensePage />} />
           <Route path="/driving-license/apply" element={<DrivingLicenseWizardPage />} />
           <Route path="/challans" element={<ChallanPage />} />
+          <Route path="/ask-my-vehicle" element={<AskMyVehiclePage />} />
         </Routes>
       </Router>
     </LanguageProvider>

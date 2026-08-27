@@ -30,7 +30,7 @@ const Sidebar = () => {
         { icon: <CreditCard className="w-5 h-5" />, label: 'Driving License', path: '/driving-license' },
         { icon: <Receipt className="w-5 h-5" />, label: 'Challan', path: '/challans' },
         { icon: <BookOpen className="w-5 h-5" />, label: 'Citizen Process Guide', path: '#' },
-        { icon: <MessageSquare className="w-5 h-5" />, label: 'Virtual Assistant', path: '#' },
+        { icon: <MessageSquare className="w-5 h-5" />, label: 'Ask My Vehicle', path: '/ask-my-vehicle' },
       ]
     },
     {
@@ -51,9 +51,9 @@ const Sidebar = () => {
 
   return (
     <aside className={`bg-white border-r border-slate-200 h-screen sticky top-0 hidden lg:flex flex-col transition-all duration-300 relative z-50 ${isCollapsed ? 'w-20' : 'w-72'}`}>
-      
+
       {/* Absolute Toggle Button (Moved outside overflow container to prevent clipping) */}
-      <button 
+      <button
         onClick={() => setIsCollapsed(!isCollapsed)}
         className="absolute -right-3 top-9 bg-white border border-slate-200 text-slate-400 rounded-full p-1 hover:text-blue-600 shadow-sm z-[100] transition-colors"
       >
@@ -69,7 +69,7 @@ const Sidebar = () => {
               PARIVAHAN SEWA
             </h1>
             <p className="text-[8.5px] text-slate-500 font-medium leading-[1.2] mt-0.5">
-              MINISTRY OF ROAD TRANSPORT & HIGHWAYS<br/>
+              MINISTRY OF ROAD TRANSPORT & HIGHWAYS<br />
               Government of India
             </p>
           </div>
@@ -79,7 +79,7 @@ const Sidebar = () => {
       {/* Scrollable Menus */}
       <div className="p-4 overflow-y-auto overflow-x-hidden flex-1">
         <Link to="/dashboard" className={`w-full bg-blue-50 text-blue-700 hover:bg-blue-100 transition-colors py-2.5 rounded-lg flex items-center font-semibold text-sm mb-6 ${isCollapsed ? 'justify-center px-0' : 'gap-3 px-4'}`}>
-           <Home className="w-4 h-4 shrink-0" /> {!isCollapsed && <span>Dashboard</span>}
+          <Home className="w-4 h-4 shrink-0" /> {!isCollapsed && <span>Dashboard</span>}
         </Link>
 
         {menuGroups.map((group, idx) => (

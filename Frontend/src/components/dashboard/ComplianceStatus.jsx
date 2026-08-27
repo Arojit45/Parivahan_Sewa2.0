@@ -78,22 +78,22 @@ const ComplianceStatus = () => {
 
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4 lg:gap-6">
         {compliances.map((item, idx) => (
-          <div key={idx} className="border border-slate-100 rounded-[1.25rem] p-5 flex flex-col hover:shadow-md transition-shadow bg-white shadow-[0_2px_10px_rgb(0,0,0,0.02)]">
-            <div className="flex justify-between items-start mb-6">
+          <div key={idx} className="border border-slate-100 rounded-[1.25rem] p-4 flex flex-col hover:shadow-md transition-shadow bg-white shadow-[0_2px_10px_rgb(0,0,0,0.02)]">
+            <div className="flex justify-between items-start mb-3">
                <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${item.iconBg}`}>
                  {item.icon}
                </div>
                <Info className="w-4 h-4 text-slate-300" />
             </div>
             
-            <h3 className="text-[15px] font-bold text-slate-900 mb-6">{item.title}</h3>
+            <h3 className="text-[15px] font-bold text-slate-900 mb-3">{item.title}</h3>
             
             <div className="flex-grow flex flex-col justify-end">
-              <span className={`text-[11px] font-bold ${item.statusColor} mb-1 block`}>{item.status}</span>
-              <span className="text-[11px] text-slate-500 font-medium mb-6 block whitespace-pre-line leading-relaxed">
+              <span className={`text-[11px] font-bold ${item.statusColor} mb-0.5 block`}>{item.status}</span>
+              <span className="text-[11px] text-slate-500 font-medium mb-4 block whitespace-pre-line leading-relaxed">
                 {item.validText}
               </span>
-              <button className={`w-full py-2.5 rounded-xl text-[12px] font-bold transition-colors border whitespace-pre-line leading-snug ${item.actionColor}`}>
+              <button className={`w-full py-2 rounded-xl text-[12px] font-bold transition-colors border whitespace-pre-line leading-snug ${item.actionColor}`}>
                 {item.actionText}
               </button>
             </div>

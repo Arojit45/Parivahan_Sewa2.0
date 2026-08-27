@@ -36,21 +36,21 @@ const Timeline = () => {
   ];
 
   return (
-    <div className="bg-white rounded-[1.25rem] border border-slate-200 p-6 shadow-sm h-full flex flex-col">
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-[15px] font-bold text-[#1e293b]">Recent Timeline</h2>
-        <button className="text-[13px] font-bold text-blue-600 hover:underline">View All</button>
+    <div className="bg-white rounded-[1.25rem] border border-slate-200 p-5 shadow-sm h-full flex flex-col">
+      <div className="flex justify-between items-center mb-5">
+        <h2 className="text-[14px] font-bold text-[#1e293b]">Recent Timeline</h2>
+        <button className="text-[12px] font-bold text-blue-600 hover:underline">View All</button>
       </div>
 
-      <div className="relative border-l-2 border-slate-100 ml-3.5 space-y-5 flex-1 mt-2">
+      <div className="relative border-l-2 border-slate-100 ml-3 space-y-4 flex-1 mt-1">
         {events.map((event, idx) => (
-          <div key={idx} className="relative pl-8">
-            <span className={`absolute -left-[15px] -top-1 w-7 h-7 rounded-lg border flex items-center justify-center ${event.color}`}>
-              {event.icon}
+          <div key={idx} className="relative pl-6">
+            <span className={`absolute -left-[13px] -top-0.5 w-6 h-6 rounded-lg border flex items-center justify-center ${event.color}`}>
+              {React.cloneElement(event.icon, { className: 'w-3.5 h-3.5 ' + event.icon.props.className.replace('w-4 h-4 ', '') })}
             </span>
-            <div className="-mt-0.5">
-              <h4 className="text-[13px] font-bold text-slate-900">{event.title}</h4>
-              <p className="text-[11px] text-slate-500 font-medium mt-0.5">{event.date}</p>
+            <div className="-mt-1">
+              <h4 className="text-[12px] font-bold text-slate-900 leading-tight">{event.title}</h4>
+              <p className="text-[10px] text-slate-500 font-medium mt-0.5">{event.date}</p>
             </div>
           </div>
         ))}
