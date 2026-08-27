@@ -28,6 +28,7 @@ const Sidebar = () => {
       title: 'SERVICES',
       items: [
         { icon: <CreditCard className="w-5 h-5" />, label: 'Driving License', path: '/driving-license' },
+        { icon: <FileText className="w-5 h-5" />, label: 'Vehicle Registration', path: '/register-vehicle' },
         { icon: <Receipt className="w-5 h-5" />, label: 'Challan', path: '/challans' },
         { icon: <BookOpen className="w-5 h-5" />, label: 'Citizen Process Guide', path: '#' },
         { icon: <MessageSquare className="w-5 h-5" />, label: 'Ask My Vehicle', path: '/ask-my-vehicle' },

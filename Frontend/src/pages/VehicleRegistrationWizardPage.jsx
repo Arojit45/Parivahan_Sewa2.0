@@ -1,46 +1,43 @@
 import React from 'react';
 import Sidebar from '../components/dashboard/Sidebar';
 import Topbar from '../components/dashboard/Topbar';
-import { DLWizardProvider, useDLWizard } from '../contexts/DLWizardContext';
-import WizardProgress from '../components/dl-wizard/WizardProgress';
-import Step1State from '../components/dl-wizard/Step1State';
-import Step2RTO from '../components/dl-wizard/Step2RTO';
-import Step3VehicleClass from '../components/dl-wizard/Step3VehicleClass';
-import Step4LLCheck from '../components/dl-wizard/Step4LLCheck';
-import Step5Eligibility from '../components/dl-wizard/Step5Eligibility';
-import Step6Documents from '../components/dl-wizard/Step6Documents';
-import Step7Appointment from '../components/dl-wizard/Step7Appointment';
-import Step8Application from '../components/dl-wizard/Step8Application';
-import Step9Tracking from '../components/dl-wizard/Step9Tracking';
+import { VRWizardProvider, useVRWizard } from '../contexts/VRWizardContext';
+import WizardProgress from '../components/vr-wizard/WizardProgress';
+import Step1State from '../components/vr-wizard/Step1State';
+import Step2RTO from '../components/vr-wizard/Step2RTO';
+import Step3Eligibility from '../components/vr-wizard/Step3Eligibility';
+import Step4Documents from '../components/vr-wizard/Step4Documents';
+import Step5Fees from '../components/vr-wizard/Step5Fees';
+import Step6Appointment from '../components/vr-wizard/Step6Appointment';
+import Step7Application from '../components/vr-wizard/Step7Application';
+import Step8Tracking from '../components/vr-wizard/Step8Tracking';
 import { RotateCcw } from 'lucide-react';
 import AudioGuide from '../components/AudioGuide';
 
 const STEP_COMPONENTS = {
   1: Step1State,
   2: Step2RTO,
-  3: Step3VehicleClass,
-  4: Step4LLCheck,
-  5: Step5Eligibility,
-  6: Step6Documents,
-  7: Step7Appointment,
-  8: Step8Application,
-  9: Step9Tracking,
+  3: Step3Eligibility,
+  4: Step4Documents,
+  5: Step5Fees,
+  6: Step6Appointment,
+  7: Step7Application,
+  8: Step8Tracking,
 };
 
 const STEP_TITLES = {
-  1: "Where are you applying?",
-  2: "Which RTO?",
-  3: "What vehicle do you want to drive?",
-  4: "Do you already have a Learner's Licence?",
-  5: "Are you eligible to proceed?",
-  6: "Here's exactly what you need.",
-  7: "Book your appointment.",
-  8: "Complete your application.",
-  9: "Track your application.",
+  1: "Where are you registering?",
+  2: "Select your RTO",
+  3: "Check Vehicle Eligibility",
+  4: "Upload Required Documents",
+  5: "Fee Estimation",
+  6: "Book RTO Inspection",
+  7: "Review & Submit",
+  8: "Track Registration Status",
 };
 
 const WizardContent = () => {
-  const { wizard } = useDLWizard();
+  const { wizard } = useVRWizard();
   const { currentStep, isResuming } = wizard;
 
   const ActiveStep = STEP_COMPONENTS[currentStep] || Step1State;
@@ -67,8 +64,8 @@ const WizardContent = () => {
               {/* Header */}
               <div className="px-4 pt-5 pb-3 border-b border-slate-100 flex justify-between items-start">
                 <div>
-                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Driving Licence</p>
-                  <h2 className="text-sm font-bold text-slate-800 mt-0.5">Application Wizard</h2>
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Vehicle Registration</p>
+                  <h2 className="text-sm font-bold text-slate-800 mt-0.5">Registration Wizard</h2>
                 </div>
                 <AudioGuide textToRead={STEP_TITLES[currentStep]} />
               </div>
@@ -80,7 +77,7 @@ const WizardContent = () => {
 
               {/* Footer */}
               <div className="px-4 py-3 border-t border-slate-100 text-[10px] text-slate-400 font-medium">
-                Step {currentStep} of 9
+                Step {currentStep} of 8
               </div>
             </div>
 
@@ -97,11 +94,10 @@ const WizardContent = () => {
   );
 };
 
-// The page wraps content in DLWizardProvider
-const DrivingLicenseWizardPage = () => (
-  <DLWizardProvider>
+const VehicleRegistrationWizardPage = () => (
+  <VRWizardProvider>
     <WizardContent />
-  </DLWizardProvider>
+  </VRWizardProvider>
 );
 
-export default DrivingLicenseWizardPage;
+export default VehicleRegistrationWizardPage;
