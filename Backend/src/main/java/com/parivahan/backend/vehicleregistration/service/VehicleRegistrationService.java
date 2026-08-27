@@ -37,10 +37,14 @@ public class VehicleRegistrationService {
     public VrApplicationResponse createApplication(CreateVrRequest request) {
         User user = getCurrentUser();
         
-        // Return existing draft if one exists
+        // Return existing draft if one exists, but update the state/stateCode first
         Optional<VehicleRegistrationApplication> existing = repository.findLatestDraftByUserId(user.getId());
         if (existing.isPresent()) {
-            return mapToResponse(existing.get());
+            VehicleRegistrationApplication draft = existing.get();
+            draft.setState(request.getState());
+            draft.setStateCode(request.getStateCode());
+            draft = repository.save(draft);
+            return mapToResponse(draft);
         }
 
         VehicleRegistrationApplication app = VehicleRegistrationApplication.builder()
@@ -63,6 +67,12 @@ public class VehicleRegistrationService {
 
         if (!app.getUser().getId().equals(user.getId())) {
             throw new RuntimeException("Unauthorized");
+        }
+
+        // Step 1: State
+        if (request.getState() != null) {
+            app.setState(request.getState());
+            app.setStateCode(request.getStateCode());
         }
 
         // Step 2: RTO

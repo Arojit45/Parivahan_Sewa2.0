@@ -11,4 +11,5 @@ import java.util.Optional;
 public interface VehicleRepository extends JpaRepository<Vehicle, Long> {
     Optional<Vehicle> findByRegistrationNumber(String registrationNumber);
     List<Vehicle> findByUserId(Long userId);
+    void deleteByRegistrationNumberAndUserId(String registrationNumber, Long userId);
 }

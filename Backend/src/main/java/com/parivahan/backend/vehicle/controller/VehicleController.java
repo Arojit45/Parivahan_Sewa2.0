@@ -65,4 +65,10 @@ public class VehicleController {
         VehiclePublicResponse response = vehicleService.getVehicleInfo(registrationNumber);
         return ResponseEntity.ok(response);
     }
+
+    @DeleteMapping("/{registrationNumber}")
+    public ResponseEntity<Void> removeVehicle(@PathVariable String registrationNumber) {
+        vehicleService.removeVehicle(registrationNumber);
+        return ResponseEntity.noContent().build();
+    }
 }

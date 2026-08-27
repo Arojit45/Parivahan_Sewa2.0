@@ -27,15 +27,15 @@ const EmptyState = () => (
       </div>
       <h2 className="text-2xl font-bold text-slate-900 mb-3">No Vehicles Found</h2>
       <p className="text-slate-500 text-sm leading-relaxed mb-8">
-        You have not registered any vehicles yet. Add your first vehicle to unlock
+        You have not linked any vehicles yet. Add your vehicle to unlock
         your personal dashboard — track compliance, challans, live location and more.
       </p>
       <Link
-        to="/register-vehicle"
+        to="/add-vehicle"
         className="inline-flex items-center gap-2 bg-blue-600 text-white font-semibold text-sm px-6 py-3 rounded-xl hover:bg-blue-700 transition-colors"
       >
         <PlusCircle className="w-4 h-4" />
-        Register Your First Vehicle
+        Add Vehicle
       </Link>
     </div>
   </div>

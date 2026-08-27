@@ -57,19 +57,19 @@ public class VehicleRegistrationApplication extends BaseEntity {
 
     // --- Step 4: Documents (Base64) ---
     @Lob
-    @Column(columnDefinition = "LONGTEXT")
+    @Column(columnDefinition = "TEXT")
     private String identityProof;
 
     @Lob
-    @Column(columnDefinition = "LONGTEXT")
+    @Column(columnDefinition = "TEXT")
     private String addressProof;
 
     @Lob
-    @Column(columnDefinition = "LONGTEXT")
+    @Column(columnDefinition = "TEXT")
     private String vehicleInvoice;
 
     @Lob
-    @Column(columnDefinition = "LONGTEXT")
+    @Column(columnDefinition = "TEXT")
     private String insuranceProof;
 
     private Boolean documentsConfirmed;

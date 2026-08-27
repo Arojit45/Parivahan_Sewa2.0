@@ -13,7 +13,11 @@ const Step5Fees = () => {
       
       setLoading(true);
       try {
-        const res = await fetch(`/api/v1/vr/fee?vehicleType=${encodeURIComponent(wizard.vehicleType || 'Two Wheeler')}`);
+        const res = await fetch(`/api/v1/vr/fee?vehicleType=${encodeURIComponent(wizard.vehicleType || 'Two Wheeler')}`, {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token') || sessionStorage.getItem('token')}`
+          }
+        });
         if (res.ok) {
           const data = await res.json();
           updateFields({ feeAmount: data.fee });

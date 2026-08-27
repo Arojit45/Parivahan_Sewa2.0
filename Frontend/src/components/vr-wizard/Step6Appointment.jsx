@@ -3,15 +3,18 @@ import { Calendar, Clock } from 'lucide-react';
 import { useVRWizard } from '../../contexts/VRWizardContext';
 import WizardNav from './WizardNav';
 
-const DATES = Array.from({ length: 7 }, (_, i) => {
-  const d = new Date();
-  d.setDate(d.getDate() + i + 2); // Start from day after tomorrow
-  // Skip weekends
-  if (d.getDay() === 0 || d.getDay() === 6) {
-    d.setDate(d.getDate() + 2);
+const DATES = (() => {
+  const dates = [];
+  let current = new Date();
+  current.setDate(current.getDate() + 2); // Start from day after tomorrow
+  while (dates.length < 7) {
+    if (current.getDay() !== 0 && current.getDay() !== 6) { // Skip weekends
+      dates.push(current.toISOString().split('T')[0]);
+    }
+    current.setDate(current.getDate() + 1);
   }
-  return d.toISOString().split('T')[0];
-});
+  return dates;
+})();
 
 const SLOTS = ['09:00 AM - 10:00 AM', '10:00 AM - 11:00 AM', '11:30 AM - 12:30 PM', '02:00 PM - 03:00 PM', '03:30 PM - 04:30 PM'];
 

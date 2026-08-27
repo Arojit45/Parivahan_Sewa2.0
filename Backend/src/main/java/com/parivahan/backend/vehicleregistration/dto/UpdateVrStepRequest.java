@@ -9,6 +9,10 @@ import java.time.LocalDate;
 public class UpdateVrStepRequest {
     private Integer completedStep;
 
+    // Step 1
+    private String state;
+    private String stateCode;
+
     // Step 2
     private String rtoCode;
     private String rtoName;

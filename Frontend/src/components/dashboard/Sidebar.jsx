@@ -1,4 +1,4 @@
-﻿import React, { useState } from "react";
+import React, { useState } from "react";
 import { Home, PlusCircle, Shield, AlertTriangle, MapPin, Bell, Share2, BookOpen, MessageSquare, Truck, Activity, FileText, CheckSquare, Settings, HelpCircle, ChevronLeft, ChevronRight, CreditCard, Receipt, LogOut, Car, Zap } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
@@ -46,22 +46,22 @@ const Sidebar = () => {
         { icon: <CreditCard className="w-5 h-5" />, label: "Driving License", path: "/driving-license" },
         { icon: <FileText className="w-5 h-5" />, label: "Vehicle Registration", path: "/register-vehicle" },
         { icon: <Receipt className="w-5 h-5" />, label: "Challan", path: "/challans" },
-        { icon: <BookOpen className="w-5 h-5" />, label: "Citizen Process Guide", path: "#" },
+        { icon: <BookOpen className="w-5 h-5" />, label: "Citizen Process Guide", path: "/citizen-guide" },
         { icon: <MessageSquare className="w-5 h-5" />, label: "Ask My Vehicle", path: "/ask-my-vehicle" },
       ],
     },
     {
       title: "FLEET",
       items: [
-        { icon: <Truck className="w-5 h-5" />, label: "Fleet Dashboard", path: "#" },
-        { icon: <Activity className="w-5 h-5" />, label: "Fleet Risk Radar", path: "#" },
+        { icon: <Truck className="w-5 h-5" />, label: "Fleet Dashboard", path: "/fleet" },
       ],
     },
     {
       title: "DOCUMENTS",
       items: [
-        { icon: <FileText className="w-5 h-5" />, label: "My Documents", path: "#" },
-        { icon: <CheckSquare className="w-5 h-5" />, label: "Application Status", path: "#" },
+        { icon: <FileText className="w-5 h-5" />, label: "My Documents", path: "/my-documents" },
+        { icon: <CheckSquare className="w-5 h-5" />, label: "Track & Review", path: "/track-review" },
+        { icon: <AlertTriangle className="w-5 h-5" />, label: "Corrections Center", path: "/corrections" },
       ],
     },
   ];
@@ -107,7 +107,18 @@ const Sidebar = () => {
             <h3 className="text-xs font-bold text-slate-400 mb-3 px-4 tracking-wider">MY VEHICLES</h3>
 
             {vehicles.length === 0 ? (
-              <p className="text-[11px] text-slate-400 px-4 font-medium">No vehicles added yet</p>
+              <div className="px-4 mb-2">
+                <p className="text-[11px] text-slate-400 font-medium mb-3">No vehicles added yet</p>
+                <Link
+                  to="/add-vehicle"
+                  className="flex items-center gap-2 text-blue-600 hover:text-blue-700 transition-colors"
+                >
+                  <div className="p-1 rounded-full border border-blue-600 flex items-center justify-center">
+                    <PlusCircle className="w-4 h-4" />
+                  </div>
+                  <span className="text-sm font-semibold">Add Vehicle</span>
+                </Link>
+              </div>
             ) : (
               <ul className="space-y-1 mb-2">
                 {vehicles.map((v) => {
@@ -133,13 +144,15 @@ const Sidebar = () => {
               </ul>
             )}
 
-            <Link
-              to="/register-vehicle"
-              className="flex items-center gap-3 px-4 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-blue-600 hover:bg-slate-50 transition-colors"
-            >
-              <PlusCircle className="w-5 h-5 text-slate-400 shrink-0" />
-              <span>Add Vehicle</span>
-            </Link>
+            {vehicles.length > 0 && (
+              <Link
+                to="/add-vehicle"
+                className="flex items-center gap-3 px-4 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-blue-600 hover:bg-slate-50 transition-colors"
+              >
+                <PlusCircle className="w-5 h-5 text-slate-400 shrink-0" />
+                <span>Add Vehicle</span>
+              </Link>
+            )}
           </div>
         )}
 

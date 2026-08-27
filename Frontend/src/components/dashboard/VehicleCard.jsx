@@ -1,5 +1,5 @@
-﻿import React from "react";
-import { ChevronLeft, Edit2, Copy, RefreshCw } from "lucide-react";
+import React from "react";
+import { ChevronLeft, Edit2, Copy, RefreshCw, Trash2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useDashboard } from "../../contexts/DashboardContext";
 import CarModelViewer from "../CarModelViewer";
@@ -45,6 +45,23 @@ const VehicleCard = () => {
                 {v.vehicleStatus}
               </span>
               <button className="text-slate-400 hover:text-blue-600"><Edit2 className="w-3.5 h-3.5" /></button>
+              <button 
+                onClick={async () => {
+                  if(window.confirm("Are you sure you want to unlink this vehicle?")) {
+                    try {
+                      const { apiFetch } = await import('../../utils/api');
+                      await apiFetch(`/vehicles/${v.registrationNumber}`, { method: 'DELETE' });
+                      window.location.reload();
+                    } catch (err) {
+                      alert(err.message || 'Failed to unlink vehicle.');
+                    }
+                  }
+                }}
+                className="text-red-400 hover:text-red-600 ml-2 border border-red-100 hover:bg-red-50 p-1 rounded transition-colors"
+                title="Unlink Vehicle"
+              >
+                <Trash2 className="w-4 h-4" />
+              </button>
             </div>
             <div className="flex items-center gap-3">
               <div className="border border-blue-200 rounded-lg px-3 py-1 font-bold text-sm bg-blue-50 text-slate-800 shadow-sm">

@@ -3,6 +3,17 @@ package com.parivahan.backend.seeder;
 import com.parivahan.backend.challan.entity.Challan;
 import com.parivahan.backend.challan.enums.ChallanStatus;
 import com.parivahan.backend.challan.repository.ChallanRepository;
+import com.parivahan.backend.fleet.domain.FleetAlert;
+import com.parivahan.backend.fleet.domain.FleetRegistration;
+import com.parivahan.backend.fleet.domain.FleetRoute;
+import com.parivahan.backend.fleet.domain.FleetVehicle;
+import com.parivahan.backend.fleet.enums.FleetAlertType;
+import com.parivahan.backend.fleet.enums.FleetRouteStatus;
+import com.parivahan.backend.fleet.enums.FleetStatus;
+import com.parivahan.backend.fleet.repository.FleetAlertRepository;
+import com.parivahan.backend.fleet.repository.FleetRegistrationRepository;
+import com.parivahan.backend.fleet.repository.FleetRouteRepository;
+import com.parivahan.backend.fleet.repository.FleetVehicleRepository;
 import com.parivahan.backend.livelocation.entity.VehicleLocation;
 import com.parivahan.backend.livelocation.repository.VehicleLocationRepository;
 import com.parivahan.backend.user.domain.Role;
@@ -40,6 +51,10 @@ public class MockDataSeeder implements CommandLineRunner {
     private final ChallanRepository challanRepository;
     private final VehicleLocationRepository vehicleLocationRepository;
     private final PasswordEncoder passwordEncoder;
+    private final FleetRegistrationRepository fleetRegistrationRepository;
+    private final FleetVehicleRepository fleetVehicleRepository;
+    private final FleetRouteRepository fleetRouteRepository;
+    private final FleetAlertRepository fleetAlertRepository;
 
     @Override
     @Transactional
@@ -49,6 +64,8 @@ public class MockDataSeeder implements CommandLineRunner {
         seedSinha();
         seedPaula();
         seedRcRegistry();
+        seedFleet();
+        seedFleetPaula();
         log.info("=== MockDataSeeder complete ===");
     }
 
@@ -287,5 +304,233 @@ public class MockDataSeeder implements CommandLineRunner {
                 .registrationNumber(regNum).ownerName(ownerName).ownerMobile(ownerMobile)
                 .manufacturer(manufacturer).model(model).vehicleClass(vehicleClass)
                 .fuelType(fuelType).registrationDate(regDate).rto(rto).build());
+    }
+
+    // -----------------------------------------------------------------------
+    // Fleet seed — approved fleet for sinhaarijit368@gmail.com
+    // -----------------------------------------------------------------------
+    private void seedFleet() {
+        if (fleetRegistrationRepository.findAll().stream()
+                .anyMatch(f -> "FLT-2026-001245".equals(f.getFleetRegistrationNumber()))) return;
+
+        User sinha = userRepository.findByEmail("sinhaarijit368@gmail.com").orElse(null);
+        if (sinha == null) return;
+
+        // Get existing seeded vehicles for sinha
+        Vehicle wb12 = vehicleRepository.findByRegistrationNumber("WB12AB1234").orElse(null);
+        Vehicle wb02 = vehicleRepository.findByRegistrationNumber("WB02ZA5678").orElse(null);
+
+        // Seed a third vehicle for the fleet (GPS offline scenario)
+        Vehicle wb34 = vehicleRepository.findByRegistrationNumber("WB34CD5678").orElseGet(() -> {
+            Vehicle v = vehicleRepository.save(Vehicle.builder()
+                    .registrationNumber("WB34CD5678").nickname("Fleet Truck 3")
+                    .manufacturer("Tata Motors").model("Ace Gold").vehicleClass("GOODS CARRIER").fuelType("DIESEL")
+                    .registrationDate("2023-06-10").rto("KOLKATA (WB-34)")
+                    .insuranceProvider("New India Assurance")
+                    .insuranceValidTill(LocalDate.now().plusDays(5)) // expiring soon!
+                    .pucValidTill(LocalDate.now().plusMonths(3))
+                    .taxValidTill(LocalDate.now().plusMonths(8))
+                    .vehicleStatus(VehicleStatus.ACTIVE).user(sinha).build());
+            // GPS offline — last updated 15 min ago (triggers GPS offline alert)
+            vehicleLocationRepository.save(VehicleLocation.builder()
+                    .vehicle(v).latitude(22.4700).longitude(88.3300)
+                    .speed(0.0).heading("Parked").address("Jadavpur, Kolkata, West Bengal")
+                    .lastUpdated(LocalDateTime.now().minusMinutes(15)).build());
+            saveRcIfAbsent("WB34CD5678", "Arijit Sinha", "9812345678",
+                    "Tata Motors", "Ace Gold", "GOODS CARRIER", "DIESEL", "2023-06-10", "KOLKATA (WB-34)");
+            log.info("Seeded WB34CD5678 for fleet");
+            return v;
+        });
+
+        if (wb12 == null || wb02 == null) return;
+
+        // Update WB02ZA5678 GPS to simulate route deviation (moved off corridor)
+        vehicleLocationRepository.findByVehicleId(wb02.getId()).ifPresent(loc -> {
+            // Simulate vehicle deviating 2km off route (Kolkata→Durgapur corridor)
+            loc.setLatitude(22.6500); // moved significantly off the corridor
+            loc.setLongitude(88.1000);
+            loc.setSpeed(72.0);
+            loc.setHeading("North-West");
+            loc.setAddress("Serampore, Hooghly, West Bengal");
+            loc.setLastUpdated(LocalDateTime.now().minusMinutes(2));
+            vehicleLocationRepository.save(loc);
+        });
+
+        // Create approved fleet
+        FleetRegistration fleet = fleetRegistrationRepository.save(FleetRegistration.builder()
+                .owner(sinha)
+                .fleetName("Sinha Transports")
+                .fleetRegistrationNumber("FLT-2026-001245")
+                .vehicleRegistrationNumber("WB12AB1234")
+                .status(FleetStatus.APPROVED)
+                .document1Base64("MOCK_DOC_1")
+                .document2Base64("MOCK_DOC_2")
+                .businessProofBase64("MOCK_BUSINESS_PROOF")
+                .build());
+
+        // Add 3 vehicles to fleet
+        fleetVehicleRepository.save(FleetVehicle.builder()
+                .fleet(fleet).vehicle(wb12).active(true).addedAt(LocalDateTime.now().minusDays(30)).build());
+        fleetVehicleRepository.save(FleetVehicle.builder()
+                .fleet(fleet).vehicle(wb02).active(true).addedAt(LocalDateTime.now().minusDays(25)).build());
+        fleetVehicleRepository.save(FleetVehicle.builder()
+                .fleet(fleet).vehicle(wb34).active(true).addedAt(LocalDateTime.now().minusDays(20)).build());
+
+        // Active route: WB12AB1234 — Kolkata → Durgapur (on-route)
+        fleetRouteRepository.save(FleetRoute.builder()
+                .fleet(fleet).vehicle(wb12)
+                .startLocation("Kolkata").destination("Durgapur")
+                .startLat(22.5726).startLng(88.3639) // Kolkata
+                .destLat(23.5204).destLng(87.3119)   // Durgapur
+                .toleranceMeters(5000) // 5km for demo so WB12 shows ON-ROUTE
+                .routeStatus(FleetRouteStatus.ACTIVE)
+                .startedAt(LocalDateTime.now().minusHours(2))
+                .build());
+
+        // Active route: WB02ZA5678 — Kolkata → Asansol (with deviation)
+        FleetRoute deviatingRoute = fleetRouteRepository.save(FleetRoute.builder()
+                .fleet(fleet).vehicle(wb02)
+                .startLocation("Kolkata").destination("Asansol")
+                .startLat(22.5726).startLng(88.3639)  // Kolkata
+                .destLat(23.6850).destLng(86.9820)    // Asansol
+                .toleranceMeters(500)
+                .routeStatus(FleetRouteStatus.ACTIVE)
+                .startedAt(LocalDateTime.now().minusHours(1))
+                .build());
+
+        // Pre-seed fleet alerts
+        // 1. Route deviation for WB02ZA5678
+        fleetAlertRepository.save(FleetAlert.builder()
+                .fleet(fleet).vehicle(wb02)
+                .alertType(FleetAlertType.ROUTE_DEVIATION)
+                .message("Vehicle WB02ZA5678 has deviated from assigned route Kolkata → Asansol. Detected near Serampore, Hooghly.")
+                .status("OPEN")
+                .lastTriggeredAt(LocalDateTime.now().minusMinutes(3))
+                .build());
+
+        // 2. GPS offline for WB34CD5678
+        fleetAlertRepository.save(FleetAlert.builder()
+                .fleet(fleet).vehicle(wb34)
+                .alertType(FleetAlertType.GPS_OFFLINE)
+                .message("Vehicle WB34CD5678 GPS offline. Last seen 15 minutes ago near Jadavpur, Kolkata.")
+                .status("OPEN")
+                .lastTriggeredAt(LocalDateTime.now().minusMinutes(5))
+                .build());
+
+        log.info("Seeded Fleet 'Sinha Transports' FLT-2026-001245 for sinhaarijit368@gmail.com");
+    }
+
+    // -----------------------------------------------------------------------
+    // Fleet seed — approved fleet for paularijit368@gmail.com
+    // -----------------------------------------------------------------------
+    private void seedFleetPaula() {
+        if (fleetRegistrationRepository.findAll().stream()
+                .anyMatch(f -> "FLT-2026-009988".equals(f.getFleetRegistrationNumber()))) return;
+
+        User paula = userRepository.findByEmail("paularijit368@gmail.com").orElse(null);
+        if (paula == null) return;
+
+        // Get existing seeded vehicles for paula
+        Vehicle nexon = vehicleRepository.findByRegistrationNumber("KA03MN4567").orElse(null);
+        Vehicle city = vehicleRepository.findByRegistrationNumber("KA01PQ7890").orElse(null);
+
+        // Seed a third vehicle for the fleet (GPS offline scenario)
+        Vehicle ace = vehicleRepository.findByRegistrationNumber("KA04XY9876").orElseGet(() -> {
+            Vehicle v = vehicleRepository.save(Vehicle.builder()
+                    .registrationNumber("KA04XY9876").nickname("Delivery Ace")
+                    .manufacturer("Tata Motors").model("Ace Gold").vehicleClass("GOODS CARRIER").fuelType("DIESEL")
+                    .registrationDate("2023-08-15").rto("BENGALURU (KA-04)")
+                    .insuranceProvider("ICICI Lombard")
+                    .insuranceValidTill(LocalDate.now().plusMonths(5))
+                    .pucValidTill(LocalDate.now().plusMonths(3))
+                    .taxValidTill(LocalDate.now().plusMonths(12))
+                    .vehicleStatus(VehicleStatus.ACTIVE).user(paula).build());
+            // GPS offline — last updated 20 min ago
+            vehicleLocationRepository.save(VehicleLocation.builder()
+                    .vehicle(v).latitude(12.9716).longitude(77.5946)
+                    .speed(0.0).heading("Parked").address("Majestic, Bengaluru, Karnataka")
+                    .lastUpdated(LocalDateTime.now().minusMinutes(20)).build());
+            saveRcIfAbsent("KA04XY9876", "Arijit Paul", "9000012345",
+                    "Tata Motors", "Ace Gold", "GOODS CARRIER", "DIESEL", "2023-08-15", "BENGALURU (KA-04)");
+            log.info("Seeded KA04XY9876 for fleet");
+            return v;
+        });
+
+        if (nexon == null || city == null) return;
+
+        // Update Honda City GPS to simulate route deviation (moved off corridor)
+        vehicleLocationRepository.findByVehicleId(city.getId()).ifPresent(loc -> {
+            // Simulate vehicle deviating off route (Bengaluru→Mysuru corridor)
+            loc.setLatitude(12.7200); // Moved off the expected route
+            loc.setLongitude(77.2800);
+            loc.setSpeed(60.0);
+            loc.setHeading("South-West");
+            loc.setAddress("Ramanagara, Karnataka");
+            loc.setLastUpdated(LocalDateTime.now().minusMinutes(3));
+            vehicleLocationRepository.save(loc);
+        });
+
+        // Create approved fleet
+        FleetRegistration fleet = fleetRegistrationRepository.save(FleetRegistration.builder()
+                .owner(paula)
+                .fleetName("Paul Fleet Services")
+                .fleetRegistrationNumber("FLT-2026-009988")
+                .vehicleRegistrationNumber("KA03MN4567")
+                .status(FleetStatus.APPROVED)
+                .document1Base64("MOCK_DOC_1")
+                .document2Base64("MOCK_DOC_2")
+                .businessProofBase64("MOCK_BUSINESS_PROOF")
+                .build());
+
+        // Add 3 vehicles to fleet
+        fleetVehicleRepository.save(FleetVehicle.builder()
+                .fleet(fleet).vehicle(nexon).active(true).addedAt(LocalDateTime.now().minusDays(15)).build());
+        fleetVehicleRepository.save(FleetVehicle.builder()
+                .fleet(fleet).vehicle(city).active(true).addedAt(LocalDateTime.now().minusDays(10)).build());
+        fleetVehicleRepository.save(FleetVehicle.builder()
+                .fleet(fleet).vehicle(ace).active(true).addedAt(LocalDateTime.now().minusDays(5)).build());
+
+        // Active route: KA03MN4567 (Nexon) — Bengaluru → Hosur (on-route)
+        fleetRouteRepository.save(FleetRoute.builder()
+                .fleet(fleet).vehicle(nexon)
+                .startLocation("Bengaluru").destination("Hosur")
+                .startLat(12.9716).startLng(77.5946) // Bengaluru
+                .destLat(12.7409).destLng(77.8253)   // Hosur
+                .toleranceMeters(5000)
+                .routeStatus(FleetRouteStatus.ACTIVE)
+                .startedAt(LocalDateTime.now().minusHours(1))
+                .build());
+
+        // Active route: KA01PQ7890 (City) — Bengaluru → Mysuru (with deviation)
+        fleetRouteRepository.save(FleetRoute.builder()
+                .fleet(fleet).vehicle(city)
+                .startLocation("Bengaluru").destination("Mysuru")
+                .startLat(12.9716).startLng(77.5946)  // Bengaluru
+                .destLat(12.2958).destLng(76.6394)    // Mysuru
+                .toleranceMeters(500)
+                .routeStatus(FleetRouteStatus.ACTIVE)
+                .startedAt(LocalDateTime.now().minusHours(2))
+                .build());
+
+        // Pre-seed fleet alerts
+        // 1. Route deviation for City
+        fleetAlertRepository.save(FleetAlert.builder()
+                .fleet(fleet).vehicle(city)
+                .alertType(FleetAlertType.ROUTE_DEVIATION)
+                .message("Vehicle KA01PQ7890 has deviated from assigned route Bengaluru → Mysuru. Detected near Ramanagara.")
+                .status("OPEN")
+                .lastTriggeredAt(LocalDateTime.now().minusMinutes(5))
+                .build());
+
+        // 2. GPS offline for Ace
+        fleetAlertRepository.save(FleetAlert.builder()
+                .fleet(fleet).vehicle(ace)
+                .alertType(FleetAlertType.GPS_OFFLINE)
+                .message("Vehicle KA04XY9876 GPS offline. Last seen 20 minutes ago near Majestic, Bengaluru.")
+                .status("OPEN")
+                .lastTriggeredAt(LocalDateTime.now().minusMinutes(10))
+                .build());
+
+        log.info("Seeded Fleet 'Paul Fleet Services' FLT-2026-009988 for paularijit368@gmail.com");
     }
 }

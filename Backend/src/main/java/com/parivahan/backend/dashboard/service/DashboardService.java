@@ -58,12 +58,15 @@ public class DashboardService {
                 .build();
     }
 
-    /** Returns lightweight cards for all vehicles owned by the authenticated user. */
+    /**
+     * Returns lightweight cards for all vehicles owned by the authenticated user.
+     */
     @Transactional(readOnly = true)
     public List<VehicleCardDto> getAllVehicleCards() {
         User currentUser = getCurrentUser();
         return vehicleRepository.findByUserId(currentUser.getId())
                 .stream()
+                .filter(v -> v.getVehicleStatus() == com.parivahan.backend.vehicle.enums.VehicleStatus.ACTIVE)
                 .map(v -> buildVehicleCard(v, currentUser))
                 .collect(Collectors.toList());
     }
@@ -94,7 +97,8 @@ public class DashboardService {
         LocalDate today = LocalDate.now();
         // RC valid for 15 years from registration date
         LocalDate rcValidTill = vehicle.getRegistrationDate() != null
-                ? LocalDate.parse(vehicle.getRegistrationDate()).plusYears(15) : null;
+                ? LocalDate.parse(vehicle.getRegistrationDate()).plusYears(15)
+                : null;
 
         return ComplianceStatusDto.builder()
                 .rc(resolveStatus(rcValidTill, today))

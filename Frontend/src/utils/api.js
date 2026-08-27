@@ -1,5 +1,5 @@
 /**
- * api.js — Centralized API client for Parivahan Sewa 2.0
+ * api.js - Centralized API client for Parivahan Sewa 2.0
  * Reads the JWT token from localStorage and injects it into every request.
  */
 
@@ -9,7 +9,7 @@ function getToken() {
   return localStorage.getItem('token');
 }
 
-async function apiFetch(path, options = {}) {
+export async function apiFetch(path, options = {}) {
   const token = getToken();
   const res = await fetch(`${BASE_URL}${path}`, {
     ...options,
@@ -43,4 +43,16 @@ export async function getMyVehicles() {
 
 export async function getVehicleDashboard(vehicleId) {
   return apiFetch(`/dashboard/vehicles/${vehicleId}`);
+}
+
+export async function getCitizenGuide(params = {}) {
+  const query = new URLSearchParams();
+  if (params.category) query.set('category', params.category);
+  if (params.search) query.set('search', params.search);
+  const suffix = query.toString() ? `?${query.toString()}` : '';
+  return apiFetch(`/citizen-guide${suffix}`);
+}
+
+export async function getCitizenGuideDetail(guideId) {
+  return apiFetch(`/citizen-guide/guides/${encodeURIComponent(guideId)}`);
 }

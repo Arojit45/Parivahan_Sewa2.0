@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Volume2, VolumeX } from 'lucide-react';
+import { Volume2, Square } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 
 const AudioGuide = ({ textToRead, readElementId }) => {
@@ -7,32 +7,38 @@ const AudioGuide = ({ textToRead, readElementId }) => {
   const { language } = useLanguage();
   const synthRef = useRef(window.speechSynthesis);
 
-  const audioRef = useRef(null);
-  const queueRef = useRef([]);
-  const isPausedRef = useRef(false);
+  const [voices, setVoices] = useState([]);
 
-  // Cleanup audio on unmount
   useEffect(() => {
+    const loadVoices = () => {
+      const availableVoices = window.speechSynthesis.getVoices();
+      setVoices(availableVoices);
+    };
+    
+    loadVoices();
+    if (speechSynthesis.onvoiceschanged !== undefined) {
+      speechSynthesis.onvoiceschanged = loadVoices;
+    }
+    
     return () => {
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current = null;
+      synthRef.current.cancel();
+      if (speechSynthesis.onvoiceschanged !== undefined) {
+        speechSynthesis.onvoiceschanged = null;
       }
     };
   }, []);
 
   // When text changes, stop current audio if playing
   useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current = null;
+    if (isPlaying) {
+      synthRef.current.cancel();
       setIsPlaying(false);
     }
   }, [textToRead]);
 
   const toggleSpeech = async () => {
     if (isPlaying) {
-      if (audioRef.current) audioRef.current.pause();
+      synthRef.current.cancel();
       setIsPlaying(false);
     } else {
       let finalContent = textToRead;
@@ -47,42 +53,27 @@ const AudioGuide = ({ textToRead, readElementId }) => {
       setIsPlaying(true);
       
       try {
-        const response = await fetch('/api/v1/tts/synthesize', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('token') || sessionStorage.getItem('token')}`
-          },
-          body: JSON.stringify({ text: finalContent, language })
-        });
+        const utterance = new SpeechSynthesisUtterance(finalContent);
         
-        if (!response.ok) {
-          console.error("TTS configuration is missing or backend failed. Please configure your Cloud TTS provider API keys in the backend.");
-          setIsPlaying(false);
-          return;
+        // Try to match language
+        if (voices.length > 0) {
+           let match = voices.find(v => v.lang.startsWith(language));
+           if (!match) match = voices.find(v => v.lang.startsWith('en'));
+           if (match) utterance.voice = match;
         }
-        
-        const blob = await response.blob();
-        const url = URL.createObjectURL(blob);
-        
-        const audio = new Audio(url);
-        
-        audio.onended = () => {
+
+        utterance.onend = () => {
           setIsPlaying(false);
         };
-        
-        audio.onerror = (e) => {
+
+        utterance.onerror = (e) => {
           console.error("TTS Audio Playback Error", e);
           setIsPlaying(false);
         };
 
-        audioRef.current = audio;
-        audio.play().catch(e => {
-          console.error("Autoplay blocked or error:", e);
-          setIsPlaying(false);
-        });
+        synthRef.current.speak(utterance);
       } catch (error) {
-        console.error("Failed to connect to TTS backend service. Ensure /api/v1/tts/synthesize is implemented.");
+        console.error("Failed to play TTS audio.", error);
         setIsPlaying(false);
       }
     }
@@ -98,7 +89,7 @@ const AudioGuide = ({ textToRead, readElementId }) => {
           : 'bg-white text-slate-500 border-slate-200 hover:bg-slate-50 hover:text-slate-700'
       }`}
     >
-      {isPlaying ? <Volume2 className="w-5 h-5" /> : <VolumeX className="w-5 h-5" />}
+      {isPlaying ? <Square className="w-5 h-5 fill-current" /> : <Volume2 className="w-5 h-5" />}
     </button>
   );
 };
