@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import { CheckCircle2, ArrowRight } from 'lucide-react';
 
 const DashboardPreview = () => {
@@ -35,10 +36,10 @@ const DashboardPreview = () => {
               ))}
             </ul>
             
-            <button className="bg-white hover:bg-slate-50 text-blue-700 border-2 border-blue-100 hover:border-blue-200 px-8 py-3.5 rounded-xl font-semibold transition-all shadow-sm inline-flex items-center justify-center gap-2">
+            <Link to="/auth" className="bg-white hover:bg-slate-50 text-blue-700 border-2 border-blue-100 hover:border-blue-200 px-8 py-3.5 rounded-xl font-semibold transition-all shadow-sm inline-flex items-center justify-center gap-2">
               View Dashboard Preview
               <ArrowRight className="w-5 h-5" />
-            </button>
+            </Link>
           </div>
 
           {/* Right Content - Mockup */}
