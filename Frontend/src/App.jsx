@@ -25,6 +25,7 @@ import AddVehiclePage from './pages/AddVehiclePage';
 import FleetGatewayPage from './pages/FleetGatewayPage';
 import FleetRegistrationPage from './pages/FleetRegistrationPage';
 import FleetDashboardPage from './pages/FleetDashboardPage';
+import HelpSupportPage from './pages/HelpSupportPage';
 
 function App() {
   return (
@@ -58,6 +59,7 @@ function App() {
             <Route path="/my-documents" element={<PrivateRoute><MyDocumentsPage /></PrivateRoute>} />
             <Route path="/track-review" element={<PrivateRoute><TrackReviewPage /></PrivateRoute>} />
             <Route path="/corrections" element={<PrivateRoute><CorrectionsPage /></PrivateRoute>} />
+            <Route path="/help-support" element={<PrivateRoute><HelpSupportPage /></PrivateRoute>} />
             <Route path="/citizen-guide" element={<PrivateRoute><CitizenGuidePage /></PrivateRoute>} />
             <Route path="/citizen-guide/:guideId" element={<PrivateRoute><CitizenGuidePage /></PrivateRoute>} />
             {/* Fleet Routes */}

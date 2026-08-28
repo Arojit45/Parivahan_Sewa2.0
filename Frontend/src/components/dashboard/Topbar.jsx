@@ -109,10 +109,7 @@ const Topbar = () => {
         </div>
 
         <div className="flex items-center gap-4 border-x border-slate-200 px-6">
-          <button className="relative text-slate-400 hover:text-blue-600 transition-colors">
-            <Bell className="w-5 h-5" />
-            <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 border-2 border-white rounded-full text-[9px] font-bold text-white flex items-center justify-center">3</span>
-          </button>
+
           <button className="text-slate-400 hover:text-blue-600 transition-colors">
             <HelpCircle className="w-5 h-5" />
           </button>

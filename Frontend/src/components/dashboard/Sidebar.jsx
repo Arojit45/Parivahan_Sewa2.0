@@ -206,9 +206,9 @@ const Sidebar = () => {
             </button>
           </li>
           <li>
-            <a href="#" className={`flex items-center rounded-lg text-sm font-medium text-slate-600 hover:text-blue-600 hover:bg-slate-50 transition-colors ${isCollapsed ? "justify-center p-2.5 mx-auto w-10 h-10" : "gap-3 px-4 py-2"}`} title={isCollapsed ? (t.dash?.helpSupport || "Help & Support") : undefined}>
+            <Link to="/help-support" className={`flex items-center rounded-lg text-sm font-medium text-slate-600 hover:text-blue-600 hover:bg-slate-50 transition-colors ${isCollapsed ? "justify-center p-2.5 mx-auto w-10 h-10" : "gap-3 px-4 py-2"}`} title={isCollapsed ? (t.dash?.helpSupport || "Help & Support") : undefined}>
               <HelpCircle className="w-5 h-5 text-slate-400 shrink-0" /> {!isCollapsed && (t.dash?.helpSupport || "Help & Support")}
-            </a>
+            </Link>
           </li>
           <li>
             <button
