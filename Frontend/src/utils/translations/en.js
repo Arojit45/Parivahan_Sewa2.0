@@ -1,4 +1,4 @@
-export const en = {
+﻿export const en = {
   challan: {
       "challans": "Challans",
       "challansSubtitle": "View, pay and manage all your vehicle challans",
@@ -8,9 +8,9 @@ export const en = {
       "pendingAmount": "PENDING AMOUNT",
       "toBePaid": "To be paid",
       "overdueChallans": "OVERDUE CHALLANS",
-      "totalZero": "Total ₹ 0",
+      "totalZero": "Total â‚¹ 0",
       "paidChallans": "PAID CHALLANS",
-      "totalPaid": "Total ₹ 1,000",
+      "totalPaid": "Total â‚¹ 1,000",
       "allChallans": "All Challans",
       "pending": "Pending",
       "overdue": "Overdue",
@@ -21,7 +21,7 @@ export const en = {
       "violation": "Violation",
       "date": "Date",
       "location": "Location",
-      "amount": "Amount (₹)",
+      "amount": "Amount (â‚¹)",
       "dueDate": "Due Date",
       "action": "Action",
       "payNow": "Pay Now",
@@ -64,12 +64,12 @@ export const en = {
   },
   dash: {
       "noVehiclesTitle": "No Vehicles Found",
-      "noVehiclesDesc": "You have not linked any vehicles yet. Add your vehicle to unlock your personal dashboard — track compliance, challans, live location and more.",
+      "noVehiclesDesc": "You have not linked any vehicles yet. Add your vehicle to unlock your personal dashboard â€” track compliance, challans, live location and more.",
       "addVehicleBtn": "Add Vehicle",
       "errorTitle": "Something Went Wrong",
       "errorDesc": "Failed to load your dashboard. Please try again later.",
       "backToVehicles": "Back to My Vehicles",
-      "view360": "View 360°",
+      "view360": "View 360Â°",
       "unlinkPrompt": "Are you sure you want to unlink this vehicle?",
       "unlinkError": "Failed to unlink vehicle.",
       "unlinkTitle": "Unlink Vehicle",
@@ -191,7 +191,7 @@ export const en = {
       "helpSupport": "Help & Support",
       "logout": "Logout",
       "parivahanSewa": "PARIVAHAN SEWA",
-      "greetingMsg": "Hello! 👋 Ask me anything about {vehicle} — health, documents, challans, or live location."
+      "greetingMsg": "Hello! ðŸ‘‹ Ask me anything about {vehicle} â€” health, documents, challans, or live location."
   },
 
   navbar: {
@@ -207,7 +207,7 @@ export const en = {
     heroTitle2: "Many Milestones.",
     heroSubtitle: "A simple, guided process to get your Driving Licence anywhere in India.",
     startJourney: "Start Your Journey",
-    features: "100% Digital • Secure • Easy • Trusted",
+    features: "100% Digital â€¢ Secure â€¢ Easy â€¢ Trusted",
     audioGuide: "Audio Guide",
     listenFollow: "Listen & Follow along",
     more: "More",
@@ -263,7 +263,7 @@ export const en = {
     wizardHeader: "Vehicle Registration",
     wizardTitle: "Registration Wizard",
     stepOf: "Step {current} of {total}",
-    resumingBanner: "Resuming your previous application from Step {step} — your progress has been restored.",
+    resumingBanner: "Resuming your previous application from Step {step} â€” your progress has been restored.",
     steps: {
       1: "Where are you registering?",
       2: "Select your RTO",

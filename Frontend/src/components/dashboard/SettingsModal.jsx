@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+﻿import React, { useState, useRef } from 'react';
 import { X, Camera, Loader2, CheckCircle2 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { updateProfile } from '../../utils/api';

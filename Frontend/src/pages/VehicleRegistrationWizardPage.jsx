@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import Sidebar from '../components/dashboard/Sidebar';
 import Topbar from '../components/dashboard/Topbar';
 import { VRWizardProvider, useVRWizard } from '../contexts/VRWizardContext';
@@ -52,7 +52,7 @@ const WizardContent = () => {
           )}
 
           <div className="flex-1 flex overflow-hidden">
-            {/* Left Rail — Steps Progress */}
+            {/* Left Rail â€” Steps Progress */}
             <div className="w-56 xl:w-64 bg-white border-r border-slate-100 flex flex-col shrink-0 overflow-hidden">
               {/* Header */}
               <div className="px-4 pt-5 pb-3 border-b border-slate-100 flex justify-between items-start">
@@ -74,7 +74,7 @@ const WizardContent = () => {
               </div>
             </div>
 
-            {/* Right — Active Step */}
+            {/* Right â€” Active Step */}
             <div className="flex-1 flex flex-col overflow-hidden bg-slate-50">
               <div id="vr-step-content" className="flex-1 overflow-hidden bg-white m-4 rounded-2xl shadow-sm border border-slate-100 flex flex-col">
                 <ActiveStep />

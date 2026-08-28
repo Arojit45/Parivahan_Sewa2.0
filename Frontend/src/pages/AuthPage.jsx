@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, Upload, Mail, Lock, User, Phone, Globe, Image as ImageIcon, Loader2 } from 'lucide-react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
@@ -217,7 +217,7 @@ const AuthPage = () => {
                         name="password"
                         value={loginForm.password}
                         onChange={handleLoginChange}
-                        placeholder="••••••••" 
+                        placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" 
                         className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition-all"
                         required
                       />
@@ -295,7 +295,7 @@ const AuthPage = () => {
                         <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                         <input 
                           type="password" name="password" value={registerForm.password} onChange={handleRegisterChange}
-                          placeholder="••••••••" 
+                          placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" 
                           className="w-full pl-10 pr-3 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-600 outline-none transition-all" required
                         />
                       </div>

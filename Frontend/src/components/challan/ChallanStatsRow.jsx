@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { FileText, Wallet, Clock, CheckCircle2, Loader2 } from 'lucide-react';
 import { useChallan } from '../../contexts/ChallanContext';
 import { useLanguage } from '../../contexts/LanguageContext';
@@ -45,7 +45,7 @@ const ChallanStatsRow = () => {
           </div>
         </div>
         <div>
-          <h2 className="text-3xl font-bold text-orange-500">₹ {stats.pendingAmount.toLocaleString('en-IN')}</h2>
+          <h2 className="text-3xl font-bold text-orange-500">â‚¹ {stats.pendingAmount.toLocaleString('en-IN')}</h2>
           <p className="text-xs text-slate-400 mt-1 font-medium">{c.toBePaid || 'To be paid'}</p>
         </div>
       </div>
@@ -60,7 +60,7 @@ const ChallanStatsRow = () => {
         </div>
         <div>
           <h2 className="text-3xl font-bold text-red-500">{String(stats.overdueCount).padStart(2, '0')}</h2>
-          <p className="text-xs text-slate-400 mt-1 font-medium">Total ₹ {stats.overdueAmount.toLocaleString('en-IN')}</p>
+          <p className="text-xs text-slate-400 mt-1 font-medium">Total â‚¹ {stats.overdueAmount.toLocaleString('en-IN')}</p>
         </div>
       </div>
 
@@ -74,7 +74,7 @@ const ChallanStatsRow = () => {
         </div>
         <div>
           <h2 className="text-3xl font-bold text-emerald-600">{String(stats.paidCount).padStart(2, '0')}</h2>
-          <p className="text-xs text-slate-400 mt-1 font-medium">Total ₹ {stats.paidAmount.toLocaleString('en-IN')}</p>
+          <p className="text-xs text-slate-400 mt-1 font-medium">Total â‚¹ {stats.paidAmount.toLocaleString('en-IN')}</p>
         </div>
       </div>
     </div>

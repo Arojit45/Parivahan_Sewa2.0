@@ -1,4 +1,4 @@
-import React from "react";
+﻿import React from "react";
 import { ChevronLeft, Edit2, Copy, RefreshCw, Trash2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useDashboard } from "../../contexts/DashboardContext";
@@ -31,7 +31,7 @@ const VehicleCard = () => {
           <CarModelViewer />
         </div>
         <button className="mt-4 text-xs font-semibold text-slate-500 flex items-center gap-1 border border-slate-200 px-3 py-1.5 rounded-full hover:bg-slate-50 transition-colors">
-          <RefreshCw className="w-3 h-3" /> {t.dash?.view360 || "View 360°"}
+          <RefreshCw className="w-3 h-3" /> {t.dash?.view360 || "View 360Â°"}
         </button>
       </div>
 
@@ -77,7 +77,7 @@ const VehicleCard = () => {
               </button>
             </div>
             <p className="text-[11px] text-slate-500 font-medium mt-3">
-              {v.fuelType} • {v.vehicleClass}
+              {v.fuelType} â€¢ {v.vehicleClass}
             </p>
           </div>
           <button className="text-[12px] font-bold text-blue-600 border border-slate-200 px-3 py-1.5 rounded-lg hover:bg-slate-50 transition-colors flex items-center gap-1">
@@ -88,7 +88,7 @@ const VehicleCard = () => {
         <div className="grid grid-cols-2 gap-y-3 gap-x-12 text-[11px]">
           <div className="flex justify-between">
             <span className="text-slate-500">{t.dash?.nickname || "Nickname"}</span>
-            <span className="font-semibold text-slate-900">{v.nickname || "—"}</span>
+            <span className="font-semibold text-slate-900">{v.nickname || "â€”"}</span>
           </div>
           <div className="flex justify-between">
             <span className="text-slate-500">{t.dash?.owner || "Owner"}</span>
@@ -104,7 +104,7 @@ const VehicleCard = () => {
           </div>
           <div className="flex justify-between">
             <span className="text-slate-500">{t.dash?.insuranceProvider || "Insurance Provider"}</span>
-            <span className="font-semibold text-slate-900">{v.insuranceProvider || "—"}</span>
+            <span className="font-semibold text-slate-900">{v.insuranceProvider || "â€”"}</span>
           </div>
         </div>
       </div>

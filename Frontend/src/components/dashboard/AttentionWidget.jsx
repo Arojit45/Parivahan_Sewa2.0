@@ -1,4 +1,4 @@
-import React from "react";
+﻿import React from "react";
 import { Receipt, Leaf, CheckCircle, AlertTriangle } from "lucide-react";
 import { useDashboard } from "../../contexts/DashboardContext";
 import { useLanguage } from "../../contexts/LanguageContext";
@@ -50,7 +50,7 @@ const AttentionWidget = () => {
                 {challans.length} {t.dash?.challanPending || "challans pending"}
               </p>
               <p className="text-[11px] text-slate-700 font-bold mt-1">
-                {t.dash?.amount || "Amount"}: ₹{challans.reduce((s, c) => s + Number(c.amount), 0).toLocaleString("en-IN")}
+                {t.dash?.amount || "Amount"}: â‚¹{challans.reduce((s, c) => s + Number(c.amount), 0).toLocaleString("en-IN")}
               </p>
             </div>
             <button className="bg-white border border-red-200 text-red-600 text-[11px] font-bold px-4 py-2 rounded-lg hover:bg-red-50 transition-colors">

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { Eye, Download, Printer, MoreVertical, SlidersHorizontal, Scale, AlertCircle } from 'lucide-react';
 import { useChallan } from '../../contexts/ChallanContext';
 import { useLanguage } from '../../contexts/LanguageContext';
@@ -86,9 +86,9 @@ const ChallanTable = () => {
             <tr>
               <th className="px-6 py-4 font-semibold">{c.challanNumber || 'Challan Number'}</th>
               <th className="px-6 py-4 font-semibold">{c.violation || 'Violation'}</th>
-              <th className="px-6 py-4 font-semibold flex items-center gap-1">Date <span className="text-[10px]">↓</span></th>
+              <th className="px-6 py-4 font-semibold flex items-center gap-1">Date <span className="text-[10px]">â†“</span></th>
               <th className="px-6 py-4 font-semibold">{c.location || 'Location'}</th>
-              <th className="px-6 py-4 font-semibold">{c.amount || 'Amount'} (₹)</th>
+              <th className="px-6 py-4 font-semibold">{c.amount || 'Amount'} (â‚¹)</th>
               <th className="px-6 py-4 font-semibold">{c.dueDate || 'Due Date'}</th>
               <th className="px-6 py-4 font-semibold">{c.status || 'Status'}</th>
               <th className="px-6 py-4 font-semibold text-right">{c.actions || 'Actions'}</th>
@@ -118,7 +118,7 @@ const ChallanTable = () => {
                 <td className="px-6 py-4 font-semibold text-slate-800">{Number(challan.amount).toLocaleString('en-IN')}</td>
                 <td className="px-6 py-4">
                   <div className={`font-medium ${compStatus === 'OVERDUE' ? 'text-red-600' : 'text-slate-700'}`}>
-                    {challan.dueDate ? new Date(challan.dueDate).toLocaleDateString('en-IN') : '—'}
+                    {challan.dueDate ? new Date(challan.dueDate).toLocaleDateString('en-IN') : 'â€”'}
                   </div>
                   {compStatus === 'OVERDUE' && <div className="text-xs text-red-500 mt-0.5 font-medium">Overdue</div>}
                   {compStatus === 'PENDING' && <div className="text-xs text-orange-500 mt-0.5 font-medium">Pending</div>}

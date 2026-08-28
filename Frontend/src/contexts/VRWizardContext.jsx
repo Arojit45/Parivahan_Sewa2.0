@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, useEffect, useCallback } fr
 
 const VRWizardContext = createContext(null);
 
-const API_BASE = '/api/v1/vr';
+const API_BASE = 'https://parivahan-sewa2-0-backend.onrender.com/api/v1/vr';
 
 const INITIAL_STATE = {
   applicationId: null,

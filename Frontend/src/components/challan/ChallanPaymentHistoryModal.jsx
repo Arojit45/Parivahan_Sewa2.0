@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { X, CheckCircle2, Download, CreditCard, Search } from 'lucide-react';
 import { useChallan } from '../../contexts/ChallanContext';
 import { downloadReceiptPdf } from '../../utils/challanPdf';
@@ -43,7 +43,7 @@ const ChallanPaymentHistoryModal = () => {
              </div>
              <div>
                <p className="text-xs text-slate-400 font-semibold uppercase tracking-wider">Total Amount Paid</p>
-               <p className="text-lg font-bold text-emerald-600">₹{totalPaid.toLocaleString('en-IN')}</p>
+               <p className="text-lg font-bold text-emerald-600">â‚¹{totalPaid.toLocaleString('en-IN')}</p>
              </div>
            </div>
            <div className="relative">
@@ -95,7 +95,7 @@ const ChallanPaymentHistoryModal = () => {
                       })}
                     </td>
                     <td className="px-6 py-4 font-semibold text-emerald-600">
-                      ₹{Number(challan.amount).toLocaleString('en-IN')}
+                      â‚¹{Number(challan.amount).toLocaleString('en-IN')}
                     </td>
                     <td className="px-6 py-4 text-right">
                       <button 

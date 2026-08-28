@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { Globe, Menu, X, ChevronDown, User } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
@@ -25,8 +25,8 @@ const Navbar = () => {
 
   const languages = [
     { code: 'en', label: 'English' },
-    { code: 'hi', label: 'हिंदी' },
-    { code: 'bn', label: 'বাংলা' }
+    { code: 'hi', label: 'à¤¹à¤¿à¤‚à¤¦à¥€' },
+    { code: 'bn', label: 'à¦¬à¦¾à¦‚à¦²à¦¾' }
   ];
 
   return (

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { Loader2, AlertCircle, FileText, CheckCircle2, Clock, ChevronRight, XCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import Topbar from '../components/dashboard/Topbar';
@@ -41,8 +41,8 @@ const TrackReviewPage = () => {
       try {
         const headers = { 'Authorization': `Bearer ${localStorage.getItem('token')}` };
         const [vrRes, dlRes] = await Promise.all([
-          fetch('/api/v1/vr/application/mine', { headers }),
-          fetch('/api/v1/dl/application/mine', { headers })
+          fetch('https://parivahan-sewa2-0-backend.onrender.com/api/v1/vr/application/mine', { headers }),
+          fetch('https://parivahan-sewa2-0-backend.onrender.com/api/v1/dl/application/mine', { headers })
         ]);
         
         if (vrRes.ok) setVrApps(await vrRes.json());

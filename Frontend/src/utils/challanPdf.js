@@ -1,4 +1,4 @@
-import { jsPDF } from 'jspdf';
+﻿import { jsPDF } from 'jspdf';
 
 const LOCATIONS = {
   'Over Speeding': 'Silk Board Junction, Bengaluru',
@@ -17,7 +17,7 @@ export function downloadChallanPdf(challan) {
   const doc = new jsPDF({ unit: 'mm', format: 'a4' });
   const W = doc.internal.pageSize.getWidth();
 
-  // ── Header gradient band ───────────────────────────────────────────────
+  // â”€â”€ Header gradient band â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   doc.setFillColor(15, 82, 186);
   doc.rect(0, 0, W, 40, 'F');
 
@@ -41,7 +41,7 @@ export function downloadChallanPdf(challan) {
   doc.text(challanNum, W - 15, 20, { align: 'right' });
   doc.text(`Date: ${formatDate(challan.challanDate)}`, W - 15, 26, { align: 'right' });
 
-  // ── Status watermark ───────────────────────────────────────────────────
+  // â”€â”€ Status watermark â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const statusColor = challan.status === 'PAID' ? [16, 185, 129] :
     challan.status === 'DISPUTED' ? [139, 92, 246] : [239, 68, 68];
   doc.setTextColor(...statusColor);
@@ -51,21 +51,21 @@ export function downloadChallanPdf(challan) {
   doc.text(challan.status, W / 2, 150, { align: 'center', angle: 35 });
   doc.setGState(new doc.GState({ opacity: 1 }));
 
-  // ── Section: Vehicle Info ──────────────────────────────────────────────
+  // â”€â”€ Section: Vehicle Info â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   let y = 54;
   sectionHeader(doc, 'VEHICLE INFORMATION', y); y += 8;
   row(doc, 'Registration Number', challan.registrationNumber, y); y += 7;
-  row(doc, 'Vehicle', challan.vehicleModel || '—', y); y += 7;
-  row(doc, 'Nickname', challan.vehicleNickname || '—', y); y += 12;
+  row(doc, 'Vehicle', challan.vehicleModel || 'â€”', y); y += 7;
+  row(doc, 'Nickname', challan.vehicleNickname || 'â€”', y); y += 12;
 
-  // ── Section: Offence Details ───────────────────────────────────────────
+  // â”€â”€ Section: Offence Details â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   sectionHeader(doc, 'OFFENCE DETAILS', y); y += 8;
   row(doc, 'Violation', challan.offence, y); y += 7;
   row(doc, 'Location', challan.location || LOCATIONS[challan.offence] || 'Bengaluru, Karnataka', y); y += 7;
   row(doc, 'Date of Offence', formatDate(challan.challanDate), y); y += 7;
   row(doc, 'Due Date', formatDate(challan.dueDate), y); y += 12;
 
-  // ── Section: Payment Info ──────────────────────────────────────────────
+  // â”€â”€ Section: Payment Info â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   sectionHeader(doc, 'PAYMENT INFORMATION', y); y += 8;
 
   // Amount box
@@ -85,11 +85,11 @@ export function downloadChallanPdf(challan) {
   row(doc, 'Status', challan.status, y); y += 7;
   if (challan.status === 'PAID') {
     row(doc, 'Paid On', formatDate(challan.paymentDate), y); y += 7;
-    row(doc, 'Transaction ID', challan.transactionId || '—', y); y += 7;
+    row(doc, 'Transaction ID', challan.transactionId || 'â€”', y); y += 7;
   }
   y += 8;
 
-  // ── How to Pay section ─────────────────────────────────────────────────
+  // â”€â”€ How to Pay section â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   if (challan.status !== 'PAID') {
     sectionHeader(doc, 'HOW TO PAY', y); y += 8;
     doc.setTextColor(80, 80, 80);
@@ -108,14 +108,14 @@ export function downloadChallanPdf(challan) {
     y += 6;
   }
 
-  // ── Footer ─────────────────────────────────────────────────────────────
+  // â”€â”€ Footer â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   doc.setFillColor(245, 247, 250);
   doc.rect(0, 270, W, 27, 'F');
   doc.setTextColor(120, 120, 120);
   doc.setFontSize(8);
   doc.setFont('helvetica', 'normal');
   doc.text('This is a computer-generated challan. For queries, contact your nearest RTO or call 1800-11-5656.', W / 2, 278, { align: 'center' });
-  doc.text('\u00A9 Parivahan Sewa — Ministry of Road Transport & Highways, Government of India', W / 2, 284, { align: 'center' });
+  doc.text('\u00A9 Parivahan Sewa â€” Ministry of Road Transport & Highways, Government of India', W / 2, 284, { align: 'center' });
   doc.text(`Generated on: ${new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric' })}`, W / 2, 290, { align: 'center' });
 
   doc.save(`Challan_${challanNum}.pdf`);
@@ -138,7 +138,7 @@ export function downloadReceiptPdf(receipt) {
   doc.text('PAYMENT RECEIPT', 15, 18);
   doc.setFontSize(10);
   doc.setFont('helvetica', 'normal');
-  doc.text('Parivahan Sewa — Ministry of Road Transport & Highways', 15, 27);
+  doc.text('Parivahan Sewa â€” Ministry of Road Transport & Highways', 15, 27);
   doc.text('PAID', W - 15, 20, { align: 'right' });
 
   // Receipt details
@@ -180,7 +180,7 @@ export function downloadReceiptPdf(receipt) {
   doc.save(`Receipt_${receipt.receiptNumber}.pdf`);
 }
 
-// ── Helpers ──────────────────────────────────────────────────────────────
+// â”€â”€ Helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function sectionHeader(doc, text, y) {
   doc.setFontSize(9);
@@ -200,11 +200,11 @@ function row(doc, label, value, y) {
   doc.text(label, 20, y);
   doc.setTextColor(30, 30, 30);
   doc.setFont('helvetica', 'bold');
-  doc.text(String(value ?? '—'), 90, y);
+  doc.text(String(value ?? 'â€”'), 90, y);
   doc.setFont('helvetica', 'normal');
 }
 
 function formatDate(d) {
-  if (!d) return '—';
+  if (!d) return 'â€”';
   return new Date(d).toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric' });
 }

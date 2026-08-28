@@ -1,4 +1,4 @@
-import { useLanguage } from '../../contexts/LanguageContext';
+﻿import { useLanguage } from '../../contexts/LanguageContext';
 import React, { useState } from 'react';
 import { X, CheckCircle, CreditCard, Download, ShieldCheck, Loader2 } from 'lucide-react';
 import { useChallan } from '../../contexts/ChallanContext';
@@ -41,7 +41,7 @@ const PaymentConfirmationModal = () => {
           <div className="bg-slate-50 rounded-xl p-4 w-full text-left space-y-3 mb-6 border border-slate-100">
             <div className="flex justify-between text-sm">
               <span className="text-slate-500">Amount Paid</span>
-              <span className="font-semibold text-emerald-600">₹{Number(receipt.amountPaid).toLocaleString('en-IN')}</span>
+              <span className="font-semibold text-emerald-600">â‚¹{Number(receipt.amountPaid).toLocaleString('en-IN')}</span>
             </div>
             <div className="flex justify-between text-sm">
               <span className="text-slate-500">Transaction ID</span>
@@ -87,7 +87,7 @@ const PaymentConfirmationModal = () => {
           <div className="bg-blue-50/50 rounded-xl p-5 border border-blue-100/50 flex items-center justify-between mb-6">
             <div>
               <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Total Amount</p>
-              <div className="text-3xl font-bold text-slate-800 mt-1">₹{Number(challan.amount).toLocaleString('en-IN')}</div>
+              <div className="text-3xl font-bold text-slate-800 mt-1">â‚¹{Number(challan.amount).toLocaleString('en-IN')}</div>
             </div>
             <CreditCard className="w-8 h-8 text-blue-500 opacity-80" />
           </div>
@@ -120,7 +120,7 @@ const PaymentConfirmationModal = () => {
               className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-colors disabled:opacity-70"
             >
               {processing ? <Loader2 className="w-5 h-5 animate-spin" /> : <ShieldCheck className="w-5 h-5" />}
-              {processing ? 'Processing Payment...' : `Pay ₹${Number(challan.amount).toLocaleString('en-IN')}`}
+              {processing ? 'Processing Payment...' : `Pay â‚¹${Number(challan.amount).toLocaleString('en-IN')}`}
             </button>
             <p className="text-center text-xs text-slate-400 mt-3 flex items-center justify-center gap-1">
               <ShieldCheck className="w-3 h-3" /> Secure Payment Gateway (Mock)

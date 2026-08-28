@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { CreditCard, FileText, AlertCircle, Loader2, CheckCircle2 } from 'lucide-react';
 import Topbar from '../components/dashboard/Topbar';
 import Sidebar from '../components/dashboard/Sidebar';
@@ -49,7 +49,7 @@ const MyDocumentsPage = () => {
     const fetchDocuments = async () => {
       try {
         const headers = { 'Authorization': `Bearer ${localStorage.getItem('token')}` };
-        const res = await fetch('/api/v1/documents/mine', {
+        const res = await fetch('https://parivahan-sewa2-0-backend.onrender.com/api/v1/documents/mine', {
           headers
         });
         if (!res.ok) throw new Error('Failed to fetch documents');

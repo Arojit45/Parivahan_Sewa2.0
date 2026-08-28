@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { useDLWizard } from '../../contexts/DLWizardContext';
 import { VEHICLE_CLASSES } from '../../data/indiaData';
 import WizardNav from './WizardNav';
@@ -49,7 +49,7 @@ const Step3VehicleClass = () => {
                     <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${isSelected ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-500'}`}>
                       {vc.code}
                     </span>
-                    <span className="text-xs text-slate-400 font-medium">Fee: ₹{vc.fee}</span>
+                    <span className="text-xs text-slate-400 font-medium">Fee: â‚¹{vc.fee}</span>
                   </div>
                 </div>
 
@@ -76,7 +76,7 @@ const Step3VehicleClass = () => {
             <Info className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
             <div>
               <p className="text-sm font-bold text-amber-800">Application Fee for {selected.name}</p>
-              <p className="text-2xl font-extrabold text-amber-700 mt-1">₹{selected.fee}</p>
+              <p className="text-2xl font-extrabold text-amber-700 mt-1">â‚¹{selected.fee}</p>
               <p className="text-xs text-amber-600 mt-1">Payable at Step 8. You must be at least {selected.minAge} years old to apply.</p>
             </div>
           </div>

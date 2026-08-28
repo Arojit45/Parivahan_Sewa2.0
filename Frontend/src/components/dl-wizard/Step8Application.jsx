@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { MapPin, Car, Calendar, Clock, CreditCard, User, CheckCircle2, Loader2, PartyPopper } from 'lucide-react';
 import { useDLWizard } from '../../contexts/DLWizardContext';
 import { VEHICLE_CLASSES } from '../../data/indiaData';
@@ -19,7 +19,7 @@ const Step8Application = () => {
   };
 
   const reviewItems = [
-    { icon: MapPin, label: "State & RTO", value: `${wizard.state} — ${wizard.rtoName}` },
+    { icon: MapPin, label: "State & RTO", value: `${wizard.state} â€” ${wizard.rtoName}` },
     { icon: Car, label: "Vehicle Class", value: `${selectedClass?.name || wizard.vehicleClass} (${wizard.vehicleClass})` },
     { icon: User, label: "Applicant", value: `${wizard.applicantName} | DOB: ${wizard.dob ? new Date(wizard.dob).toLocaleDateString('en-IN') : 'N/A'}` },
     { icon: Calendar, label: "Appointment", value: wizard.appointmentDate ? new Date(wizard.appointmentDate).toLocaleDateString('en-IN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) : 'N/A' },
@@ -52,7 +52,7 @@ const Step8Application = () => {
         </div>
         <div>
           <p className="text-emerald-600 font-bold uppercase tracking-wider text-sm mb-2">Payment Successful</p>
-          <h3 className="text-3xl font-extrabold text-slate-900">₹{wizard.feeAmount} Paid!</h3>
+          <h3 className="text-3xl font-extrabold text-slate-900">â‚¹{wizard.feeAmount} Paid!</h3>
           <p className="text-slate-500 text-sm mt-2 font-medium">Your Driving Licence application has been submitted.</p>
         </div>
 
@@ -67,7 +67,7 @@ const Step8Application = () => {
           </div>
           <div className="flex justify-between text-sm">
             <span className="text-slate-500 font-medium">Status</span>
-            <span className="font-bold text-emerald-600">SUBMITTED ✓</span>
+            <span className="font-bold text-emerald-600">SUBMITTED âœ“</span>
           </div>
         </div>
 
@@ -114,7 +114,7 @@ const Step8Application = () => {
           <div className="flex items-start justify-between mb-4">
             <div>
               <p className="text-blue-200 text-xs font-semibold uppercase tracking-wide">Application Fee</p>
-              <p className="text-4xl font-extrabold mt-1">₹{wizard.feeAmount || selectedClass?.fee || '700'}</p>
+              <p className="text-4xl font-extrabold mt-1">â‚¹{wizard.feeAmount || selectedClass?.fee || '700'}</p>
               <p className="text-blue-200 text-xs mt-1">For {selectedClass?.name} ({wizard.vehicleClass})</p>
             </div>
             <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
@@ -123,7 +123,7 @@ const Step8Application = () => {
           </div>
 
           <div className="text-xs text-blue-200 font-medium mb-5 bg-white/10 rounded-xl px-3 py-2">
-            🔒 Secure payment. This is a simulated payment — no real money will be charged.
+            ðŸ”’ Secure payment. This is a simulated payment â€” no real money will be charged.
           </div>
 
           <button
@@ -131,15 +131,15 @@ const Step8Application = () => {
             className="w-full bg-white text-blue-700 font-bold py-3 rounded-xl text-sm hover:bg-blue-50 transition-colors shadow-lg flex items-center justify-center gap-2"
           >
             <CreditCard className="w-4 h-4" />
-            Pay ₹{wizard.feeAmount || selectedClass?.fee || '700'} Now
+            Pay â‚¹{wizard.feeAmount || selectedClass?.fee || '700'} Now
           </button>
         </div>
 
         {/* Trust note */}
         <div className="flex items-center justify-center gap-6 text-[10px] text-slate-400 font-semibold">
-          <span>🔒 256-bit SSL Encrypted</span>
-          <span>🏛️ Government of India</span>
-          <span>✅ RBI Compliant</span>
+          <span>ðŸ”’ 256-bit SSL Encrypted</span>
+          <span>ðŸ›ï¸ Government of India</span>
+          <span>âœ… RBI Compliant</span>
         </div>
       </div>
     </div>

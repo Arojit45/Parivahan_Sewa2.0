@@ -1,4 +1,4 @@
-const BASE = '/api/v1/challans';
+const BASE = 'https://parivahan-sewa2-0-backend.onrender.com/api/v1/challans';
 
 function getToken() {
   return localStorage.getItem('token');
@@ -32,7 +32,7 @@ export async function getChallanDetail(challanId) {
   return request(`${BASE}/${challanId}`);
 }
 
-/** Pay a challan — returns PaymentReceiptDto */
+/** Pay a challan â€” returns PaymentReceiptDto */
 export async function payChallan(challanId) {
   return request(`${BASE}/${challanId}/pay`, { method: 'POST' });
 }
@@ -52,7 +52,7 @@ export async function getChallanDispute(challanId) {
 
 /** Get all disputes for the current user */
 export async function getAllDisputes() {
-  return request('/api/v1/disputes');
+  return request('https://parivahan-sewa2-0-backend.onrender.com/api/v1/disputes');
 }
 
 /**

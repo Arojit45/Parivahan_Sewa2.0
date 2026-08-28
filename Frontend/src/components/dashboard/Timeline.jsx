@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { CheckCircle, ShieldCheck, UserCheck, FileText, File } from 'lucide-react';
 import { useLanguage } from '../../contexts/LanguageContext';
 
@@ -7,31 +7,31 @@ const Timeline = () => {
   const events = [
     {
       title: t.dash?.pucUpdated || 'PUC Certificate Updated',
-      date: '26 May 2025 • 10:20 AM',
+      date: '26 May 2025 â€¢ 10:20 AM',
       icon: <CheckCircle className="w-4 h-4 text-emerald-500" />,
       color: 'bg-emerald-50/50 border-emerald-100'
     },
     {
       title: t.dash?.insuranceRenewed || 'Insurance Renewed',
-      date: '25 Dec 2024 • 09:15 AM',
+      date: '25 Dec 2024 â€¢ 09:15 AM',
       icon: <ShieldCheck className="w-4 h-4 text-blue-500" />,
       color: 'bg-blue-50/50 border-blue-100'
     },
     {
       title: t.dash?.taxPaid || 'Road Tax Paid',
-      date: '31 Mar 2025 • 11:40 AM',
+      date: '31 Mar 2025 â€¢ 11:40 AM',
       icon: <UserCheck className="w-4 h-4 text-emerald-500" />,
       color: 'bg-emerald-50/50 border-emerald-100'
     },
     {
       title: t.dash?.vehicleRegistered || 'Vehicle Registered',
-      date: '11 Sep 2022 • 10:30 AM',
+      date: '11 Sep 2022 â€¢ 10:30 AM',
       icon: <FileText className="w-4 h-4 text-blue-500" />,
       color: 'bg-blue-50/50 border-blue-100'
     },
     {
       title: t.dash?.rcIssued || 'RC Issued',
-      date: '11 Sep 2022 • 04:25 PM',
+      date: '11 Sep 2022 â€¢ 04:25 PM',
       icon: <File className="w-4 h-4 text-blue-500" />,
       color: 'bg-blue-50/50 border-blue-100'
     }

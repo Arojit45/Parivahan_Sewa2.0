@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+﻿import React, { createContext, useContext, useState, useEffect } from 'react';
 import { translations } from '../utils/translations';
 
 const LanguageContext = createContext();
@@ -24,7 +24,7 @@ export const LanguageProvider = ({ children }) => {
   useEffect(() => {
     const token = getAuthToken();
     if (!token) return;
-    fetch('/api/user/language', {
+    fetch('https://parivahan-sewa2-0-backend.onrender.com/api/user/language', {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => res.ok ? res.json() : null)
@@ -33,7 +33,7 @@ export const LanguageProvider = ({ children }) => {
           setLanguageState(data.language);
         }
       })
-      .catch(() => { /* silent — default to English */ });
+      .catch(() => { /* silent â€” default to English */ });
   }, []);
 
   const changeLanguage = (lang) => {
@@ -44,7 +44,7 @@ export const LanguageProvider = ({ children }) => {
     // Persist to backend if authenticated
     const token = getAuthToken();
     if (token) {
-      fetch('/api/user/language', {
+      fetch('https://parivahan-sewa2-0-backend.onrender.com/api/user/language', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

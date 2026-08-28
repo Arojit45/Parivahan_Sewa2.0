@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback } from "react";
+﻿import React, { useState, useRef, useEffect, useCallback } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import {
   Bot, Send, ArrowLeft, Sparkles, MapPin, FileText, AlertCircle,
@@ -8,9 +8,9 @@ import { askVehicle, resolveActionRoute } from "../utils/assistantApi";
 import { getMyVehicles } from "../utils/api";
 import { useLanguage } from "../contexts/LanguageContext";
 
-// ─────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // Constants
-// ─────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 const QUICK_QUESTIONS = [
   { label: "Is my vehicle okay?",         icon: Heart },
@@ -23,21 +23,21 @@ const QUICK_QUESTIONS = [
 
 const LANGUAGES = [
   { code: "en", label: "English" },
-  { code: "hi", label: "हिन्दी" },
-  { code: "bn", label: "বাংলা" },
-  { code: "mr", label: "मराठी" },
-  { code: "ta", label: "தமிழ்" },
-  { code: "te", label: "తెలుగు" },
-  { code: "kn", label: "ಕನ್ನಡ" },
-  { code: "ml", label: "മലയാളം" },
-  { code: "gu", label: "ગુજરાતી" },
-  { code: "pa", label: "ਪੰਜਾਬੀ" },
-  { code: "or", label: "ଓଡ଼ିଆ" },
+  { code: "hi", label: "à¤¹à¤¿à¤¨à¥à¤¦à¥€" },
+  { code: "bn", label: "à¦¬à¦¾à¦‚à¦²à¦¾" },
+  { code: "mr", label: "à¤®à¤°à¤¾à¤ à¥€" },
+  { code: "ta", label: "à®¤à®®à®¿à®´à¯" },
+  { code: "te", label: "à°¤à±†à°²à±à°—à±" },
+  { code: "kn", label: "à²•à²¨à³à²¨à²¡" },
+  { code: "ml", label: "à´®à´²à´¯à´¾à´³à´‚" },
+  { code: "gu", label: "àª—à«àªœàª°àª¾àª¤à«€" },
+  { code: "pa", label: "à¨ªà©°à¨œà¨¾à¨¬à©€" },
+  { code: "or", label: "à¬“à¬¡à¬¼à¬¿à¬†" },
 ];
 
-// ─────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // Sub-components
-// ─────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 const TypingIndicator = () => (
   <div className="flex gap-3 mb-4">
@@ -81,7 +81,7 @@ const AssistantBubble = ({ msg, navigate }) => (
       </div>
       {msg.sources && msg.sources.length > 0 && (
         <p className="text-[10px] text-slate-400 font-medium mt-1.5 px-1">
-          Based on: {msg.sources.join(" · ")}
+          Based on: {msg.sources.join(" Â· ")}
         </p>
       )}
       {msg.actions && msg.actions.length > 0 && (
@@ -106,9 +106,9 @@ const UserBubble = ({ text }) => (
   </div>
 );
 
-// ─────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // Main Page
-// ─────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 const AskMyVehiclePage = () => {
   const navigate = useNavigate();
@@ -119,7 +119,7 @@ const AskMyVehiclePage = () => {
   const [vehicles, setVehicles] = useState([]);
   const [loadingVehicles, setLoadingVehicles] = useState(true);
 
-  // Selected vehicle — default to query param from dashboard widget, or first vehicle
+  // Selected vehicle â€” default to query param from dashboard widget, or first vehicle
   const queryVehicleId = searchParams.get("vehicleId") ? Number(searchParams.get("vehicleId")) : null;
   const [selectedVehicleId, setSelectedVehicleId] = useState(queryVehicleId);
 
@@ -130,7 +130,7 @@ const AskMyVehiclePage = () => {
   // Messages
   const makeGreeting = useCallback((name, reg) => ({
     role: "assistant",
-    answer: `Hi! 👋 I'm your vehicle assistant for ${name}${reg ? ` (${reg})` : ""}.\n\nI can help you understand your vehicle's health, documents, challans, alerts, and live status. What would you like to know?`,
+    answer: `Hi! ðŸ‘‹ I'm your vehicle assistant for ${name}${reg ? ` (${reg})` : ""}.\n\nI can help you understand your vehicle's health, documents, challans, alerts, and live status. What would you like to know?`,
     actions: [],
     sources: [],
   }), []);
@@ -249,7 +249,7 @@ const AskMyVehiclePage = () => {
   return (
     <div className="flex h-screen bg-slate-50 font-['Poppins'] overflow-hidden">
 
-      {/* ── Left Panel ── */}
+      {/* â”€â”€ Left Panel â”€â”€ */}
       <div className="hidden lg:flex w-80 xl:w-96 flex-col bg-gradient-to-b from-[#0f172a] to-[#1e293b] text-white shrink-0">
 
         {/* Back button */}
@@ -385,7 +385,7 @@ const AskMyVehiclePage = () => {
         </div>
       </div>
 
-      {/* ── Right Panel (chat) ── */}
+      {/* â”€â”€ Right Panel (chat) â”€â”€ */}
       <div className="flex-1 flex flex-col min-w-0">
 
         {/* Chat topbar */}
@@ -406,7 +406,7 @@ const AskMyVehiclePage = () => {
                 {loadingVehicles
                   ? "Loading vehicle..."
                   : selectedVehicle
-                  ? `${vehicleName} · ${vehicleReg}`
+                  ? `${vehicleName} Â· ${vehicleReg}`
                   : "No vehicle selected"}
               </p>
             </div>
@@ -496,7 +496,7 @@ const AskMyVehiclePage = () => {
               </button>
             </div>
             <p className="text-center text-[10px] text-slate-400 mt-2">
-              Powered by Gemini · Answers based on your vehicle data only
+              Powered by Gemini Â· Answers based on your vehicle data only
             </p>
           </div>
         </div>

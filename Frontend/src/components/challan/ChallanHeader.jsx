@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { ShieldAlert } from 'lucide-react';
 import { useLanguage } from '../../contexts/LanguageContext';
 

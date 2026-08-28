@@ -53,7 +53,7 @@ const Step9Tracking = () => {
 
     try {
       const token = localStorage.getItem('token') || sessionStorage.getItem('token');
-      const res = await fetch(`/api/v1/dl/track/${encodeURIComponent(n.trim())}`, {
+      const res = await fetch(`https://parivahan-sewa2-0-backend.onrender.com/api/v1/dl/track/${encodeURIComponent(n.trim())}`, {
         headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
       if (!res.ok) throw new Error('Application not found');
@@ -107,7 +107,7 @@ const Step9Tracking = () => {
               Track
             </button>
           </div>
-          {error && <p className="text-red-500 text-xs mt-2 font-medium">⚠️ {error}</p>}
+          {error && <p className="text-red-500 text-xs mt-2 font-medium">âš ï¸ {error}</p>}
         </div>
 
         {/* Result */}
@@ -132,7 +132,7 @@ const Step9Tracking = () => {
               <h4 className="font-bold text-slate-900 text-sm mb-3">Application Details</h4>
               {[
                 { icon: FileText,  label: "Application No.", value: result.applicationNumber },
-                { icon: MapPin,    label: "State & RTO",     value: `${result.state} — ${result.rtoName}` },
+                { icon: MapPin,    label: "State & RTO",     value: `${result.state} â€” ${result.rtoName}` },
                 { icon: Car,       label: "Vehicle Class",   value: result.vehicleClass },
                 { icon: Calendar,  label: "Test Date",       value: result.appointmentDate ? new Date(result.appointmentDate).toLocaleDateString('en-IN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) : 'TBD' },
               ].map((item, i) => (
@@ -173,10 +173,10 @@ const Step9Tracking = () => {
                         <p className={`text-sm font-bold ${isDone ? 'text-slate-800' : 'text-slate-400'}`}>{step.label}</p>
                         <p className={`text-xs font-medium mt-0.5 ${isDone ? 'text-slate-500' : 'text-slate-300'}`}>{step.desc}</p>
                         {step.key === 'PASS' && result.testResult === 'FAIL' && (
-                          <span className="inline-block mt-1 text-[10px] bg-red-100 text-red-600 font-bold px-2 py-0.5 rounded">FAILED — Re-test required</span>
+                          <span className="inline-block mt-1 text-[10px] bg-red-100 text-red-600 font-bold px-2 py-0.5 rounded">FAILED â€” Re-test required</span>
                         )}
                         {step.key === 'PASS' && result.testResult === 'PASS' && (
-                          <span className="inline-block mt-1 text-[10px] bg-emerald-100 text-emerald-600 font-bold px-2 py-0.5 rounded">PASSED ✓</span>
+                          <span className="inline-block mt-1 text-[10px] bg-emerald-100 text-emerald-600 font-bold px-2 py-0.5 rounded">PASSED âœ“</span>
                         )}
                       </div>
                     </div>

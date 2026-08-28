@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, MapPin, Bell, Shield, Bot, FileText } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -33,7 +33,7 @@ const Hero = () => {
             </h1>
             
             <p className="text-lg text-slate-600 mb-8 leading-relaxed max-w-lg">
-              Parivahan Sewa is India's comprehensive digital platform for all vehicle & transport services — empowering citizens with smart technology, real-time insights and seamless access to government services.
+              Parivahan Sewa is India's comprehensive digital platform for all vehicle & transport services â€” empowering citizens with smart technology, real-time insights and seamless access to government services.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 mb-12">

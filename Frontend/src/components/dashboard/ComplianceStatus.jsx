@@ -1,4 +1,4 @@
-import React from "react";
+﻿import React from "react";
 import { Info, FileText, CheckSquare, Shield, Receipt, File, FileSpreadsheet } from "lucide-react";
 import { useDashboard } from "../../contexts/DashboardContext";
 import { useLanguage } from "../../contexts/LanguageContext";

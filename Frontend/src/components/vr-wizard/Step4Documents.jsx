@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+﻿import React, { useRef } from 'react';
 import { Upload, CheckCircle2, FileText, AlertCircle } from 'lucide-react';
 import { useVRWizard } from '../../contexts/VRWizardContext';
 import WizardNav from './WizardNav';

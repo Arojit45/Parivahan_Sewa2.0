@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Check, Circle } from 'lucide-react';
 import { useDLWizard } from '../../contexts/DLWizardContext';
 
@@ -50,7 +50,7 @@ const WizardProgress = () => {
             </span>
 
             {isCompleted && !isActive && (
-              <span className="ml-auto text-emerald-500 text-[10px] font-bold">✓</span>
+              <span className="ml-auto text-emerald-500 text-[10px] font-bold">âœ“</span>
             )}
           </button>
         );

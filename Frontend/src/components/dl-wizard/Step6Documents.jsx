@@ -23,7 +23,7 @@ const Step6Documents = () => {
     if (!wizard.state) return;
     setLoadingSchools(true);
     const token = localStorage.getItem('token') || sessionStorage.getItem('token');
-    fetch(`/api/v1/dl/schools?state=${encodeURIComponent(wizard.state)}`, {
+    fetch(`https://parivahan-sewa2-0-backend.onrender.com/api/v1/dl/schools?state=${encodeURIComponent(wizard.state)}`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(r => r.ok ? r.json() : [])
@@ -94,7 +94,7 @@ const Step6Documents = () => {
         {/* Driving School Search */}
         <div className="bg-white border border-slate-200 rounded-2xl p-5">
           <h4 className="font-bold text-slate-900 text-sm mb-1">Find a Registered Driving School</h4>
-          <p className="text-xs text-slate-500 font-medium mb-4">Optional — but highly recommended for first-time applicants.</p>
+          <p className="text-xs text-slate-500 font-medium mb-4">Optional â€” but highly recommended for first-time applicants.</p>
 
           <div className="relative mb-4">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
@@ -135,7 +135,7 @@ const Step6Documents = () => {
                           <span className="text-[9px] font-bold bg-emerald-100 text-emerald-700 px-1.5 py-0.5 rounded">Govt Approved</span>
                         )}
                       </div>
-                      <p className="text-xs text-slate-500 mt-0.5">{school.city} — {school.address}</p>
+                      <p className="text-xs text-slate-500 mt-0.5">{school.city} â€” {school.address}</p>
                       <div className="flex items-center gap-3 mt-1">
                         {school.rating && (
                           <span className="flex items-center gap-1 text-amber-600 text-[10px] font-bold">

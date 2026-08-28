@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { AlertTriangle, Send, Loader2, CheckCircle2, Clock, AlertCircle } from 'lucide-react';
 import { useSearchParams } from 'react-router-dom';
 import Topbar from '../components/dashboard/Topbar';
@@ -34,7 +34,7 @@ const CorrectionsPage = () => {
   const fetchCorrections = async () => {
     try {
       const headers = { 'Authorization': `Bearer ${localStorage.getItem('token')}` };
-      const res = await fetch('/api/v1/corrections/mine', { headers });
+      const res = await fetch('https://parivahan-sewa2-0-backend.onrender.com/api/v1/corrections/mine', { headers });
       if (res.ok) {
         setCorrections(await res.json());
       }
@@ -61,7 +61,7 @@ const CorrectionsPage = () => {
 
     try {
         const headers = { 'Authorization': `Bearer ${localStorage.getItem('token')}` };
-        const res = await fetch('/api/v1/corrections', {
+        const res = await fetch('https://parivahan-sewa2-0-backend.onrender.com/api/v1/corrections', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -185,7 +185,7 @@ const CorrectionsPage = () => {
                       
                       <div className="flex items-center gap-2 text-sm font-medium mb-3">
                         <span className="text-red-500 line-through truncate max-w-[120px]">{c.currentValue || 'N/A'}</span>
-                        <span className="text-slate-300">→</span>
+                        <span className="text-slate-300">â†’</span>
                         <span className="text-emerald-600 truncate max-w-[120px]">{c.requestedValue}</span>
                       </div>
                       

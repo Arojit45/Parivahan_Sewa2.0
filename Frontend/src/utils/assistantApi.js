@@ -6,7 +6,7 @@
  * The Gemini API key is NEVER included here - it stays on the server.
  */
 
-const BASE_URL = '/api/vehicles';
+const BASE_URL = 'https://parivahan-sewa2-0-backend.onrender.com/api/vehicles';
 const SUPPORTED_LANGUAGES = new Set(['en', 'hi', 'bn', 'mr', 'ta', 'te', 'kn', 'ml', 'gu', 'pa', 'or']);
 
 const resolveLanguage = (language) => {
@@ -25,7 +25,7 @@ const resolveLanguage = (language) => {
  * @returns {Promise<{answer, intent, actions, sources, fallback}>}
  */
 export async function askVehicle(vehicleId, message, history = [], language) {
-  // Token key must match what AuthContext saves — it saves as 'token'
+  // Token key must match what AuthContext saves â€” it saves as 'token'
   const token = localStorage.getItem('token');
   const responseLanguage = resolveLanguage(language);
 
@@ -56,7 +56,7 @@ export async function askApplicationProcess(message, history = [], language) {
   const token = localStorage.getItem('token') || sessionStorage.getItem('token');
   const responseLanguage = resolveLanguage(language);
 
-  const response = await fetch('/api/v1/application-assistant', {
+  const response = await fetch('https://parivahan-sewa2-0-backend.onrender.com/api/v1/application-assistant', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

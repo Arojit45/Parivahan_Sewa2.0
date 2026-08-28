@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { ArrowLeft, ArrowRight, Loader2 } from 'lucide-react';
 import { useDLWizard } from '../../contexts/DLWizardContext';
 
@@ -12,7 +12,7 @@ const WizardNav = ({ onNext, nextLabel = 'Save & Continue', disabledNext = false
       <div className="flex-1">
         {error && (
           <p className="text-red-500 text-sm font-medium bg-red-50 px-3 py-1.5 rounded-lg border border-red-100">
-            ⚠️ {error}
+            âš ï¸ {error}
           </p>
         )}
       </div>

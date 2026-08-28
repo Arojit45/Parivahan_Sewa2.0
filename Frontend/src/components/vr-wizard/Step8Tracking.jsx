@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { CheckCircle2, FileText, Activity } from 'lucide-react';
 import { useVRWizard } from '../../contexts/VRWizardContext';
 

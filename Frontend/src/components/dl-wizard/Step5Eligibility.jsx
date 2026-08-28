@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+﻿import React, { useMemo } from 'react';
 import { CheckCircle2, XCircle, User, Calendar, Home, CreditCard } from 'lucide-react';
 import { useDLWizard } from '../../contexts/DLWizardContext';
 import { VEHICLE_CLASSES } from '../../data/indiaData';
@@ -82,8 +82,8 @@ const Step5Eligibility = () => {
               <div className={`flex items-center gap-2 mt-2 text-xs font-semibold px-3 py-1.5 rounded-lg
                 ${isAgeEligible ? 'bg-emerald-50 text-emerald-700' : 'bg-red-50 text-red-700'}`}>
                 {isAgeEligible
-                  ? <><CheckCircle2 className="w-3.5 h-3.5" /> Age {age} — Eligible for {wizard.vehicleClass}</>
-                  : <><XCircle className="w-3.5 h-3.5" /> Age {age} — Must be at least {minAge} years old for {wizard.vehicleClass}</>
+                  ? <><CheckCircle2 className="w-3.5 h-3.5" /> Age {age} â€” Eligible for {wizard.vehicleClass}</>
+                  : <><XCircle className="w-3.5 h-3.5" /> Age {age} â€” Must be at least {minAge} years old for {wizard.vehicleClass}</>
                 }
               </div>
             )}
@@ -134,7 +134,7 @@ const Step5Eligibility = () => {
               }
               <div>
                 <h4 className={`font-bold text-base ${isEligible ? 'text-emerald-800' : 'text-red-800'}`}>
-                  {isEligible ? '✅ You are eligible to proceed!' : '❌ Eligibility issue found'}
+                  {isEligible ? 'âœ… You are eligible to proceed!' : 'âŒ Eligibility issue found'}
                 </h4>
                 <p className={`text-xs mt-0.5 font-medium ${isEligible ? 'text-emerald-700' : 'text-red-700'}`}>
                   {isEligible
