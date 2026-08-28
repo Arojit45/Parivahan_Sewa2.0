@@ -1,11 +1,46 @@
-import React from "react";
+import React, { useState } from "react";
 import { CheckCircle, RefreshCw, AlertTriangle, Info } from "lucide-react";
 import { useDashboard } from "../../contexts/DashboardContext";
 import { useLanguage } from "../../contexts/LanguageContext";
 
+// ── Health Score Tooltip content ───────────────────────────────────────────
+const ScoreTooltip = () => (
+  <div
+    className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 w-64 bg-slate-900 text-white text-[11px] rounded-xl p-3.5 shadow-xl z-50 pointer-events-none"
+    style={{ lineHeight: "1.6" }}
+  >
+    <p className="font-bold text-[12px] mb-2 text-white">How we calculate your score</p>
+    <ul className="space-y-1.5 text-slate-300">
+      <li className="flex items-start gap-1.5">
+        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 mt-1.5 shrink-0" />
+        <span><span className="text-white font-semibold">RC valid</span> — 20 pts</span>
+      </li>
+      <li className="flex items-start gap-1.5">
+        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 mt-1.5 shrink-0" />
+        <span><span className="text-white font-semibold">Insurance valid</span> — 20 pts</span>
+      </li>
+      <li className="flex items-start gap-1.5">
+        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 mt-1.5 shrink-0" />
+        <span><span className="text-white font-semibold">PUC valid</span> — 20 pts</span>
+      </li>
+      <li className="flex items-start gap-1.5">
+        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 mt-1.5 shrink-0" />
+        <span><span className="text-white font-semibold">Tax paid</span> — 20 pts</span>
+      </li>
+      <li className="flex items-start gap-1.5">
+        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 mt-1.5 shrink-0" />
+        <span><span className="text-white font-semibold">No pending challans</span> — 20 pts</span>
+      </li>
+    </ul>
+    {/* Arrow */}
+    <div className="absolute top-full left-1/2 -translate-x-1/2 border-8 border-transparent border-t-slate-900" />
+  </div>
+);
+
 const HealthSummary = () => {
   const { dashboard, loadingDashboard } = useDashboard();
   const { t } = useLanguage();
+  const [showScoreTooltip, setShowScoreTooltip] = useState(false);
 
   if (loadingDashboard || !dashboard) {
     return (
@@ -48,33 +83,44 @@ const HealthSummary = () => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-4 gap-4 lg:gap-6">
 
-      {/* Health Score */}
-      <div className="bg-white rounded-[1.25rem] border border-slate-100 shadow-[0_2px_10px_rgb(0,0,0,0.02)] p-5 lg:p-6 flex flex-col justify-between">
-        <h3 className="text-[13px] font-semibold text-slate-500 mb-3">{t.dash?.vehicleHealthScore || "Vehicle Health Score"}</h3>
-        <div>
-          <div className="flex items-baseline gap-1.5 mb-3">
-            <span className="text-[2.5rem] font-bold leading-none tracking-tight" style={{ color: scoreColor }}>{healthScore}</span>
-            <span className="text-xl font-semibold text-slate-400">/ 100</span>
+      {/* Health Score — with info hover tooltip */}
+      <div className="bg-white rounded-[1.25rem] border border-slate-100 shadow-[0_2px_10px_rgb(0,0,0,0.02)] p-5 lg:p-6 flex flex-col gap-3">
+        <div className="flex items-center justify-between">
+          <h3 className="text-[13px] font-semibold text-slate-500">{t.dash?.vehicleHealthScore || "Vehicle Health Score"}</h3>
+          {/* Hover info icon */}
+          <div
+            className="relative"
+            onMouseEnter={() => setShowScoreTooltip(true)}
+            onMouseLeave={() => setShowScoreTooltip(false)}
+          >
+            <button className="text-blue-400 hover:text-blue-600 transition-colors">
+              <Info className="w-3.5 h-3.5" />
+            </button>
+            {showScoreTooltip && <ScoreTooltip />}
           </div>
-          <div className="flex items-center justify-between">
-            <span className="font-bold text-[13px]" style={{ color: scoreColor }}>{healthLabel}</span>
-            <div className="w-7 h-7 rounded-full flex items-center justify-center" style={{ backgroundColor: `${scoreColor}20`, border: `1px solid ${scoreColor}40` }}>
-              {isHealthy
-                ? <CheckCircle className="w-4 h-4" style={{ color: scoreColor }} />
-                : <AlertTriangle className="w-4 h-4" style={{ color: scoreColor }} />
-              }
-            </div>
+        </div>
+        <div className="flex items-baseline gap-1.5">
+          <span className="text-[2.5rem] font-bold leading-none tracking-tight" style={{ color: scoreColor }}>{healthScore}</span>
+          <span className="text-xl font-semibold text-slate-400">/ 100</span>
+        </div>
+        <div className="flex items-center justify-between">
+          <span className="font-bold text-[13px]" style={{ color: scoreColor }}>{healthLabel}</span>
+          <div className="w-7 h-7 rounded-full flex items-center justify-center" style={{ backgroundColor: `${scoreColor}20`, border: `1px solid ${scoreColor}40` }}>
+            {isHealthy
+              ? <CheckCircle className="w-4 h-4" style={{ color: scoreColor }} />
+              : <AlertTriangle className="w-4 h-4" style={{ color: scoreColor }} />
+            }
           </div>
         </div>
       </div>
 
       {/* 30-Second Summary */}
-      <div className="bg-white rounded-[1.25rem] border border-slate-100 shadow-[0_2px_10px_rgb(0,0,0,0.02)] p-5 lg:p-6 flex flex-col justify-between">
-        <div className="flex items-center justify-between mb-4">
+      <div className="bg-white rounded-[1.25rem] border border-slate-100 shadow-[0_2px_10px_rgb(0,0,0,0.02)] p-5 lg:p-6 flex flex-col gap-3">
+        <div className="flex items-center justify-between">
           <h3 className="text-[13px] font-semibold text-slate-600">{t.dash?.thirtySecondSummary || "30-Second Summary"}</h3>
           <Info className="w-3.5 h-3.5 text-blue-400" />
         </div>
-        <ul className="space-y-2.5 text-[12px] font-semibold">
+        <ul className="space-y-2 text-[12px] font-semibold">
           {summaryItems.slice(0, 3).map((item, i) => (
             <li key={i} className={`flex items-start gap-2 ${item.color}`}>
               <span className={`w-1.5 h-1.5 rounded-full ${item.dot} mt-1.5 shrink-0`} />
@@ -91,45 +137,41 @@ const HealthSummary = () => {
       </div>
 
       {/* Total Alerts */}
-      <div className="bg-white rounded-[1.25rem] border border-slate-100 shadow-[0_2px_10px_rgb(0,0,0,0.02)] p-5 lg:p-6 flex flex-col justify-between">
-        <h3 className="text-[13px] font-semibold text-slate-500 mb-3">{t.dash?.totalAlerts || "Total Alerts"}</h3>
-        <div>
-          <div className="flex items-baseline gap-2 mb-3">
-            <span className="text-[2.5rem] font-bold leading-none tracking-tight" style={{ color: alertCount > 0 ? "#EF4444" : "#10B981" }}>
-              {alertCount}
-            </span>
-          </div>
-          <div className="flex items-center justify-between">
-            <span className="font-bold text-[13px]" style={{ color: alertCount > 0 ? "#EF4444" : "#10B981" }}>
-              {alertCount > 0 ? (t.dash?.needsAttention || "Needs Attention") : (t.dash?.allClear || "All Clear")}
-            </span>
-            <div className="w-7 h-7 rounded-full flex items-center justify-center" style={{ backgroundColor: alertCount > 0 ? "#FEF2F2" : "#ECFDF5", border: alertCount > 0 ? "1px solid #FEE2E2" : "1px solid #D1FAE5" }}>
-              {alertCount > 0
-                ? <AlertTriangle className="w-4 h-4 text-[#F97316]" />
-                : <CheckCircle className="w-4 h-4 text-[#10B981]" />
-              }
-            </div>
+      <div className="bg-white rounded-[1.25rem] border border-slate-100 shadow-[0_2px_10px_rgb(0,0,0,0.02)] p-5 lg:p-6 flex flex-col gap-3">
+        <h3 className="text-[13px] font-semibold text-slate-500">{t.dash?.totalAlerts || "Total Alerts"}</h3>
+        <div className="flex items-baseline gap-2">
+          <span className="text-[2.5rem] font-bold leading-none tracking-tight" style={{ color: alertCount > 0 ? "#EF4444" : "#10B981" }}>
+            {alertCount}
+          </span>
+        </div>
+        <div className="flex items-center justify-between">
+          <span className="font-bold text-[13px]" style={{ color: alertCount > 0 ? "#EF4444" : "#10B981" }}>
+            {alertCount > 0 ? (t.dash?.needsAttention || "Needs Attention") : (t.dash?.allClear || "All Clear")}
+          </span>
+          <div className="w-7 h-7 rounded-full flex items-center justify-center" style={{ backgroundColor: alertCount > 0 ? "#FEF2F2" : "#ECFDF5", border: alertCount > 0 ? "1px solid #FEE2E2" : "1px solid #D1FAE5" }}>
+            {alertCount > 0
+              ? <AlertTriangle className="w-4 h-4 text-[#F97316]" />
+              : <CheckCircle className="w-4 h-4 text-[#10B981]" />
+            }
           </div>
         </div>
       </div>
 
       {/* Last Updated */}
-      <div className="bg-white rounded-[1.25rem] border border-slate-100 shadow-[0_2px_10px_rgb(0,0,0,0.02)] p-5 lg:p-6 flex flex-col justify-between">
-        <h3 className="text-[13px] font-semibold text-slate-500 mb-3">{t.dash?.lastUpdated || "Last Updated"}</h3>
-        <div>
-          <div className="flex items-baseline gap-2 mb-5">
-            <span className="text-2xl font-bold text-slate-900 leading-none">
-              {lastUpdated ? lastUpdated.label : (t.dash?.noData || "No data")}
-            </span>
-          </div>
-          <div className="flex items-center justify-between">
-            <span className="text-slate-500 font-medium text-[11px]">
-              {lastUpdated ? lastUpdated.sub : (t.dash?.locationUnavailable || "Location unavailable")}
-            </span>
-            <button className="text-blue-500 hover:rotate-180 transition-transform">
-              <RefreshCw className="w-4 h-4" />
-            </button>
-          </div>
+      <div className="bg-white rounded-[1.25rem] border border-slate-100 shadow-[0_2px_10px_rgb(0,0,0,0.02)] p-5 lg:p-6 flex flex-col gap-3">
+        <h3 className="text-[13px] font-semibold text-slate-500">{t.dash?.lastUpdated || "Last Updated"}</h3>
+        <div className="flex items-baseline gap-2">
+          <span className="text-2xl font-bold text-slate-900 leading-none">
+            {lastUpdated ? lastUpdated.label : (t.dash?.noData || "No data")}
+          </span>
+        </div>
+        <div className="flex items-center justify-between">
+          <span className="text-slate-500 font-medium text-[11px]">
+            {lastUpdated ? lastUpdated.sub : (t.dash?.locationUnavailable || "Location unavailable")}
+          </span>
+          <button className="text-blue-500 hover:rotate-180 transition-transform">
+            <RefreshCw className="w-4 h-4" />
+          </button>
         </div>
       </div>
 

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useKeepAlive } from './utils/useKeepAlive';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LandingPage from './pages/LandingPage';
 import AuthPage from './pages/AuthPage';
@@ -27,11 +28,15 @@ import FleetRegistrationPage from './pages/FleetRegistrationPage';
 import FleetDashboardPage from './pages/FleetDashboardPage';
 import HelpSupportPage from './pages/HelpSupportPage';
 
+// Mounts the keep-alive scheduler once for the entire app session
+const KeepAlive = () => { useKeepAlive(); return null; };
+
 function App() {
   return (
     <LanguageProvider>
       <AuthProvider>
         <Router>
+          <KeepAlive />
           <NativeDomTranslator />
           <Routes>
             {/* Public Routes */}

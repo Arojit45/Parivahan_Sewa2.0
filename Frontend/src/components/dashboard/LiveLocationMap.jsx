@@ -1,5 +1,5 @@
-import React from "react";
-import { MapContainer, TileLayer, Marker, Circle } from "react-leaflet";
+import React, { useRef, useEffect, useState } from "react";
+import { MapContainer, TileLayer, Marker, Circle, useMap } from "react-leaflet";
 import L from "leaflet";
 import { BarChart2, MapPin } from "lucide-react";
 import { useDashboard } from "../../contexts/DashboardContext";
@@ -11,12 +11,33 @@ const carIcon = new L.Icon({
   iconAnchor: [16, 16],
 });
 
+// Internal helper: resets map view to initial position when triggered
+const MapResetControl = ({ position, zoom, trigger }) => {
+  const map = useMap();
+  useEffect(() => {
+    if (trigger > 0) {
+      map.setView(position, zoom, { animate: true });
+    }
+  }, [trigger]);
+  return null;
+};
+
 const LiveLocationMap = () => {
   const { dashboard } = useDashboard();
   const { t } = useLanguage();
   const twin = dashboard?.vehicleTwin;
 
-  // No location data state
+  // Each time the component mounts (page refresh), increment mapKey to force
+  // MapContainer remount and fresh tile load.
+  const [mapKey] = useState(() => Date.now());
+  // Incrementing this triggers MapResetControl to fly back to initial position.
+  const [resetTrigger, setResetTrigger] = useState(0);
+
+  const handleViewFullTracking = () => {
+    setResetTrigger((n) => n + 1);
+  };
+
+  // ── No location state ──────────────────────────────────────────────────────
   if (!twin || !twin.latitude || !twin.longitude) {
     return (
       <div className="bg-white rounded-2xl border border-slate-200 p-6 flex flex-col">
@@ -39,6 +60,7 @@ const LiveLocationMap = () => {
   }
 
   const position = [twin.latitude, twin.longitude];
+  const INITIAL_ZOOM = 14;
 
   const lastUpdatedLabel = twin.lastUpdated
     ? (() => {
@@ -56,14 +78,23 @@ const LiveLocationMap = () => {
         </span>
       </div>
 
+      {/* key={mapKey} forces a full remount on each page load → tiles refresh */}
       <div className="w-full h-64 min-h-[256px] rounded-xl overflow-hidden border border-slate-200 mb-4 z-0 relative block bg-slate-100">
-        <MapContainer center={position} zoom={14} style={{ height: "100%", width: "100%" }} zoomControl={false}>
+        <MapContainer
+          key={mapKey}
+          center={position}
+          zoom={INITIAL_ZOOM}
+          style={{ height: "100%", width: "100%" }}
+          zoomControl={false}
+        >
           <TileLayer
             url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           />
           <Circle center={position} radius={600} pathOptions={{ color: "#3b82f6", fillColor: "#3b82f6", fillOpacity: 0.15 }} />
           <Marker position={position} icon={carIcon} />
+          {/* Resets view to initial position when "View Full Tracking" is clicked */}
+          <MapResetControl position={position} zoom={INITIAL_ZOOM} trigger={resetTrigger} />
         </MapContainer>
       </div>
 
@@ -79,7 +110,10 @@ const LiveLocationMap = () => {
         </div>
       </div>
 
-      <button className="w-full mt-4 py-2 border border-slate-200 rounded-lg text-sm font-semibold text-blue-600 hover:bg-slate-50 transition-colors">
+      <button
+        onClick={handleViewFullTracking}
+        className="w-full mt-4 py-2 border border-slate-200 rounded-lg text-sm font-semibold text-blue-600 hover:bg-slate-50 transition-colors"
+      >
         {t.dash?.viewFullTracking || "View Full Tracking"}
       </button>
     </div>
