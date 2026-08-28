@@ -43,6 +43,29 @@ export async function askVehicle(vehicleId, message, history = []) {
   return response.json();
 }
 
+export async function askApplicationProcess(message, history = []) {
+  const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+
+  const response = await fetch('/api/v1/application-assistant', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+    body: JSON.stringify({ message, history }),
+  });
+
+  if (response.status === 401) {
+    throw new Error('UNAUTHORIZED');
+  }
+  if (!response.ok) {
+    const text = await response.text().catch(() => '');
+    throw new Error(text || `Server error ${response.status}`);
+  }
+
+  return response.json();
+}
+
 /**
  * Controlled action router - maps action strings from AI response to app routes.
  * NEVER executes arbitrary strings as URLs or code.
@@ -60,6 +83,8 @@ export const ACTION_ROUTES = {
   VIEW_COMPLIANCE: '/dashboard#compliance',
   OPEN_DASHBOARD:  '/dashboard',
   VIEW_TIMELINE:   '/dashboard#timeline',
+  START_DL_APPLICATION: '/driving-license/apply',
+  TRACK_DL_APPLICATION: '/driving-license/apply',
 };
 
 export function resolveActionRoute(actionCode) {

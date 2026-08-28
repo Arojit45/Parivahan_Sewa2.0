@@ -11,9 +11,13 @@ import com.parivahan.backend.guardianmode.repository.GeofenceBreachEventReposito
 import com.parivahan.backend.guardianmode.repository.GuardianConfigRepository;
 import com.parivahan.backend.livelocation.entity.VehicleLocation;
 import com.parivahan.backend.livelocation.repository.VehicleLocationRepository;
+import com.parivahan.backend.user.domain.User;
+import com.parivahan.backend.user.repository.UserRepository;
 import com.parivahan.backend.vehicle.domain.Vehicle;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +34,7 @@ public class GeofenceCheckerService {
     private final GeofenceBreachEventRepository breachEventRepository;
     private final VehicleLocationRepository vehicleLocationRepository;
     private final AlertService alertService;
+    private final UserRepository userRepository;
 
     /**
      * Checks if the vehicle's current location is outside its configured safe zone.
@@ -41,6 +46,7 @@ public class GeofenceCheckerService {
     public GeofenceBreachEventDto checkGeofence(Long vehicleId) {
         GuardianConfig config = guardianConfigRepository.findByVehicleId(vehicleId)
                 .orElseThrow(() -> new ResourceNotFoundException("Guardian Mode not configured for this vehicle"));
+        verifyOwner(config.getVehicle());
 
         if (!config.isEnabled()) {
             throw new IllegalStateException("Guardian Mode is not enabled for this vehicle");
@@ -92,6 +98,10 @@ public class GeofenceCheckerService {
 
     @Transactional(readOnly = true)
     public List<GeofenceBreachEventDto> getBreachHistory(Long vehicleId) {
+        GuardianConfig config = guardianConfigRepository.findByVehicleId(vehicleId)
+                .orElseThrow(() -> new ResourceNotFoundException("Guardian Mode not configured for this vehicle"));
+        verifyOwner(config.getVehicle());
+
         return breachEventRepository.findByVehicleIdOrderByBreachedAtDesc(vehicleId)
                 .stream().map(this::toDto).collect(Collectors.toList());
     }
@@ -120,5 +130,18 @@ public class GeofenceCheckerService {
                 .lastKnownAddress(e.getLastKnownAddress())
                 .breachedAt(e.getBreachedAt())
                 .build();
+    }
+
+    private void verifyOwner(Vehicle vehicle) {
+        if (!vehicle.getUser().getId().equals(getCurrentUser().getId())) {
+            throw new SecurityException("Access denied: You do not own this vehicle");
+        }
+    }
+
+    private User getCurrentUser() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String email = principal instanceof UserDetails ud ? ud.getUsername() : principal.toString();
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 }

@@ -3,6 +3,8 @@ import { CreditCard, Navigation, CheckCircle2, AlertCircle } from 'lucide-react'
 import { useDLWizard } from '../../contexts/DLWizardContext';
 import WizardNav from './WizardNav';
 
+const LL_NUMBER_PATTERN = /^[A-Z]{2}[0-9]{13}$/;
+
 const Step4LLCheck = () => {
   const { wizard, updateFields, saveAndNext } = useDLWizard();
   const [verifying, setVerifying] = useState(false);
@@ -16,8 +18,8 @@ const Step4LLCheck = () => {
   };
 
   const handleVerifyLL = () => {
-    if (!wizard.llNumber || wizard.llNumber.length < 10) {
-      setVerifyError('Please enter a valid Learner\'s Licence number');
+    if (!LL_NUMBER_PATTERN.test(wizard.llNumber || '')) {
+      setVerifyError('Enter LL number in this format: DL0120240012345');
       return;
     }
     // Mock verification
@@ -31,11 +33,17 @@ const Step4LLCheck = () => {
 
   const handleNext = () => {
     if (wizard.hasLL === null) return;
-    if (wizard.hasLL && !verified && !wizard.llNumber) return;
-    saveAndNext({ hasLL: wizard.hasLL, llNumber: wizard.llNumber });
+    if (wizard.hasLL && (!verified || !LL_NUMBER_PATTERN.test(wizard.llNumber || ''))) {
+      setVerifyError('Please verify a valid Learner\'s Licence number before continuing.');
+      return;
+    }
+    saveAndNext({
+      hasLL: wizard.hasLL,
+      llNumber: wizard.hasLL ? wizard.llNumber : '',
+    });
   };
 
-  const isNextEnabled = wizard.hasLL === false || (wizard.hasLL === true && wizard.llNumber);
+  const isNextDisabled = wizard.hasLL === null || (wizard.hasLL === true && (!verified || !LL_NUMBER_PATTERN.test(wizard.llNumber || '')));
 
   return (
     <div className="flex flex-col h-full">
@@ -93,8 +101,12 @@ const Step4LLCheck = () => {
                 type="text"
                 placeholder="e.g. DL0120240012345"
                 value={wizard.llNumber}
-                onChange={e => { updateFields({ llNumber: e.target.value.toUpperCase() }); setVerified(false); setVerifyError(''); }}
-                maxLength={20}
+                onChange={e => {
+                  updateFields({ llNumber: e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 15) });
+                  setVerified(false);
+                  setVerifyError('');
+                }}
+                maxLength={15}
                 className="flex-1 border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-400"
               />
               <button
@@ -106,6 +118,7 @@ const Step4LLCheck = () => {
                 {verifying ? 'Verifying...' : verified ? '✓ Verified' : 'Verify'}
               </button>
             </div>
+            <p className="text-[11px] text-slate-400 mt-2 font-medium">Format: 2 letters followed by 13 digits, for example DL0120240012345.</p>
             {verifyError && <p className="text-red-500 text-xs mt-2 font-medium">{verifyError}</p>}
             {verified && (
               <div className="flex items-center gap-2 mt-3 text-emerald-600 text-sm font-semibold">
@@ -137,7 +150,7 @@ const Step4LLCheck = () => {
         )}
       </div>
 
-      <WizardNav onNext={handleNext} disabledNext={wizard.hasLL === null} />
+      <WizardNav onNext={handleNext} disabledNext={isNextDisabled} />
     </div>
   );
 };

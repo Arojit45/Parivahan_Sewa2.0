@@ -36,7 +36,7 @@ public class GuardianModeService {
         Vehicle vehicle = getOwnedVehicle(vehicleId);
         GuardianConfig config = guardianConfigRepository.findByVehicleId(vehicleId)
                 .orElse(GuardianConfig.builder()
-                        .vehicle(vehicle).enabled(false).radiusMeters(2000.0).build());
+                        .vehicle(vehicle).user(vehicle.getUser()).enabled(false).radiusMeters(2000.0).build());
         return toDto(config);
     }
 
@@ -64,11 +64,31 @@ public class GuardianModeService {
             config.setSafeLat(request.getSafeLat());
             config.setSafeLng(request.getSafeLng());
             config.setSafeAreaName(null);
-        } else {
+        } else if (config.getSafeLat() == null || config.getSafeLng() == null) {
             throw new IllegalArgumentException("Provide either an area name or lat/lng coordinates.");
         }
 
-        config.setRadiusMeters(request.getRadiusMeters());
+        if (request.getRadiusMeters() != null) {
+            config.setRadiusMeters(request.getRadiusMeters());
+        }
+        if (request.getPushAlertsEnabled() != null) {
+            config.setPushAlertsEnabled(request.getPushAlertsEnabled());
+        }
+        if (request.getSmsAlertsEnabled() != null) {
+            config.setSmsAlertsEnabled(request.getSmsAlertsEnabled());
+        }
+        if (request.getEmailAlertsEnabled() != null) {
+            config.setEmailAlertsEnabled(request.getEmailAlertsEnabled());
+        }
+        if (request.getQuietHoursEnabled() != null) {
+            config.setQuietHoursEnabled(request.getQuietHoursEnabled());
+        }
+        if (request.getQuietHoursStart() != null && !request.getQuietHoursStart().isBlank()) {
+            config.setQuietHoursStart(request.getQuietHoursStart());
+        }
+        if (request.getQuietHoursEnd() != null && !request.getQuietHoursEnd().isBlank()) {
+            config.setQuietHoursEnd(request.getQuietHoursEnd());
+        }
         config.setUser(user);
 
         return toDto(guardianConfigRepository.save(config));
@@ -122,6 +142,12 @@ public class GuardianModeService {
                 .safeLng(c.getSafeLng())
                 .safeAreaName(c.getSafeAreaName())
                 .radiusMeters(c.getRadiusMeters())
+                .pushAlertsEnabled(c.isPushAlertsEnabled())
+                .smsAlertsEnabled(c.isSmsAlertsEnabled())
+                .emailAlertsEnabled(c.isEmailAlertsEnabled())
+                .quietHoursEnabled(c.isQuietHoursEnabled())
+                .quietHoursStart(c.getQuietHoursStart())
+                .quietHoursEnd(c.getQuietHoursEnd())
                 .lastBreachAt(c.getLastBreachAt())
                 .build();
     }

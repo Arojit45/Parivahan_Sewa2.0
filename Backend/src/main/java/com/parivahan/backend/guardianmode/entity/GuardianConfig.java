@@ -43,6 +43,24 @@ public class GuardianConfig extends BaseEntity {
     @Builder.Default
     private Double radiusMeters = 2000.0;
 
+    @Builder.Default
+    private boolean pushAlertsEnabled = true;
+
+    @Builder.Default
+    private boolean smsAlertsEnabled = true;
+
+    @Builder.Default
+    private boolean emailAlertsEnabled = true;
+
+    @Builder.Default
+    private boolean quietHoursEnabled = true;
+
+    @Builder.Default
+    private String quietHoursStart = "22:00";
+
+    @Builder.Default
+    private String quietHoursEnd = "06:00";
+
     // Timestamp of last recorded geofence breach
     private LocalDateTime lastBreachAt;
 }

@@ -3,15 +3,36 @@ import Sidebar from '../components/dashboard/Sidebar';
 import Topbar from '../components/dashboard/Topbar';
 import Footer from '../components/layout/Footer';
 import { useLanguage } from '../contexts/LanguageContext';
-import { Play, Pause, Headphones, ChevronDown, ChevronRight, MapPin, Building2, Car, ClipboardCheck, CreditCard, Crosshair, ArrowRight, ArrowLeft, MessageCircle, Phone, Map, Video, Search, CheckCircle2, Bot, Sparkles, Navigation, Shield, Globe, RotateCcw } from 'lucide-react';
+import { Play, Pause, Headphones, ChevronDown, ChevronRight, MapPin, Building2, Car, ClipboardCheck, CreditCard, Crosshair, ArrowRight, ArrowLeft, MessageCircle, Phone, Map, Video, Search, CheckCircle2, Bot, Sparkles, Navigation, Shield, Globe, RotateCcw, Loader2, ExternalLink } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import { askApplicationProcess, resolveActionRoute } from '../utils/assistantApi';
+
+const DL_ASSISTANT_STORAGE_KEY = 'drivingLicenseAssistantMessages';
+
+const makeAssistantGreeting = () => ({
+  role: 'assistant',
+  answer: "Hi! I can help with Driving Licence applications, documents, eligibility, appointment booking, payment, tracking, and re-test questions.",
+  actions: [],
+  sources: [],
+});
 
 const DrivingLicensePage = () => {
   const { t, language } = useLanguage();
   const navigate = useNavigate();
   const [audioState, setAudioState] = useState('IDLE'); // 'IDLE', 'PLAYING', 'PAUSED'
   const [activeStep, setActiveStep] = useState(0);
+  const [assistantMessages, setAssistantMessages] = useState(() => {
+    try {
+      const saved = localStorage.getItem(DL_ASSISTANT_STORAGE_KEY);
+      return saved ? JSON.parse(saved) : [makeAssistantGreeting()];
+    } catch (e) {
+      return [makeAssistantGreeting()];
+    }
+  });
+  const [assistantInput, setAssistantInput] = useState('');
+  const [assistantLoading, setAssistantLoading] = useState(false);
+  const assistantEndRef = useRef(null);
 
   useEffect(() => {
     const fetchProgress = async () => {
@@ -79,6 +100,11 @@ const DrivingLicensePage = () => {
   };
 
   const audioRef = useRef(null);
+
+  useEffect(() => {
+    localStorage.setItem(DL_ASSISTANT_STORAGE_KEY, JSON.stringify(assistantMessages));
+    assistantEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [assistantMessages]);
 
   const startSpeech = async () => {
     if (audioRef.current) {
@@ -151,6 +177,52 @@ const DrivingLicensePage = () => {
     }
     setAudioState('IDLE');
     setTimeout(startSpeech, 100);
+  };
+
+  const handleAssistantAction = (actionCode) => {
+    const route = resolveActionRoute(actionCode);
+    if (route) navigate(route);
+  };
+
+  const sendAssistantMessage = async (text) => {
+    const question = text?.trim();
+    if (!question || assistantLoading) return;
+
+    setAssistantInput('');
+    const history = assistantMessages
+      .filter((m) => m.role === 'user' || m.role === 'assistant')
+      .slice(-8)
+      .map((m) => ({ role: m.role, content: m.role === 'user' ? m.text : m.answer }));
+
+    setAssistantMessages(prev => [...prev, { role: 'user', text: question }]);
+    setAssistantLoading(true);
+
+    try {
+      const response = await askApplicationProcess(question, history);
+      setAssistantMessages(prev => [...prev, { role: 'assistant', ...response }]);
+    } catch (err) {
+      setAssistantMessages(prev => [
+        ...prev,
+        {
+          role: 'assistant',
+          answer: err.message === 'UNAUTHORIZED'
+            ? 'Please log in again to use the application assistant.'
+            : 'I am unable to reach the assistant right now. You can still continue the DL application from the Start Application button.',
+          actions: [{ label: 'Start DL Application', action: 'START_DL_APPLICATION' }],
+          sources: [],
+          fallback: true,
+        },
+      ]);
+    } finally {
+      setAssistantLoading(false);
+    }
+  };
+
+  const handleAssistantKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      sendAssistantMessage(assistantInput);
+    }
   };
 
   const steps = [
@@ -372,7 +444,7 @@ const DrivingLicensePage = () => {
           </div>
 
           {/* Smart Assistant */}
-          <div className="w-full lg:w-[400px] bg-white rounded-3xl p-8 shadow-sm border border-slate-200 flex flex-col relative">
+          <div className="w-full lg:w-[400px] bg-white rounded-3xl p-8 shadow-sm border border-slate-200 flex flex-col relative min-h-[520px]">
              <div className="absolute top-0 right-0 w-32 h-32 bg-blue-50/50 rounded-bl-full -z-10"></div>
              
              {/* Floating AI Illustration */}
@@ -387,29 +459,81 @@ const DrivingLicensePage = () => {
                </div>
              </div>
 
-             <div className="flex-1 flex flex-col gap-3 mb-6">
-               <button className="bg-slate-50 hover:bg-blue-50 text-slate-700 hover:text-blue-700 border border-slate-100 hover:border-blue-200 text-xs font-medium py-2 px-4 rounded-full text-left transition-colors truncate">
-                 {t.dl.q1}
-               </button>
-               <button className="bg-slate-50 hover:bg-blue-50 text-slate-700 hover:text-blue-700 border border-slate-100 hover:border-blue-200 text-xs font-medium py-2 px-4 rounded-full text-left transition-colors truncate">
-                 {t.dl.q2}
-               </button>
-               <button className="bg-slate-50 hover:bg-blue-50 text-slate-700 hover:text-blue-700 border border-slate-100 hover:border-blue-200 text-xs font-medium py-2 px-4 rounded-full text-left transition-colors truncate">
-                 {t.dl.q3}
-               </button>
-               <button className="bg-slate-50 hover:bg-blue-50 text-slate-700 hover:text-blue-700 border border-slate-100 hover:border-blue-200 text-xs font-medium py-2 px-4 rounded-full text-left transition-colors truncate">
-                 {t.dl.q4}
-               </button>
+             <div className="flex flex-col gap-2 mb-4">
+               {[t.dl.q1, t.dl.q2, t.dl.q3, t.dl.q4].map((question) => (
+                 <button
+                   key={question}
+                   onClick={() => sendAssistantMessage(question)}
+                   disabled={assistantLoading}
+                   className="bg-slate-50 hover:bg-blue-50 text-slate-700 hover:text-blue-700 border border-slate-100 hover:border-blue-200 text-xs font-medium py-2 px-4 rounded-full text-left transition-colors truncate disabled:opacity-60"
+                 >
+                   {question}
+                 </button>
+               ))}
+             </div>
+
+             <div className="flex-1 overflow-y-auto pr-1 space-y-3 mb-4 min-h-[170px] max-h-[260px]">
+               {assistantMessages.map((msg, index) => (
+                 <div key={index} className={`flex gap-2 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                   {msg.role === 'assistant' && (
+                     <div className="w-7 h-7 rounded-full bg-blue-50 border border-blue-100 flex items-center justify-center shrink-0 mt-0.5">
+                       <Bot className="w-3.5 h-3.5 text-blue-600" />
+                     </div>
+                   )}
+                   <div className={`max-w-[86%] rounded-2xl px-3 py-2 text-xs leading-relaxed whitespace-pre-wrap ${
+                     msg.role === 'user'
+                       ? 'bg-blue-600 text-white rounded-tr-sm'
+                       : msg.fallback
+                         ? 'bg-amber-50 border border-amber-200 text-amber-900 rounded-tl-sm'
+                         : 'bg-slate-50 border border-slate-200 text-slate-700 rounded-tl-sm'
+                   }`}>
+                     {msg.role === 'user' ? msg.text : msg.answer}
+                     {msg.actions?.length > 0 && (
+                       <div className="mt-2 flex flex-wrap gap-1.5">
+                         {msg.actions.map((action, actionIndex) => (
+                           <button
+                             key={`${action.action}-${actionIndex}`}
+                             onClick={() => handleAssistantAction(action.action)}
+                             className="inline-flex items-center gap-1 rounded-full bg-white/80 border border-blue-200 text-blue-700 px-2 py-1 text-[10px] font-bold hover:bg-blue-50"
+                           >
+                             {action.label}
+                             <ExternalLink className="w-3 h-3" />
+                           </button>
+                         ))}
+                       </div>
+                     )}
+                   </div>
+                 </div>
+               ))}
+               {assistantLoading && (
+                 <div className="flex gap-2 justify-start">
+                   <div className="w-7 h-7 rounded-full bg-blue-50 border border-blue-100 flex items-center justify-center shrink-0">
+                     <Bot className="w-3.5 h-3.5 text-blue-600" />
+                   </div>
+                   <div className="bg-slate-50 border border-slate-200 rounded-2xl rounded-tl-sm px-3 py-2">
+                     <Loader2 className="w-4 h-4 text-blue-500 animate-spin" />
+                   </div>
+                 </div>
+               )}
+               <div ref={assistantEndRef} />
              </div>
 
              <div className="mt-auto relative">
                <input 
                  type="text" 
+                 value={assistantInput}
+                 onChange={(e) => setAssistantInput(e.target.value)}
+                 onKeyDown={handleAssistantKeyDown}
                  placeholder={t.dl.typeQ} 
-                 className="w-full bg-slate-50 border border-slate-200 rounded-full py-3 pl-5 pr-12 text-sm focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all"
+                 disabled={assistantLoading}
+                 className="w-full bg-slate-50 border border-slate-200 rounded-full py-3 pl-5 pr-12 text-sm focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all disabled:opacity-60"
                />
-               <button className="absolute right-1.5 top-1.5 bottom-1.5 w-9 bg-blue-600 text-white rounded-full flex items-center justify-center hover:bg-blue-700 transition-colors shadow-sm">
-                 <ArrowRight className="w-4 h-4" />
+               <button
+                 onClick={() => sendAssistantMessage(assistantInput)}
+                 disabled={!assistantInput.trim() || assistantLoading}
+                 className="absolute right-1.5 top-1.5 bottom-1.5 w-9 bg-blue-600 text-white rounded-full flex items-center justify-center hover:bg-blue-700 transition-colors shadow-sm disabled:opacity-50"
+               >
+                 {assistantLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <ArrowRight className="w-4 h-4" />}
                </button>
              </div>
           </div>

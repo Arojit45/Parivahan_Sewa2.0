@@ -2,7 +2,6 @@ package com.parivahan.backend.guardianmode.dto;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
@@ -13,8 +12,14 @@ public class GuardianConfigRequest {
     private Double safeLng;
     private String safeAreaName;
 
-    @NotNull(message = "Radius is required")
     @Min(value = 500, message = "Minimum radius is 500 meters")
     @Max(value = 50000, message = "Maximum radius is 50 km")
     private Double radiusMeters;
+
+    private Boolean pushAlertsEnabled;
+    private Boolean smsAlertsEnabled;
+    private Boolean emailAlertsEnabled;
+    private Boolean quietHoursEnabled;
+    private String quietHoursStart;
+    private String quietHoursEnd;
 }

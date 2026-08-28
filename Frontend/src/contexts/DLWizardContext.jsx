@@ -138,18 +138,23 @@ export const DLWizardProvider = ({ children }) => {
 
       if (result.networkError) {
         setWizard(prev => ({ ...prev, backendAvailable: false }));
+        advanceLocally(stepData, currentStep, lastCompletedStep);
+        return;
       }
 
-      // Advance regardless of backend success
+      if (!result.ok) {
+        setWizard(prev => ({ ...prev, isSaving: false, error: 'Failed to save application. Please try again.' }));
+        return;
+      }
+
       setWizard(prev => ({
         ...prev,
         ...stepData,
-        applicationId: result.ok && result.data ? result.data.id : null,
+        applicationId: result.data ? result.data.id : null,
         isSaving: false,
         isResuming: false,
         currentStep: 2,
         lastCompletedStep: Math.max(prev.lastCompletedStep, 1),
-        backendAvailable: result.networkError ? false : prev.backendAvailable,
       }));
       return;
     }
@@ -162,6 +167,17 @@ export const DLWizardProvider = ({ children }) => {
         body: JSON.stringify({ completedStep: currentStep, ...stepData }),
       });
 
+      if (result.networkError) {
+        setWizard(prev => ({ ...prev, backendAvailable: false }));
+        advanceLocally(stepData, currentStep, lastCompletedStep);
+        return;
+      }
+
+      if (!result.ok) {
+        setWizard(prev => ({ ...prev, isSaving: false, error: 'Failed to update application. Please try again.' }));
+        return;
+      }
+
       setWizard(prev => ({
         ...prev,
         ...stepData,
@@ -171,7 +187,6 @@ export const DLWizardProvider = ({ children }) => {
         isResuming: false,
         currentStep: Math.min(currentStep + 1, 9),
         lastCompletedStep: Math.max(prev.lastCompletedStep, currentStep),
-        backendAvailable: result.networkError ? false : prev.backendAvailable,
       }));
     } else {
       advanceLocally(stepData, currentStep, lastCompletedStep);

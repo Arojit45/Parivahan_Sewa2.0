@@ -18,5 +18,11 @@ public class GuardianConfigDto {
     private Double safeLng;
     private String safeAreaName;
     private Double radiusMeters;
+    private boolean pushAlertsEnabled;
+    private boolean smsAlertsEnabled;
+    private boolean emailAlertsEnabled;
+    private boolean quietHoursEnabled;
+    private String quietHoursStart;
+    private String quietHoursEnd;
     private LocalDateTime lastBreachAt;
 }

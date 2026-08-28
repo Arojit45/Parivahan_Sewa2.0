@@ -45,6 +45,33 @@ export async function getVehicleDashboard(vehicleId) {
   return apiFetch(`/dashboard/vehicles/${vehicleId}`);
 }
 
+export async function getGuardianConfig(vehicleId) {
+  return apiFetch(`/guardian-mode/vehicles/${vehicleId}`);
+}
+
+export async function saveGuardianConfig(vehicleId, payload) {
+  return apiFetch(`/guardian-mode/vehicles/${vehicleId}`, {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  });
+}
+
+export async function toggleGuardianMode(vehicleId) {
+  return apiFetch(`/guardian-mode/vehicles/${vehicleId}/toggle`, {
+    method: 'PATCH',
+  });
+}
+
+export async function checkGuardianGeofence(vehicleId) {
+  return apiFetch(`/guardian-mode/vehicles/${vehicleId}/check`, {
+    method: 'POST',
+  });
+}
+
+export async function getGuardianBreachEvents(vehicleId) {
+  return apiFetch(`/guardian-mode/vehicles/${vehicleId}/breach-events`);
+}
+
 export async function getCitizenGuide(params = {}) {
   const query = new URLSearchParams();
   if (params.category) query.set('category', params.category);

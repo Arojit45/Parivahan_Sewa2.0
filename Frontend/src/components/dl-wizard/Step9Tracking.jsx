@@ -52,7 +52,10 @@ const Step9Tracking = () => {
     setResult(null);
 
     try {
-      const res = await fetch(`/api/v1/dl/track/${encodeURIComponent(n.trim())}`);
+      const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+      const res = await fetch(`/api/v1/dl/track/${encodeURIComponent(n.trim())}`, {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
       if (!res.ok) throw new Error('Application not found');
       const data = await res.json();
       setResult(data);
