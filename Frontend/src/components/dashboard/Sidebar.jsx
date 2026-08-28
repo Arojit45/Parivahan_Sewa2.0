@@ -88,8 +88,8 @@ const Sidebar = () => {
             <p className="text-[8px] text-blue-800/80 font-bold leading-[1.3] mt-0.5 tracking-wider uppercase">
               {t.dash?.ministryTitle || "MINISTRY OF ROAD TRANSPORT & HIGHWAYS"}
             </p>
-            <p className="text-[10px] text-[#000080] font-bold leading-[1.2] mt-0.5 tracking-wide" style={{ fontFamily: 'Georgia, serif' }}>
-              {t.dash?.govtOfIndia || "Government of India"}
+            <p className="text-[10px] text-slate-800 font-bold leading-[1.2] mt-0.5 tracking-wide" style={{ fontFamily: 'Georgia, serif' }}>
+              E-Transport Portal
             </p>
             <div className="h-[1.5px] w-12 flex mt-1.5 rounded-full overflow-hidden shadow-sm opacity-90">
               <div className="flex-1 bg-[#FF9933]"></div>

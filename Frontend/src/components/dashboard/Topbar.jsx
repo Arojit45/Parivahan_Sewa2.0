@@ -1,11 +1,14 @@
-import React from 'react';
-import { Search, Bell, HelpCircle, ChevronDown, Globe } from 'lucide-react';
+import React, { useState } from 'react';
+import { Search, Bell, HelpCircle, ChevronDown, Globe, User, LogOut, Settings } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { useAuth } from '../../contexts/AuthContext';
+import SettingsModal from './SettingsModal';
 
 const Topbar = () => {
   const { t, language, setLanguage } = useLanguage();
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
+  const [showSettings, setShowSettings] = useState(false);
 
   const languages = [
     { code: 'en', label: 'English' },
@@ -49,7 +52,7 @@ const Topbar = () => {
         {/* Formal Government Branding */}
         <div className="flex-1 flex items-center gap-3 select-none">
           {/* Ashoka Chakra SVG */}
-          <div className="relative w-9 h-9 shrink-0 animate-slow-spin text-[#000080]">
+          <div className="relative w-9 h-9 shrink-0 animate-slow-spin text-slate-800">
             <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-sm" fill="currentColor">
               <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" strokeWidth="5" />
               <circle cx="50" cy="50" r="8" />
@@ -59,8 +62,8 @@ const Topbar = () => {
             </svg>
           </div>
           <div className="flex flex-col relative overflow-hidden pb-1 pr-4 px-1 -ml-1">
-            <span className="text-[17px] font-bold text-[#000080] tracking-[0.2em] uppercase leading-tight pt-1 drop-shadow-sm" style={{ fontFamily: 'Georgia, serif' }}>
-              {t.dash?.govtOfIndia || "Government of India"}
+            <span className="text-[17px] font-bold text-slate-800 tracking-[0.2em] uppercase leading-tight pt-1 drop-shadow-sm" style={{ fontFamily: 'Georgia, serif' }}>
+              E-Transport Portal
             </span>
             <div className="h-[2px] w-full flex mt-1.5 rounded-full overflow-hidden shadow-sm opacity-90">
               <div className="flex-1 bg-[#FF9933]"></div>
@@ -116,17 +119,43 @@ const Topbar = () => {
         </div>
 
         {/* Profile */}
-        <button className="flex items-center gap-3 group">
-          <div className="w-8 h-8 rounded-full bg-slate-100 border border-slate-200 overflow-hidden flex items-center justify-center">
-            <img src={user?.profilePhoto || "/userIcon.png"} alt="Profile" className="w-full h-full object-cover" />
+        <div className="relative group">
+          <button className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-full bg-slate-100 border border-slate-200 overflow-hidden flex items-center justify-center">
+              <img src={user?.profilePhoto || "/userIcon.png"} alt="Profile" className="w-full h-full object-cover" />
+            </div>
+            <div className="flex items-center gap-1 text-sm font-semibold text-slate-700 group-hover:text-blue-600 transition-colors">
+              {user?.fullName || 'Citizen'} <ChevronDown className="w-4 h-4 text-slate-400 group-hover:text-blue-600 transition-colors" />
+            </div>
+          </button>
+          
+          {/* Profile Dropdown */}
+          <div className="absolute right-0 top-full pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
+            <div className="w-64 bg-white rounded-xl shadow-lg border border-slate-100 overflow-hidden">
+              <div className="p-4 border-b border-slate-100 bg-slate-50 flex flex-col items-center text-center">
+                 <div className="w-16 h-16 rounded-full bg-white border-2 border-white shadow-sm overflow-hidden flex items-center justify-center mb-2">
+                   <img src={user?.profilePhoto || "/userIcon.png"} alt="Profile" className="w-full h-full object-cover" />
+                 </div>
+                 <h4 className="font-bold text-slate-800">{user?.fullName || 'Citizen'}</h4>
+                 <p className="text-xs text-slate-500">{user?.email || 'citizen@india.gov.in'}</p>
+              </div>
+              <div className="p-2">
+                <button onClick={() => setShowSettings(true)} className="w-full flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 hover:text-blue-600 rounded-lg transition-colors text-left">
+                  <Settings className="w-4 h-4" />
+                  Settings
+                </button>
+                <button onClick={logout} className="w-full flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-red-600 hover:bg-red-50 rounded-lg transition-colors text-left mt-1">
+                  <LogOut className="w-4 h-4" />
+                  Log Out
+                </button>
+              </div>
+            </div>
           </div>
-          <div className="flex items-center gap-1 text-sm font-semibold text-slate-700 group-hover:text-blue-600 transition-colors">
-            {user?.fullName || 'Citizen'} <ChevronDown className="w-4 h-4 text-slate-400" />
-          </div>
-        </button>
+        </div>
 
       </div>
     </header>
+    {showSettings && <SettingsModal onClose={() => setShowSettings(false)} />}
     </>
   );
 };

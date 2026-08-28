@@ -10,7 +10,7 @@ const ChallanHelpWidget = () => {
       <h3 className="font-bold text-slate-800 w-full text-left mb-4">{c.needHelp || "Need Help?"}</h3>
       
       <div className="w-32 h-32 mb-4">
-        <img src="/need help.png" alt="Help Assistant" className="w-full h-full object-contain" />
+        <img src="/Ai asistance.png" alt="Help Assistant" className="w-full h-full object-contain" />
       </div>
       
       <p className="text-sm text-slate-600 mb-5">

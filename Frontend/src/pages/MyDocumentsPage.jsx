@@ -3,8 +3,10 @@ import { CreditCard, FileText, AlertCircle, Loader2, CheckCircle2 } from 'lucide
 import Topbar from '../components/dashboard/Topbar';
 import Sidebar from '../components/dashboard/Sidebar';
 import { Link } from 'react-router-dom';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const DocumentCard = ({ title, status, validTill, type, idNumber, Icon }) => {
+  const { t } = useLanguage();
   const isExpired = validTill && new Date(validTill) < new Date();
   
   return (
@@ -17,11 +19,11 @@ const DocumentCard = ({ title, status, validTill, type, idNumber, Icon }) => {
         <div>
           {isExpired ? (
             <span className="inline-flex items-center gap-1 text-[10px] font-bold text-red-600 bg-red-50 border border-red-200 px-2 py-1 rounded-full uppercase tracking-wider">
-              Expired
+              {t.myDocsPage.expired}
             </span>
           ) : (
             <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-600 bg-emerald-50 border border-emerald-200 px-2 py-1 rounded-full uppercase tracking-wider">
-              <CheckCircle2 className="w-3 h-3" /> Active
+              <CheckCircle2 className="w-3 h-3" /> {t.myDocsPage.active}
             </span>
           )}
         </div>
@@ -30,9 +32,9 @@ const DocumentCard = ({ title, status, validTill, type, idNumber, Icon }) => {
       <p className="text-sm font-medium text-slate-500 mb-4">{idNumber || 'N/A'}</p>
       
       <div className="border-t border-slate-100 pt-4 flex justify-between items-center text-sm">
-        <span className="text-slate-500">Valid Till</span>
+        <span className="text-slate-500">{t.myDocsPage.validTill}</span>
         <span className={`font-semibold ${isExpired ? 'text-red-600' : 'text-slate-800'}`}>
-          {validTill ? new Date(validTill).toLocaleDateString('en-IN') : 'Lifetime'}
+          {validTill ? new Date(validTill).toLocaleDateString('en-IN') : t.myDocsPage.lifetime}
         </span>
       </div>
     </div>
@@ -40,6 +42,7 @@ const DocumentCard = ({ title, status, validTill, type, idNumber, Icon }) => {
 };
 
 const MyDocumentsPage = () => {
+  const { t } = useLanguage();
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState(null);
   const [selectedVehicleId, setSelectedVehicleId] = useState(null);
@@ -78,8 +81,8 @@ const MyDocumentsPage = () => {
         <main className="flex-1 overflow-y-auto p-4 lg:p-8">
           <div className="max-w-[1200px] mx-auto">
             <div className="mb-8">
-              <h1 className="text-3xl font-bold text-slate-900 mb-2">My Digital Documents</h1>
-              <p className="text-slate-500 font-medium">Access your official transport documents and certificates securely.</p>
+              <h1 className="text-3xl font-bold text-slate-900 mb-2">{t.myDocsPage.title}</h1>
+              <p className="text-slate-500 font-medium">{t.myDocsPage.subtitle}</p>
             </div>
 
             {loading ? (
@@ -100,13 +103,13 @@ const MyDocumentsPage = () => {
                     <span className="w-8 h-8 rounded-lg bg-indigo-100 text-indigo-600 flex items-center justify-center">
                       <CreditCard className="w-5 h-5" />
                     </span>
-                    Personal Documents
+                    {t.myDocsPage.personalDocs}
                   </h2>
                   
                   {data.drivingLicense ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                       <DocumentCard 
-                        title="Driving License"
+                        title={t.myDocsPage.drivingLicense}
                         idNumber={data.drivingLicense.applicationNumber}
                         validTill={null} // Usually lifetime or 20 years, we don't have this field in DL mock
                         type="DL"
@@ -118,10 +121,10 @@ const MyDocumentsPage = () => {
                       <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
                         <CreditCard className="w-8 h-8 text-slate-400" />
                       </div>
-                      <h3 className="text-lg font-bold text-slate-800 mb-2">No Driving License Found</h3>
-                      <p className="text-slate-500 text-sm mb-6">You don't have an approved driving license on record.</p>
+                      <h3 className="text-lg font-bold text-slate-800 mb-2">{t.myDocsPage.noDlFound}</h3>
+                      <p className="text-slate-500 text-sm mb-6">{t.myDocsPage.noDlDesc}</p>
                       <Link to="/driving-license" className="bg-blue-600 text-white px-6 py-2.5 rounded-xl font-semibold hover:bg-blue-700 transition-colors">
-                        Apply for DL
+                        {t.myDocsPage.applyDl}
                       </Link>
                     </div>
                   )}
@@ -134,7 +137,7 @@ const MyDocumentsPage = () => {
                       <span className="w-8 h-8 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center">
                         <FileText className="w-5 h-5" />
                       </span>
-                      Vehicle Documents
+                      {t.myDocsPage.vehicleDocs}
                     </h2>
                     
                     {data.vehicles?.length > 0 && (
@@ -153,26 +156,26 @@ const MyDocumentsPage = () => {
                   {selectedVehicle ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                       <DocumentCard 
-                        title="Registration Certificate (RC)"
+                        title={t.myDocsPage.rc}
                         idNumber={selectedVehicle.registrationNumber}
                         validTill={null} // Lifetime for private, 15 years usually
                         Icon={FileText}
                       />
                       <DocumentCard 
-                        title="Motor Insurance"
+                        title={t.myDocsPage.insurance}
                         idNumber={selectedVehicle.insuranceProvider}
                         validTill={selectedVehicle.insuranceValidTill}
                         Icon={FileText}
                       />
                       <DocumentCard 
-                        title="PUC Certificate"
+                        title={t.myDocsPage.puc}
                         idNumber={`PUC-${selectedVehicle.registrationNumber}`}
                         validTill={selectedVehicle.pucValidTill}
                         Icon={FileText}
                       />
                       {selectedVehicle.taxValidTill && (
                          <DocumentCard 
-                           title="Road Tax"
+                           title={t.myDocsPage.roadTax}
                            idNumber={`TAX-${selectedVehicle.registrationNumber}`}
                            validTill={selectedVehicle.taxValidTill}
                            Icon={FileText}
@@ -184,10 +187,10 @@ const MyDocumentsPage = () => {
                       <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
                         <FileText className="w-8 h-8 text-slate-400" />
                       </div>
-                      <h3 className="text-lg font-bold text-slate-800 mb-2">No Vehicles Found</h3>
-                      <p className="text-slate-500 text-sm mb-6">Register a vehicle to view its digital documents like RC, PUC, and Insurance.</p>
+                      <h3 className="text-lg font-bold text-slate-800 mb-2">{t.myDocsPage.noVehiclesFound}</h3>
+                      <p className="text-slate-500 text-sm mb-6">{t.myDocsPage.noVehiclesDesc}</p>
                       <Link to="/register-vehicle" className="bg-blue-600 text-white px-6 py-2.5 rounded-xl font-semibold hover:bg-blue-700 transition-colors">
-                        Register Vehicle
+                        {t.myDocsPage.registerVehicle}
                       </Link>
                     </div>
                   )}

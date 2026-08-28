@@ -1,4 +1,24 @@
 export const nativeDomPhrases = {
+  bn: {
+    'My Digital Documents': 'আমার ডিজিটাল নথিপত্র',
+    'Access your official transport documents and certificates securely.': 'আপনার অফিসিয়াল পরিবহন নথিপত্র এবং শংসাপত্রগুলি নিরাপদে অ্যাক্সেস করুন।',
+    'Personal Documents': 'ব্যক্তিগত নথিপত্র',
+    'Driving License': 'ড্রাইভিং লাইসেন্স',
+    'No Driving License Found': 'কোনো ড্রাইভিং লাইসেন্স পাওয়া যায়নি',
+    "You don't have an approved driving license on record.": 'আপনার রেকর্ডে কোনো অনুমোদিত ড্রাইভিং লাইসেন্স নেই।',
+    'Apply for DL': 'DL-এর জন্য আবেদন করুন',
+    'Vehicle Documents': 'যানবাহনের নথিপত্র',
+    'Registration Certificate (RC)': 'নিবন্ধন শংসাপত্র (RC)',
+    'Motor Insurance': 'মোটর বীমা',
+    'PUC Certificate': 'PUC শংসাপত্র',
+    'Road Tax': 'রোড ট্যাক্স',
+    'No Vehicles Found': 'কোনো যানবাহন পাওয়া যায়নি',
+    'Register Vehicle': 'যানবাহন নিবন্ধন করুন',
+    'Expired': 'মেয়াদোত্তীর্ণ',
+    'Active': 'সক্রিয়',
+    'Valid Till': 'মেয়াদ পর্যন্ত',
+    'Lifetime': 'আজীবন'
+  },
   hi: {
     'Back to Dashboard': 'डैशबोर्ड पर वापस जाएं',
     'Back to Home': 'होम पर वापस जाएं',

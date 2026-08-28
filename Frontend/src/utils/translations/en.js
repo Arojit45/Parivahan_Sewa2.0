@@ -368,5 +368,26 @@ export const en = {
       viewPaymentGuide: "View Payment Guide",
       knowHowToChallenge: "Know How to Challenge"
     }
-  }
+  },
+  myDocsPage: {
+    "title": "My Digital Documents",
+    "subtitle": "Access your official transport documents and certificates securely.",
+    "personalDocs": "Personal Documents",
+    "drivingLicense": "Driving License",
+    "noDlFound": "No Driving License Found",
+    "noDlDesc": "You don't have an approved driving license on record.",
+    "applyDl": "Apply for DL",
+    "vehicleDocs": "Vehicle Documents",
+    "rc": "Registration Certificate (RC)",
+    "insurance": "Motor Insurance",
+    "puc": "PUC Certificate",
+    "roadTax": "Road Tax",
+    "noVehiclesFound": "No Vehicles Found",
+    "noVehiclesDesc": "Register a vehicle to view its digital documents like RC, PUC, and Insurance.",
+    "registerVehicle": "Register Vehicle",
+    "expired": "Expired",
+    "active": "Active",
+    "validTill": "Valid Till",
+    "lifetime": "Lifetime"
+},
 };
