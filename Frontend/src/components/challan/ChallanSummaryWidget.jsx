@@ -1,7 +1,10 @@
 import React from 'react';
+import { useLanguage } from '../../contexts/LanguageContext';
 import { useChallan } from '../../contexts/ChallanContext';
 
 const ChallanSummaryWidget = () => {
+  const { t } = useLanguage();
+  const c = t.challan || {};
   const { stats } = useChallan();
 
   // SVG Donut Chart constants
@@ -28,7 +31,7 @@ const ChallanSummaryWidget = () => {
 
   return (
     <div className="bg-white rounded-xl p-5 border border-slate-100 shadow-sm">
-      <h3 className="font-bold text-slate-800 mb-4">Challan Summary</h3>
+      <h3 className="font-bold text-slate-800 mb-4">{c.challanSummary || "Challan Summary"}</h3>
       
       <div className="flex items-center justify-between">
         <div className="relative" style={{ width: size, height: size }}>
@@ -63,14 +66,14 @@ const ChallanSummaryWidget = () => {
           {/* Inner text */}
           <div className="absolute inset-0 flex flex-col items-center justify-center">
             <span className="text-3xl font-bold text-slate-800 leading-none">{stats.total}</span>
-            <span className="text-xs text-slate-500 font-medium mt-1">Total</span>
+            <span className="text-xs text-slate-500 font-medium mt-1">{c.total || "Total"}</span>
           </div>
         </div>
 
         {/* Legend */}
         <div className="flex flex-col gap-3 ml-2">
           {data.length === 0 ? (
-            <span className="text-sm text-slate-400">No data</span>
+            <span className="text-sm text-slate-400">{c.noData || "No data"}</span>
           ) : (
             data.map((item, index) => (
               <div key={index} className="flex items-center justify-between gap-4">

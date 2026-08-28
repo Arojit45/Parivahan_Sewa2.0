@@ -1,6 +1,7 @@
-﻿import React from "react";
+import React from "react";
 import { Info, FileText, CheckSquare, Shield, Receipt, File, FileSpreadsheet } from "lucide-react";
 import { useDashboard } from "../../contexts/DashboardContext";
+import { useLanguage } from "../../contexts/LanguageContext";
 
 const ICONS = {
   rc:        <FileText className="w-5 h-5 text-blue-500" />,
@@ -18,10 +19,8 @@ const ICON_BG = {
   permit:    "bg-slate-50",
   fitness:   "bg-slate-50",
 };
-const TITLES = { rc: "RC", puc: "PUC", insurance: "Insurance", tax: "Tax", permit: "Permit", fitness: "Fitness" };
-const ACTION_LABELS = { rc: "View RC", puc: "Renew PUC", insurance: "View Insurance", tax: "View Tax", permit: "Apply Permit", fitness: "Apply Fitness" };
 
-function resolveItem(key, item) {
+function resolveItem(key, item, t) {
   const status = item?.status ?? "NOT_APPLICABLE";
   const validTill = item?.validTill ?? null;
 
@@ -38,28 +37,28 @@ function resolveItem(key, item) {
   let statusText, statusColor, actionColor, validText;
   switch (status) {
     case "VALID":
-      statusText = "VALID";
+      statusText = t.dash?.valid || "VALID";
       statusColor = "text-[#10B981]";
       actionColor = "text-blue-600 border-blue-200 hover:bg-blue-50";
-      validText = formattedDate ? `Valid till ${formattedDate}` : "Valid";
+      validText = formattedDate ? `${t.dash?.validUntil || "Valid till"} ${formattedDate}` : (t.dash?.valid || "Valid");
       break;
     case "EXPIRING_SOON":
-      statusText = `${daysLeft} DAYS LEFT`;
+      statusText = `${daysLeft} ${t.dash?.daysLeft || "DAYS LEFT"}`;
       statusColor = "text-[#F59E0B]";
       actionColor = "text-[#F59E0B] border-[#FDE68A] bg-[#FEF3C7]/30 hover:bg-[#FEF3C7]";
-      validText = formattedDate ? `Expires ${formattedDate}` : "Expiring soon";
+      validText = formattedDate ? `${t.dash?.expires || "Expires"} ${formattedDate}` : (t.dash?.expiringSoon || "Expiring soon");
       break;
     case "EXPIRED":
-      statusText = "EXPIRED";
+      statusText = t.dash?.expired || "EXPIRED";
       statusColor = "text-[#EF4444]";
       actionColor = "text-[#EF4444] border-red-200 bg-red-50 hover:bg-red-100";
-      validText = formattedDate ? `Expired ${formattedDate}` : "Expired";
+      validText = formattedDate ? `${t.dash?.expiredOn || "Expired"} ${formattedDate}` : (t.dash?.expired || "Expired");
       break;
     default:
-      statusText = "N/A";
+      statusText = t.dash?.na || "N/A";
       statusColor = "text-slate-500";
       actionColor = "text-blue-600 border-blue-200 hover:bg-blue-50";
-      validText = "Not Required";
+      validText = t.dash?.notRequired || "Not Required";
   }
 
   return { statusText, statusColor, actionColor, validText };
@@ -67,8 +66,18 @@ function resolveItem(key, item) {
 
 const ComplianceStatus = () => {
   const { dashboard } = useDashboard();
+  const { t } = useLanguage();
   const compliance = dashboard?.compliance;
   if (!compliance) return null;
+
+  const TITLES = { 
+    rc: t.dash?.rc || "RC", 
+    puc: t.dash?.puc || "PUC", 
+    insurance: t.dash?.insurance || "Insurance", 
+    tax: t.dash?.tax || "Tax", 
+    permit: t.dash?.permit || "Permit", 
+    fitness: t.dash?.fitness || "Fitness" 
+  };
 
   const keys = ["rc", "puc", "insurance", "tax", "permit", "fitness"];
 
@@ -76,16 +85,26 @@ const ComplianceStatus = () => {
     <div className="bg-white rounded-[1.25rem] border border-slate-200 p-6 shadow-sm">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-[17px] font-bold text-[#1e293b] flex items-center gap-2">
-          Compliance Status <Info className="w-4 h-4 text-slate-300" />
+          {t.dash?.complianceStatus || "Compliance Status"} <Info className="w-4 h-4 text-slate-300" />
         </h2>
         <button className="text-[13px] font-bold text-blue-600 hover:underline flex items-center gap-1">
-          View All Compliance <span className="text-lg leading-none mb-0.5">&rsaquo;</span>
+          {t.dash?.viewAllCompliance || "View All Compliance"} <span className="text-lg leading-none mb-0.5">&rsaquo;</span>
         </button>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4 lg:gap-6">
         {keys.map((key) => {
-          const { statusText, statusColor, actionColor, validText } = resolveItem(key, compliance[key]);
+          const { statusText, statusColor, actionColor, validText } = resolveItem(key, compliance[key], t);
+          
+          const actionLabels = {
+            rc: t.dash?.viewRc || "View RC",
+            puc: t.dash?.renewPuc || "Renew PUC",
+            insurance: t.dash?.viewInsurance || "View Insurance",
+            tax: t.dash?.viewTax || "View Tax",
+            permit: t.dash?.applyPermit || "Apply Permit",
+            fitness: t.dash?.applyFitness || "Apply Fitness"
+          };
+          
           return (
             <div key={key} className="border border-slate-100 rounded-[1.25rem] p-4 flex flex-col hover:shadow-md transition-shadow bg-white shadow-[0_2px_10px_rgb(0,0,0,0.02)]">
               <div className="flex justify-between items-start mb-3">
@@ -99,7 +118,7 @@ const ComplianceStatus = () => {
                 <span className={`text-[11px] font-bold ${statusColor} mb-0.5 block`}>{statusText}</span>
                 <span className="text-[11px] text-slate-500 font-medium mb-4 block leading-relaxed">{validText}</span>
                 <button className={`w-full py-2 rounded-xl text-[12px] font-bold transition-colors border ${actionColor}`}>
-                  {ACTION_LABELS[key]}
+                  {actionLabels[key]}
                 </button>
               </div>
             </div>

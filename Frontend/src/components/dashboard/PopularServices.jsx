@@ -1,39 +1,41 @@
 import React from 'react';
 import { Users, BookOpen, FileBadge, Truck } from 'lucide-react';
+import { useLanguage } from '../../contexts/LanguageContext';
 
 const PopularServices = () => {
+  const { t } = useLanguage();
   const services = [
     {
       icon: <Users className="w-4 h-4 text-blue-600" />,
       bg: 'bg-blue-50/80 border-blue-100',
-      title: 'Ownership Transfer',
-      desc: 'Transfer vehicle ownership'
+      title: t.dash?.transferOwnership || 'Ownership Transfer',
+      desc: t.dash?.transferDesc || 'Transfer vehicle ownership'
     },
     {
       icon: <BookOpen className="w-4 h-4 text-blue-600" />,
       bg: 'bg-blue-50/80 border-blue-100',
-      title: 'Driving Licence',
-      desc: 'Apply / Renew DL'
+      title: t.dash?.drivingLicence || 'Driving Licence',
+      desc: t.dash?.applyDl || 'Apply / Renew DL'
     },
     {
       icon: <FileBadge className="w-4 h-4 text-blue-600" />,
       bg: 'bg-blue-50/80 border-blue-100',
-      title: 'Learner Licence',
-      desc: 'Apply for LL'
+      title: t.dash?.learnerLicence || 'Learner Licence',
+      desc: t.dash?.applyLl || 'Apply for LL'
     },
     {
       icon: <Truck className="w-4 h-4 text-blue-600" />,
       bg: 'bg-blue-50/80 border-blue-100',
-      title: 'National Permit',
-      desc: 'Apply for Permit'
+      title: t.dash?.nationalPermit || 'National Permit',
+      desc: t.dash?.applyPermit || 'Apply for Permit'
     }
   ];
 
   return (
     <div className="bg-white rounded-[1.25rem] border border-slate-200 p-5 shadow-sm h-full flex flex-col">
       <div className="flex justify-between items-center mb-5">
-        <h2 className="text-[14px] font-bold text-[#1e293b]">Popular Services</h2>
-        <button className="text-[12px] font-bold text-blue-600 hover:underline">View All</button>
+        <h2 className="text-[14px] font-bold text-[#1e293b]">{t.dash?.popularServices || "Popular Services"}</h2>
+        <button className="text-[12px] font-bold text-blue-600 hover:underline">{t.dash?.viewAll || "View All"}</button>
       </div>
 
       <div className="space-y-4 flex-1">

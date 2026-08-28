@@ -37,14 +37,14 @@ const Hero = () => {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 mb-12">
-              <Link to="/dashboard" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl font-medium transition-all shadow-lg shadow-blue-600/20 flex items-center justify-center gap-2">
+              <Link to="/auth" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl font-medium transition-all shadow-lg shadow-blue-600/20 flex items-center justify-center gap-2">
                 Explore Dashboard
                 <ArrowRight className="w-5 h-5" />
               </Link>
-              <button className="bg-white hover:bg-slate-50 text-blue-600 border-2 border-blue-100 hover:border-blue-200 px-8 py-4 rounded-xl font-medium transition-all flex items-center justify-center gap-2 shadow-sm">
+              <Link to="/auth" className="bg-white hover:bg-slate-50 text-blue-600 border-2 border-blue-100 hover:border-blue-200 px-8 py-4 rounded-xl font-medium transition-all flex items-center justify-center gap-2 shadow-sm">
                 View All Services
                 <ArrowRight className="w-5 h-5" />
-              </button>
+              </Link>
             </div>
             
             <div className="flex items-center gap-4">

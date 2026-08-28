@@ -4,6 +4,7 @@ import { Car, PlusCircle, AlertCircle, Loader2 } from "lucide-react";
 import { DashboardProvider, useDashboard } from "../contexts/DashboardContext";
 import Sidebar from "../components/dashboard/Sidebar";
 import Topbar from "../components/dashboard/Topbar";
+import { useLanguage } from "../contexts/LanguageContext";
 import VehicleCard from "../components/dashboard/VehicleCard";
 import HealthSummary from "../components/dashboard/HealthSummary";
 import ComplianceStatus from "../components/dashboard/ComplianceStatus";
@@ -19,42 +20,47 @@ import GovtPosterWidget from "../components/dashboard/GovtPosterWidget";
 // --------------------------------------------------------------------------
 // Empty state — shown when user has no registered vehicles
 // --------------------------------------------------------------------------
-const EmptyState = () => (
+const EmptyState = () => {
+  const { t } = useLanguage();
+  return (
   <div className="flex-1 flex items-center justify-center p-8">
     <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-10 max-w-md w-full text-center">
       <div className="w-24 h-24 rounded-full bg-blue-50 flex items-center justify-center mx-auto mb-6">
         <Car className="w-12 h-12 text-blue-400" />
       </div>
-      <h2 className="text-2xl font-bold text-slate-900 mb-3">No Vehicles Found</h2>
+      <h2 className="text-2xl font-bold text-slate-900 mb-3">{t.dash?.noVehiclesTitle || "No Vehicles Found"}</h2>
       <p className="text-slate-500 text-sm leading-relaxed mb-8">
-        You have not linked any vehicles yet. Add your vehicle to unlock
-        your personal dashboard — track compliance, challans, live location and more.
+        {t.dash?.noVehiclesDesc || "You have not linked any vehicles yet. Add your vehicle to unlock your personal dashboard — track compliance, challans, live location and more."}
       </p>
       <Link
         to="/add-vehicle"
         className="inline-flex items-center gap-2 bg-blue-600 text-white font-semibold text-sm px-6 py-3 rounded-xl hover:bg-blue-700 transition-colors"
       >
         <PlusCircle className="w-4 h-4" />
-        Add Vehicle
+        {t.dash?.addVehicleBtn || "Add Vehicle"}
       </Link>
     </div>
   </div>
-);
+  );
+};
 
 // --------------------------------------------------------------------------
 // Error state
 // --------------------------------------------------------------------------
-const ErrorState = ({ message }) => (
+const ErrorState = ({ message }) => {
+  const { t } = useLanguage();
+  return (
   <div className="flex-1 flex items-center justify-center p-8">
     <div className="bg-white rounded-3xl border border-red-200 shadow-sm p-10 max-w-md w-full text-center">
       <div className="w-20 h-20 rounded-full bg-red-50 flex items-center justify-center mx-auto mb-5">
         <AlertCircle className="w-10 h-10 text-red-400" />
       </div>
-      <h2 className="text-xl font-bold text-slate-900 mb-2">Something Went Wrong</h2>
-      <p className="text-slate-500 text-sm leading-relaxed">{message || "Failed to load your dashboard. Please try again later."}</p>
+      <h2 className="text-xl font-bold text-slate-900 mb-2">{t.dash?.errorTitle || "Something Went Wrong"}</h2>
+      <p className="text-slate-500 text-sm leading-relaxed">{message || (t.dash?.errorDesc || "Failed to load your dashboard. Please try again later.")}</p>
     </div>
   </div>
-);
+  );
+};
 
 // --------------------------------------------------------------------------
 // Loading skeleton

@@ -1,13 +1,16 @@
 import React from 'react';
+import { useLanguage } from '../../contexts/LanguageContext';
 import { FileText, Scale } from 'lucide-react';
 import { useChallan } from '../../contexts/ChallanContext';
 
 const QuickActions = () => {
+  const { t } = useLanguage();
+  const c = t.challan || {};
   const { openPaymentHistoryModal, openDisputeHistoryModal } = useChallan();
 
   return (
     <div className="bg-white rounded-xl p-6 border border-slate-100 shadow-sm mt-6">
-      <h3 className="font-bold text-slate-800 mb-4">Quick Actions</h3>
+      <h3 className="font-bold text-slate-800 mb-4">{c.quickActions || "Quick Actions"}</h3>
       <div className="flex flex-col gap-4">
         
         <button 
@@ -19,8 +22,8 @@ const QuickActions = () => {
               <FileText className="w-5 h-5" />
             </div>
             <div>
-              <h4 className="font-semibold text-slate-800">Payment History</h4>
-              <p className="text-xs text-slate-500">View all payments</p>
+              <h4 className="font-semibold text-slate-800">{c.paymentHistory || "Payment History"}</h4>
+              <p className="text-xs text-slate-500">{c.viewAllPayments || "View all payments"}</p>
             </div>
           </div>
           <svg className="w-5 h-5 text-slate-300 group-hover:text-blue-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -37,8 +40,8 @@ const QuickActions = () => {
               <Scale className="w-5 h-5" />
             </div>
             <div>
-              <h4 className="font-semibold text-slate-800">Dispute History</h4>
-              <p className="text-xs text-slate-500">Track your disputes</p>
+              <h4 className="font-semibold text-slate-800">{c.disputeHistory || "Dispute History"}</h4>
+              <p className="text-xs text-slate-500">{c.trackDisputes || "Track your disputes"}</p>
             </div>
           </div>
           <svg className="w-5 h-5 text-slate-300 group-hover:text-red-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">

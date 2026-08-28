@@ -3,6 +3,7 @@ import { Home, PlusCircle, Shield, AlertTriangle, MapPin, Bell, Share2, BookOpen
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import { useDashboard } from "../../contexts/DashboardContext";
+import { useLanguage } from "../../contexts/LanguageContext";
 import SettingsModal from "./SettingsModal";
 
 const fuelIcon = (fuelType) => {
@@ -13,6 +14,7 @@ const fuelIcon = (fuelType) => {
 };
 
 const Sidebar = () => {
+  const { t } = useLanguage();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const location = useLocation();
@@ -33,33 +35,33 @@ const Sidebar = () => {
 
   const menuGroups = [
     {
-      title: "SECURITY & SAFETY",
+      title: t.dash?.securityAndSafety || "SECURITY & SAFETY",
       items: [
-        { icon: <Shield className="w-5 h-5" />, label: "Guardian Mode", badge: "New", path: "/guardian-mode" },
+        { icon: <Shield className="w-5 h-5" />, label: t.dash?.guardianMode || "Guardian Mode", badge: t.dash?.new || "New", path: "/guardian-mode" },
       ],
     },
     {
-      title: "SERVICES",
+      title: t.dash?.services || "SERVICES",
       items: [
-        { icon: <CreditCard className="w-5 h-5" />, label: "Driving License", path: "/driving-license" },
-        { icon: <FileText className="w-5 h-5" />, label: "Vehicle Registration", path: "/register-vehicle" },
-        { icon: <Receipt className="w-5 h-5" />, label: "Challan", path: "/challans" },
-        { icon: <BookOpen className="w-5 h-5" />, label: "Citizen Process Guide", path: "/citizen-guide" },
-        { icon: <MessageSquare className="w-5 h-5" />, label: "Ask My Vehicle", path: "/ask-my-vehicle" },
+        { icon: <CreditCard className="w-5 h-5" />, label: t.dash?.drivingLicence || "Driving License", path: "/driving-license" },
+        { icon: <FileText className="w-5 h-5" />, label: t.dash?.vehicleRegistration || "Vehicle Registration", path: "/register-vehicle" },
+        { icon: <Receipt className="w-5 h-5" />, label: t.dash?.challan || "Challan", path: "/challans" },
+        { icon: <BookOpen className="w-5 h-5" />, label: t.dash?.citizenGuide || "Citizen Process Guide", path: "/citizen-guide" },
+        { icon: <MessageSquare className="w-5 h-5" />, label: t.dash?.askMyVehicle || "Ask My Vehicle", path: "/ask-my-vehicle" },
       ],
     },
     {
-      title: "FLEET",
+      title: t.dash?.fleet || "FLEET",
       items: [
-        { icon: <Truck className="w-5 h-5" />, label: "Fleet Dashboard", path: "/fleet" },
+        { icon: <Truck className="w-5 h-5" />, label: t.dash?.fleetDashboard || "Fleet Dashboard", path: "/fleet" },
       ],
     },
     {
-      title: "DOCUMENTS",
+      title: t.dash?.documents || "DOCUMENTS",
       items: [
-        { icon: <FileText className="w-5 h-5" />, label: "My Documents", path: "/my-documents" },
-        { icon: <CheckSquare className="w-5 h-5" />, label: "Track & Review", path: "/track-review" },
-        { icon: <AlertTriangle className="w-5 h-5" />, label: "Corrections Center", path: "/corrections" },
+        { icon: <FileText className="w-5 h-5" />, label: t.dash?.myDocuments || "My Documents", path: "/my-documents" },
+        { icon: <CheckSquare className="w-5 h-5" />, label: t.dash?.trackReview || "Track & Review", path: "/track-review" },
+        { icon: <AlertTriangle className="w-5 h-5" />, label: t.dash?.correctionsCenter || "Corrections Center", path: "/corrections" },
       ],
     },
   ];
@@ -79,11 +81,21 @@ const Sidebar = () => {
       <div className={`p-5 border-b border-slate-100 flex items-center ${isCollapsed ? "justify-center" : "gap-3"} shrink-0 h-24`}>
         <img src="/govtLogo.png" alt="Logo" className={`${isCollapsed ? "h-10" : "h-11"} w-auto transition-all`} />
         {!isCollapsed && (
-          <div className="overflow-hidden">
-            <h1 className="text-[17px] font-bold text-slate-900 leading-tight">PARIVAHAN SEWA</h1>
-            <p className="text-[8.5px] text-slate-500 font-medium leading-[1.2] mt-0.5">
-              MINISTRY OF ROAD TRANSPORT & HIGHWAYS<br />Government of India
+          <div className="overflow-hidden flex flex-col justify-center pl-1">
+            <h1 className="text-[17px] font-extrabold text-[#000080] leading-tight tracking-[0.05em] drop-shadow-sm">
+              {t.dash?.parivahanSewa || "PARIVAHAN SEWA"}
+            </h1>
+            <p className="text-[8px] text-blue-800/80 font-bold leading-[1.3] mt-0.5 tracking-wider uppercase">
+              {t.dash?.ministryTitle || "MINISTRY OF ROAD TRANSPORT & HIGHWAYS"}
             </p>
+            <p className="text-[10px] text-[#000080] font-bold leading-[1.2] mt-0.5 tracking-wide" style={{ fontFamily: 'Georgia, serif' }}>
+              {t.dash?.govtOfIndia || "Government of India"}
+            </p>
+            <div className="h-[1.5px] w-12 flex mt-1.5 rounded-full overflow-hidden shadow-sm opacity-90">
+              <div className="flex-1 bg-[#FF9933]"></div>
+              <div className="flex-1 bg-slate-200"></div>
+              <div className="flex-1 bg-[#138808]"></div>
+            </div>
           </div>
         )}
       </div>
@@ -96,17 +108,17 @@ const Sidebar = () => {
           to="/dashboard"
           className={`w-full bg-blue-50 text-blue-700 hover:bg-blue-100 transition-colors py-2.5 rounded-lg flex items-center font-semibold text-sm mb-4 ${isCollapsed ? "justify-center px-0" : "gap-3 px-4"}`}
         >
-          <Home className="w-4 h-4 shrink-0" /> {!isCollapsed && <span>Dashboard</span>}
+          <Home className="w-4 h-4 shrink-0" /> {!isCollapsed && <span>{t.dash?.dashboard || "Dashboard"}</span>}
         </Link>
 
         {/* MY VEHICLES section */}
         {!isCollapsed && (
           <div className="mb-6">
-            <h3 className="text-xs font-bold text-slate-400 mb-3 px-4 tracking-wider">MY VEHICLES</h3>
+            <h3 className="text-xs font-bold text-slate-400 mb-3 px-4 tracking-wider">{t.dash?.myVehicles || "MY VEHICLES"}</h3>
 
             {vehicles.length === 0 ? (
               <div className="px-4 mb-2">
-                <p className="text-[11px] text-slate-400 font-medium mb-3">No vehicles added yet</p>
+                <p className="text-[11px] text-slate-400 font-medium mb-3">{t.dash?.noVehiclesAdded || "No vehicles added yet"}</p>
                 <Link
                   to="/add-vehicle"
                   className="flex items-center gap-2 text-blue-600 hover:text-blue-700 transition-colors"
@@ -114,7 +126,7 @@ const Sidebar = () => {
                   <div className="p-1 rounded-full border border-blue-600 flex items-center justify-center">
                     <PlusCircle className="w-4 h-4" />
                   </div>
-                  <span className="text-sm font-semibold">Add Vehicle</span>
+                  <span className="text-sm font-semibold">{t.dash?.addVehicleBtn || "Add Vehicle"}</span>
                 </Link>
               </div>
             ) : (
@@ -148,7 +160,7 @@ const Sidebar = () => {
                 className="flex items-center gap-3 px-4 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-blue-600 hover:bg-slate-50 transition-colors"
               >
                 <PlusCircle className="w-5 h-5 text-slate-400 shrink-0" />
-                <span>Add Vehicle</span>
+                <span>{t.dash?.addVehicleBtn || "Add Vehicle"}</span>
               </Link>
             )}
           </div>
@@ -189,22 +201,22 @@ const Sidebar = () => {
       <div className="mt-auto p-4 border-t border-slate-100 shrink-0 bg-white">
         <ul className="space-y-1">
           <li>
-            <button onClick={() => setShowSettings(true)} className={`w-full flex items-center rounded-lg text-sm font-medium text-slate-600 hover:text-blue-600 hover:bg-slate-50 transition-colors ${isCollapsed ? "justify-center p-2.5 mx-auto w-10 h-10" : "gap-3 px-4 py-2"}`} title={isCollapsed ? "Settings" : undefined}>
-              <Settings className="w-5 h-5 text-slate-400 shrink-0" /> {!isCollapsed && "Settings"}
+            <button onClick={() => setShowSettings(true)} className={`w-full flex items-center rounded-lg text-sm font-medium text-slate-600 hover:text-blue-600 hover:bg-slate-50 transition-colors ${isCollapsed ? "justify-center p-2.5 mx-auto w-10 h-10" : "gap-3 px-4 py-2"}`} title={isCollapsed ? (t.dash?.settings || "Settings") : undefined}>
+              <Settings className="w-5 h-5 text-slate-400 shrink-0" /> {!isCollapsed && (t.dash?.settings || "Settings")}
             </button>
           </li>
           <li>
-            <a href="#" className={`flex items-center rounded-lg text-sm font-medium text-slate-600 hover:text-blue-600 hover:bg-slate-50 transition-colors ${isCollapsed ? "justify-center p-2.5 mx-auto w-10 h-10" : "gap-3 px-4 py-2"}`} title={isCollapsed ? "Help & Support" : undefined}>
-              <HelpCircle className="w-5 h-5 text-slate-400 shrink-0" /> {!isCollapsed && "Help & Support"}
+            <a href="#" className={`flex items-center rounded-lg text-sm font-medium text-slate-600 hover:text-blue-600 hover:bg-slate-50 transition-colors ${isCollapsed ? "justify-center p-2.5 mx-auto w-10 h-10" : "gap-3 px-4 py-2"}`} title={isCollapsed ? (t.dash?.helpSupport || "Help & Support") : undefined}>
+              <HelpCircle className="w-5 h-5 text-slate-400 shrink-0" /> {!isCollapsed && (t.dash?.helpSupport || "Help & Support")}
             </a>
           </li>
           <li>
             <button
               onClick={handleLogout}
               className={`w-full flex items-center rounded-lg text-sm font-medium text-red-600 hover:bg-red-50 transition-colors ${isCollapsed ? "justify-center p-2.5 mx-auto w-10 h-10" : "gap-3 px-4 py-2 mt-2"}`}
-              title={isCollapsed ? "Logout" : undefined}
+              title={isCollapsed ? (t.dash?.logout || "Logout") : undefined}
             >
-              <LogOut className="w-5 h-5 text-red-500 shrink-0" /> {!isCollapsed && "Logout"}
+              <LogOut className="w-5 h-5 text-red-500 shrink-0" /> {!isCollapsed && (t.dash?.logout || "Logout")}
             </button>
           </li>
         </ul>

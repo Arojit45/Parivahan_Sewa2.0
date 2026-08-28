@@ -17,6 +17,7 @@ import CitizenGuidePage from './pages/CitizenGuidePage';
 import { LanguageProvider } from './contexts/LanguageContext';
 import { AuthProvider } from './contexts/AuthContext';
 import PrivateRoute from './components/layout/PrivateRoute';
+import NativeDomTranslator from './components/NativeDomTranslator';
 import MyDocumentsPage from './pages/MyDocumentsPage';
 import TrackReviewPage from './pages/TrackReviewPage';
 import CorrectionsPage from './pages/CorrectionsPage';
@@ -30,6 +31,7 @@ function App() {
     <LanguageProvider>
       <AuthProvider>
         <Router>
+          <NativeDomTranslator />
           <Routes>
             {/* Public Routes */}
             <Route path="/" element={<LandingPage />} />

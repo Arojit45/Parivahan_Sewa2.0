@@ -195,7 +195,7 @@ const AskMyVehiclePage = () => {
       .map((m) => ({ role: m.role, content: m.role === "user" ? m.text : m.answer }));
 
     try {
-      const response = await askVehicle(selectedVehicleId, question, history);
+      const response = await askVehicle(selectedVehicleId, question, history, language);
       setMessages((prev) => {
         const next = [...prev, { role: "assistant", ...response }];
         sessionStorage.setItem(`askMyVehicleMessages_${selectedVehicleId}`, JSON.stringify(next));

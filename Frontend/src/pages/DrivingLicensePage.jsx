@@ -198,7 +198,7 @@ const DrivingLicensePage = () => {
     setAssistantLoading(true);
 
     try {
-      const response = await askApplicationProcess(question, history);
+      const response = await askApplicationProcess(question, history, language);
       setAssistantMessages(prev => [...prev, { role: 'assistant', ...response }]);
     } catch (err) {
       setAssistantMessages(prev => [

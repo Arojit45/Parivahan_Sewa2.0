@@ -18,11 +18,9 @@ const Navbar = () => {
   }, []);
 
   const navLinks = [
-    { name: t.navbar.home, href: '#' },
-    { name: t.navbar.dashboard, href: '/dashboard' },
-    { name: t.navbar.services, href: '#', hasDropdown: true },
-    { name: t.navbar.track, href: '#' },
-    { name: t.navbar.help, href: '#' },
+    { name: t.navbar.home, href: '/' },
+    { name: t.navbar.dashboard, href: '/auth' },
+    { name: t.navbar.help, href: '/auth' },
   ];
 
   const languages = [
@@ -42,15 +40,21 @@ const Navbar = () => {
         {/* Logo */}
         <div className="flex items-center gap-3">
           <img src="/govtLogo.png" alt="Parivahan Sewa Logo" className="h-12 w-auto" />
-          <div className="hidden sm:block">
-            <h1 className="text-[17px] font-bold text-slate-900 leading-tight">
+          <div className="hidden sm:block overflow-hidden flex flex-col justify-center pl-1">
+            <h1 className="text-[17px] font-extrabold text-[#000080] leading-tight tracking-[0.05em] drop-shadow-sm uppercase">
               PARIVAHAN SEWA
             </h1>
-            <p className="text-[9px] text-slate-500 font-medium">
+            <p className="text-[8px] text-blue-800/80 font-bold leading-[1.3] mt-0.5 tracking-wider uppercase">
               MINISTRY OF ROAD TRANSPORT & HIGHWAYS
-              <br />
+            </p>
+            <p className="text-[10px] text-[#000080] font-bold leading-[1.2] mt-0.5 tracking-wide" style={{ fontFamily: 'Georgia, serif' }}>
               Government of India
             </p>
+            <div className="h-[1.5px] w-12 flex mt-1.5 rounded-full overflow-hidden shadow-sm opacity-90">
+              <div className="flex-1 bg-[#FF9933]"></div>
+              <div className="flex-1 bg-slate-200"></div>
+              <div className="flex-1 bg-[#138808]"></div>
+            </div>
           </div>
         </div>
 

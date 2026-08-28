@@ -189,7 +189,7 @@ const ChallanTable = () => {
 
       {/* Pagination Footer */}
       <div className="px-6 py-4 border-t border-slate-100 flex flex-col sm:flex-row justify-between items-center gap-4 text-sm text-slate-500 bg-white rounded-b-xl shrink-0">
-        <div>Showing 1 to {filteredChallans.length} of {filteredChallans.length} challans</div>
+        <div>{(c.showingCount || "Showing 1 to {count} of {total} challans").replace("{count}", filteredChallans.length).replace("{total}", filteredChallans.length)}</div>
         <div className="flex items-center gap-2">
            <button className="w-8 h-8 flex items-center justify-center rounded border border-slate-200 text-slate-300 cursor-not-allowed">&lt;</button>
            <button className="w-8 h-8 flex items-center justify-center rounded bg-blue-600 text-white font-medium">1</button>

@@ -1,3 +1,4 @@
+import { useLanguage } from '../../contexts/LanguageContext';
 import React, { useState } from 'react';
 import { X, Scale, AlertCircle, Loader2 } from 'lucide-react';
 import { useChallan } from '../../contexts/ChallanContext';
@@ -14,6 +15,8 @@ const DisputeReasons = [
 ];
 
 const ChallanDisputeModal = () => {
+  const { t } = useLanguage();
+  const c = t.challan || {};
   const { disputeModal, closeDisputeModal, markDisputed } = useChallan();
   const { open, challan } = disputeModal;
   

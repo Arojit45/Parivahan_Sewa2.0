@@ -3,16 +3,18 @@ import { Bot, Send, Maximize2, Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { askVehicle } from "../../utils/assistantApi";
 import { useDashboard } from "../../contexts/DashboardContext";
+import { useLanguage } from "../../contexts/LanguageContext";
 
-const QUICK_CHIPS = [
-  "When is my PUC expiry?",
-  "Pending challans?",
-  "Insurance renewal?",
+const QUICK_CHIPS = (t) => [
+  t.dash?.q1 || "Is my pollution certificate valid?",
+  t.dash?.q2 || "Any pending traffic challans?",
+  t.dash?.q3 || "When is my next service due?",
 ];
 
 const AiAssistantWidget = () => {
   const navigate = useNavigate();
   const { selectedVehicleId, dashboard } = useDashboard();
+  const { t, language } = useLanguage();
 
   // Derive vehicle label from real data for the greeting message
   const vehicleName = dashboard?.vehicleCard
@@ -22,7 +24,7 @@ const AiAssistantWidget = () => {
   const [messages, setMessages] = useState([
     {
       role: "assistant",
-      text: `Hello! 👋 Ask me anything about ${vehicleName} — health, documents, challans, or live location.`,
+      text: (t.dash?.greetingMsg || "Hello! 👋 Ask me anything about {vehicle} — health, documents, challans, or live location.").replace("{vehicle}", vehicleName),
     },
   ]);
   const [input, setInput] = useState("");
@@ -42,10 +44,10 @@ const AiAssistantWidget = () => {
     setMessages([
       {
         role: "assistant",
-        answer: `Hello! 👋 Ask me anything about ${vehicleName} — health, documents, challans, or live location.`,
+        text: (t.dash?.greetingMsg || "Hello! 👋 Ask me anything about {vehicle} — health, documents, challans, or live location.").replace("{vehicle}", vehicleName),
       },
     ]);
-  }, [selectedVehicleId, vehicleName]);
+  }, [selectedVehicleId, vehicleName, t.dash?.greetingMsg]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -69,7 +71,7 @@ const AiAssistantWidget = () => {
     }));
 
     try {
-      const response = await askVehicle(selectedVehicleId, question, history);
+      const response = await askVehicle(selectedVehicleId, question, history, language);
       setMessages((prev) => {
         const next = [...prev, { role: "assistant", answer: response.answer }];
         sessionStorage.setItem(`askMyVehicleMessages_${selectedVehicleId}`, JSON.stringify(next));
@@ -120,8 +122,8 @@ const AiAssistantWidget = () => {
             <Bot className="w-5 h-5 text-white" />
           </div>
           <div>
-            <h2 className="text-[14px] font-bold text-slate-900 leading-tight">Ask My Vehicle</h2>
-            <p className="text-[10px] text-slate-500 font-medium leading-[1.2] mt-0.5">AI Assistant · Powered by Gemini</p>
+            <h2 className="text-[14px] font-bold text-slate-900 leading-tight">{t.dash?.askMyVehicle || "Ask My Vehicle"}</h2>
+            <p className="text-[10px] text-slate-500 font-medium leading-[1.2] mt-0.5">{t.dash?.aiAssistant || "AI Assistant"} · Powered by Gemini</p>
           </div>
         </div>
 
@@ -169,10 +171,12 @@ const AiAssistantWidget = () => {
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Quick chips */}
-      {messages.length <= 2 && (
-        <div className="flex flex-wrap gap-1.5 mb-3 shrink-0">
-          {QUICK_CHIPS.map((chip) => (
+      {/* Quick Chips */}
+      {messages.length === 1 && !isLoading && (
+        <div className="mb-4">
+          <p className="text-[11px] font-bold text-slate-500 mb-2 uppercase tracking-wider">{t.dash?.quickQuestions || "Quick Questions"}</p>
+          <div className="flex flex-wrap gap-2">
+            {QUICK_CHIPS(t).map((chip, idx) => (
             <button
               key={chip}
               onClick={() => handleSend(chip)}
@@ -183,6 +187,7 @@ const AiAssistantWidget = () => {
               {chip}
             </button>
           ))}
+          </div>
         </div>
       )}
 

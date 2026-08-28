@@ -7,12 +7,22 @@ const LanguageContext = createContext();
 // It only changes when the user explicitly selects a different language.
 const DEFAULT_LANGUAGE = 'en';
 
+const getAuthToken = () =>
+  localStorage.getItem('token') ||
+  localStorage.getItem('authToken') ||
+  sessionStorage.getItem('token');
+
+const getSavedLanguage = () => {
+  const saved = localStorage.getItem('language');
+  return saved && translations[saved] ? saved : DEFAULT_LANGUAGE;
+};
+
 export const LanguageProvider = ({ children }) => {
-  const [language, setLanguageState] = useState(DEFAULT_LANGUAGE);
+  const [language, setLanguageState] = useState(getSavedLanguage);
 
   // Load saved language preference from backend on mount (if authenticated)
   useEffect(() => {
-    const token = localStorage.getItem('authToken');
+    const token = getAuthToken();
     if (!token) return;
     fetch('/api/user/language', {
       headers: { Authorization: `Bearer ${token}` }
@@ -29,10 +39,10 @@ export const LanguageProvider = ({ children }) => {
   const changeLanguage = (lang) => {
     if (!translations[lang]) return;
     setLanguageState(lang);
-
+    localStorage.setItem('language', lang);
 
     // Persist to backend if authenticated
-    const token = localStorage.getItem('authToken');
+    const token = getAuthToken();
     if (token) {
       fetch('/api/user/language', {
         method: 'PUT',

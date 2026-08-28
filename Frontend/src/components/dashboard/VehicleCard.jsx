@@ -2,10 +2,12 @@ import React from "react";
 import { ChevronLeft, Edit2, Copy, RefreshCw, Trash2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useDashboard } from "../../contexts/DashboardContext";
+import { useLanguage } from "../../contexts/LanguageContext";
 import CarModelViewer from "../CarModelViewer";
 
 const VehicleCard = () => {
   const { dashboard } = useDashboard();
+  const { t } = useLanguage();
   const v = dashboard?.vehicleCard;
 
   if (!v) return null;
@@ -19,7 +21,7 @@ const VehicleCard = () => {
       {/* Title & Actions */}
       <div className="absolute top-6 left-6 right-6 flex justify-between items-start z-10">
         <Link to="/dashboard" className="text-blue-600 font-semibold text-sm flex items-center gap-1 hover:underline">
-          <ChevronLeft className="w-4 h-4" /> Back to My Vehicles
+          <ChevronLeft className="w-4 h-4" /> {t.dash?.backToVehicles || "Back to My Vehicles"}
         </Link>
       </div>
 
@@ -29,7 +31,7 @@ const VehicleCard = () => {
           <CarModelViewer />
         </div>
         <button className="mt-4 text-xs font-semibold text-slate-500 flex items-center gap-1 border border-slate-200 px-3 py-1.5 rounded-full hover:bg-slate-50 transition-colors">
-          <RefreshCw className="w-3 h-3" /> View 360°
+          <RefreshCw className="w-3 h-3" /> {t.dash?.view360 || "View 360°"}
         </button>
       </div>
 
@@ -47,18 +49,18 @@ const VehicleCard = () => {
               <button className="text-slate-400 hover:text-blue-600"><Edit2 className="w-3.5 h-3.5" /></button>
               <button 
                 onClick={async () => {
-                  if(window.confirm("Are you sure you want to unlink this vehicle?")) {
+                  if(window.confirm(t.dash?.unlinkPrompt || "Are you sure you want to unlink this vehicle?")) {
                     try {
                       const { apiFetch } = await import('../../utils/api');
                       await apiFetch(`/vehicles/${v.registrationNumber}`, { method: 'DELETE' });
                       window.location.reload();
                     } catch (err) {
-                      alert(err.message || 'Failed to unlink vehicle.');
+                      alert(err.message || t.dash?.unlinkError || 'Failed to unlink vehicle.');
                     }
                   }
                 }}
                 className="text-red-400 hover:text-red-600 ml-2 border border-red-100 hover:bg-red-50 p-1 rounded transition-colors"
-                title="Unlink Vehicle"
+                title={t.dash?.unlinkTitle || "Unlink Vehicle"}
               >
                 <Trash2 className="w-4 h-4" />
               </button>
@@ -79,29 +81,29 @@ const VehicleCard = () => {
             </p>
           </div>
           <button className="text-[12px] font-bold text-blue-600 border border-slate-200 px-3 py-1.5 rounded-lg hover:bg-slate-50 transition-colors flex items-center gap-1">
-            More Details <span className="text-lg leading-none mb-0.5">&rsaquo;</span>
+            {t.dash?.moreDetails || "More Details"} <span className="text-lg leading-none mb-0.5">&rsaquo;</span>
           </button>
         </div>
 
         <div className="grid grid-cols-2 gap-y-3 gap-x-12 text-[11px]">
           <div className="flex justify-between">
-            <span className="text-slate-500">Nickname</span>
+            <span className="text-slate-500">{t.dash?.nickname || "Nickname"}</span>
             <span className="font-semibold text-slate-900">{v.nickname || "—"}</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-slate-500">Owner</span>
+            <span className="text-slate-500">{t.dash?.owner || "Owner"}</span>
             <span className="font-semibold text-slate-900">{v.owner}</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-slate-500">Registration Date</span>
+            <span className="text-slate-500">{t.dash?.regDate || "Registration Date"}</span>
             <span className="font-semibold text-slate-900">{v.registrationDate}</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-slate-500">RTO</span>
+            <span className="text-slate-500">{t.dash?.rto || "RTO"}</span>
             <span className="font-semibold text-slate-900">{v.rto}</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-slate-500">Insurance Provider</span>
+            <span className="text-slate-500">{t.dash?.insuranceProvider || "Insurance Provider"}</span>
             <span className="font-semibold text-slate-900">{v.insuranceProvider || "—"}</span>
           </div>
         </div>

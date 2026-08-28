@@ -78,10 +78,7 @@ public class VehicleAssistantService {
 
     public VehicleAssistantResponse askVehicle(Long vehicleId, VehicleQuestionRequest request) {
         User currentUser = getCurrentUser();
-        String preferredLang = currentUser.getPreferredLanguage();
-        // Default to English — only use saved preference if the user explicitly set one
-        String language = (preferredLang != null && !preferredLang.isBlank()) ? preferredLang : "en";
-
+        String language = resolveLanguage(request, currentUser);
         // Load dashboard (this also enforces ownership — throws SecurityException if unauthorized)
         DashboardResponseDto dashboard;
         try {
@@ -103,7 +100,8 @@ public class VehicleAssistantService {
         String systemPromptWithLang = SYSTEM_PROMPT + "\nUSER_LANGUAGE: " + languageInstruction;
 
         // Build conversation history if provided
-        String userQuestion = buildUserQuestion(request);
+        String userQuestion = "Selected response language: " + languageInstruction
+                + "\n\n" + buildUserQuestion(request);
 
         // Call Gemini — fall back to ContextAwareAiClient if Gemini is unavailable
         String answer;
@@ -151,6 +149,15 @@ public class VehicleAssistantService {
         }
         sb.append("\nCurrent question: ").append(request.getMessage());
         return sb.toString();
+    }
+
+    private String resolveLanguage(VehicleQuestionRequest request, User currentUser) {
+        if (request.getLanguage() != null && !request.getLanguage().isBlank()) {
+            return request.getLanguage();
+        }
+
+        String preferredLang = currentUser.getPreferredLanguage();
+        return (preferredLang != null && !preferredLang.isBlank()) ? preferredLang : "en";
     }
 
     private String buildLanguageInstruction(String langCode) {

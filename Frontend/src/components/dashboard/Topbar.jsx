@@ -4,7 +4,7 @@ import { useLanguage } from '../../contexts/LanguageContext';
 import { useAuth } from '../../contexts/AuthContext';
 
 const Topbar = () => {
-  const { language, setLanguage } = useLanguage();
+  const { t, language, setLanguage } = useLanguage();
   const { user } = useAuth();
 
   const languages = [
@@ -27,24 +27,49 @@ const Topbar = () => {
     <>
       <style>
         {`
-          @keyframes gradientFlow {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+          @keyframes shimmerSweep {
+            0% { transform: translateX(-200%) skewX(-20deg); }
+            30% { transform: translateX(300%) skewX(-20deg); }
+            100% { transform: translateX(300%) skewX(-20deg); }
           }
-          .animate-gradient-flow {
-            background-size: 200% auto;
-            animation: gradientFlow 4s linear infinite;
+          .animate-shimmer-sweep {
+            animation: shimmerSweep 4s ease-in-out infinite;
+          }
+          @keyframes slowSpin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+          }
+          .animate-slow-spin {
+            animation: slowSpin 24s linear infinite;
           }
         `}
       </style>
       <header className="h-16 bg-white border-b border-slate-200 flex items-center justify-between pl-6 pr-10 sticky top-0 z-40 shrink-0">
 
-        {/* Animated Text replacing search bar */}
-        <div className="flex-1">
-          <span className="text-[17px] font-extrabold bg-gradient-to-r from-blue-800 via-indigo-500 to-blue-800 bg-clip-text text-transparent animate-gradient-flow tracking-[0.15em] uppercase drop-shadow-sm">
-            Government of India
-          </span>
+        {/* Formal Government Branding */}
+        <div className="flex-1 flex items-center gap-3 select-none">
+          {/* Ashoka Chakra SVG */}
+          <div className="relative w-9 h-9 shrink-0 animate-slow-spin text-[#000080]">
+            <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-sm" fill="currentColor">
+              <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" strokeWidth="5" />
+              <circle cx="50" cy="50" r="8" />
+              {Array.from({ length: 24 }).map((_, i) => (
+                <path key={i} d="M50 50 L48.5 7 L51.5 7 Z" transform={`rotate(${i * 15} 50 50)`} />
+              ))}
+            </svg>
+          </div>
+          <div className="flex flex-col relative overflow-hidden pb-1 pr-4 px-1 -ml-1">
+            <span className="text-[17px] font-bold text-[#000080] tracking-[0.2em] uppercase leading-tight pt-1 drop-shadow-sm" style={{ fontFamily: 'Georgia, serif' }}>
+              {t.dash?.govtOfIndia || "Government of India"}
+            </span>
+            <div className="h-[2px] w-full flex mt-1.5 rounded-full overflow-hidden shadow-sm opacity-90">
+              <div className="flex-1 bg-[#FF9933]"></div>
+              <div className="flex-1 bg-[#ffffff]"></div>
+              <div className="flex-1 bg-[#138808]"></div>
+            </div>
+            {/* Formal subtle shine sweep */}
+            <div className="absolute top-0 bottom-0 left-0 w-16 bg-gradient-to-r from-transparent via-white/60 to-transparent animate-shimmer-sweep"></div>
+          </div>
         </div>
 
       {/* Right Actions */}

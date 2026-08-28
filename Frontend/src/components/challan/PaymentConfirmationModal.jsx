@@ -1,9 +1,12 @@
+import { useLanguage } from '../../contexts/LanguageContext';
 import React, { useState } from 'react';
 import { X, CheckCircle, CreditCard, Download, ShieldCheck, Loader2 } from 'lucide-react';
 import { useChallan } from '../../contexts/ChallanContext';
 import { downloadReceiptPdf } from '../../utils/challanPdf';
 
 const PaymentConfirmationModal = () => {
+  const { t } = useLanguage();
+  const c = t.challan || {};
   const { paymentModal, closePaymentModal, confirmPayment } = useChallan();
   const { open, challan, receipt, step } = paymentModal;
   const [processing, setProcessing] = useState(false);

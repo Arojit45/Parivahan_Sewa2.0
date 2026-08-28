@@ -1,12 +1,15 @@
 import React from 'react';
+import { useLanguage } from '../../contexts/LanguageContext';
 
 const ChallanPayOnlineWidget = () => {
+  const { t } = useLanguage();
+  const c = t.challan || {};
   return (
     <div className="bg-emerald-50 rounded-xl p-5 border border-emerald-100 shadow-sm mt-6 relative overflow-hidden">
       <div className="relative z-10 w-2/3">
-        <h3 className="font-bold text-slate-900 mb-2">Pay Challan Online</h3>
+        <h3 className="font-bold text-slate-900 mb-2">{c.payChallanOnline || "Pay Challan Online"}</h3>
         <p className="text-[11px] text-emerald-800 font-medium mb-4 pr-4">
-          Pay securely using UPI, Cards, Net Banking and Wallets.
+          {c.paySecurely || "Pay securely using UPI, Cards, Net Banking and Wallets."}
         </p>
         <button className="bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2 rounded-lg font-semibold text-sm transition-colors shadow-sm">
           Pay Now

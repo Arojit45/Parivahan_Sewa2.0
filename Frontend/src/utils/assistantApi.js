@@ -7,6 +7,13 @@
  */
 
 const BASE_URL = '/api/vehicles';
+const SUPPORTED_LANGUAGES = new Set(['en', 'hi', 'bn', 'mr', 'ta', 'te', 'kn', 'ml', 'gu', 'pa', 'or']);
+
+const resolveLanguage = (language) => {
+  if (SUPPORTED_LANGUAGES.has(language)) return language;
+  const savedLanguage = localStorage.getItem('language');
+  return SUPPORTED_LANGUAGES.has(savedLanguage) ? savedLanguage : 'en';
+};
 
 /**
  * Send a question to the AI assistant for a specific vehicle.
@@ -14,11 +21,13 @@ const BASE_URL = '/api/vehicles';
  * @param {number} vehicleId - The vehicle database ID
  * @param {string} message   - The user natural-language question
  * @param {Array}  history   - Optional conversation history [{role, content}]
+ * @param {string} language  - Optional UI language code for the answer
  * @returns {Promise<{answer, intent, actions, sources, fallback}>}
  */
-export async function askVehicle(vehicleId, message, history = []) {
+export async function askVehicle(vehicleId, message, history = [], language) {
   // Token key must match what AuthContext saves — it saves as 'token'
   const token = localStorage.getItem('token');
+  const responseLanguage = resolveLanguage(language);
 
   const response = await fetch(`${BASE_URL}/${vehicleId}/assistant`, {
     method: 'POST',
@@ -26,7 +35,7 @@ export async function askVehicle(vehicleId, message, history = []) {
       'Content-Type': 'application/json',
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
     },
-    body: JSON.stringify({ message, history }),
+    body: JSON.stringify({ message, history, language: responseLanguage }),
   });
 
   if (response.status === 403) {
@@ -43,8 +52,9 @@ export async function askVehicle(vehicleId, message, history = []) {
   return response.json();
 }
 
-export async function askApplicationProcess(message, history = []) {
+export async function askApplicationProcess(message, history = [], language) {
   const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+  const responseLanguage = resolveLanguage(language);
 
   const response = await fetch('/api/v1/application-assistant', {
     method: 'POST',
@@ -52,7 +62,7 @@ export async function askApplicationProcess(message, history = []) {
       'Content-Type': 'application/json',
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
     },
-    body: JSON.stringify({ message, history }),
+    body: JSON.stringify({ message, history, language: responseLanguage }),
   });
 
   if (response.status === 401) {

@@ -279,24 +279,15 @@ const GuardianModeInner = () => {
     <main className="flex-1 overflow-y-auto p-4 lg:p-8">
       <div className="max-w-[1600px] mx-auto flex flex-col xl:flex-row gap-6 lg:gap-8">
         <div className="flex-1 flex flex-col gap-6 min-w-0">
-          <div>
-            <Link to="/dashboard" className="inline-flex items-center text-blue-600 font-medium text-xs hover:text-blue-700">
-              <ArrowLeft className="w-3.5 h-3.5 mr-1" />
-              Back to My Vehicles
-            </Link>
-          </div>
+
 
           {error && <div className="bg-red-50 border border-red-200 text-red-700 text-xs font-medium rounded-xl p-3">{error}</div>}
           {statusMessage && <div className="bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-medium rounded-xl p-3">{statusMessage}</div>}
 
           <div className="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="flex items-center gap-4">
-              <div className="w-20 h-14 bg-slate-100 rounded-lg overflow-hidden flex items-center justify-center relative shrink-0">
-                {selectedVehicle?.vehicleImageUrl ? (
-                  <img src={selectedVehicle.vehicleImageUrl} alt="" className="w-full h-full object-cover" />
-                ) : (
-                  <div className="absolute inset-0 w-[150%] h-[150%] -left-1/4 -top-1/4"><CarModelViewer /></div>
-                )}
+              <div className="w-24 h-16 flex items-center justify-center relative shrink-0">
+                <img src="/car.png" alt="Vehicle" className="w-full h-full object-contain mix-blend-multiply drop-shadow-sm" />
               </div>
               <div>
                 <h3 className="font-semibold text-slate-800 text-sm">{selectedVehicle?.manufacturer} {selectedVehicle?.model}</h3>
@@ -348,39 +339,40 @@ const GuardianModeInner = () => {
           )}
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm flex flex-col items-center text-center">
+            <div className="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm flex flex-col items-center text-center h-full">
               <div className="text-xs font-semibold text-slate-700 mb-2">Safe Location</div>
               <div className="w-8 h-8 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mb-1.5"><MapPin className="w-4 h-4" /></div>
               <div className="font-medium text-xs text-slate-800 mb-0.5">{config?.safeAreaName ? safeTitle : safePosition ? `${config.safeLat.toFixed(4)}, ${config.safeLng.toFixed(4)}` : 'Not set'}</div>
               <div className="text-[10px] text-slate-500 mb-3">{config?.safeAreaName ? safeSubtitle : 'Home, work, or custom area'}</div>
-              <button onClick={() => setEditingLocation((v) => !v)} className="mt-auto w-full border border-blue-200 text-blue-600 hover:bg-blue-50 py-1 rounded-lg text-[10px] font-semibold">Change Location</button>
+              <button onClick={() => setEditingLocation((v) => !v)} className="mt-auto w-full bg-white border border-blue-200 text-blue-600 hover:text-white hover:bg-gradient-to-r hover:from-blue-700 hover:to-blue-400 py-1.5 rounded-lg text-[11px] font-semibold transition-all duration-300">Change Location</button>
             </div>
 
-            <div className="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm flex flex-col items-center text-center">
+            <div className="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm flex flex-col items-center text-center h-full">
               <div className="text-xs font-semibold text-slate-700 mb-2">Safe Zone Radius</div>
-              <div className="flex items-center justify-center gap-1.5 mb-1.5 w-full">
-                <Target className="w-4 h-4 text-blue-400 shrink-0" />
-                <select value={radiusMeters} onChange={(e) => saveConfig({ radiusMeters: Number(e.target.value) }, 'Safe zone radius updated.')} className="bg-slate-50 border border-slate-200 rounded-lg px-3 py-1 font-semibold text-sm text-slate-800 flex-1 outline-none" disabled={!config?.safeLat}>
+              <div className="w-8 h-8 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mb-1.5"><Target className="w-4 h-4" /></div>
+              <div className="font-medium text-xs text-slate-800 mb-0.5">Select Range</div>
+              <div className="text-[10px] text-slate-500 mb-3">Recommended: 2 - 10 km</div>
+              <div className="mt-auto w-full">
+                <select value={radiusMeters} onChange={(e) => saveConfig({ radiusMeters: Number(e.target.value) }, 'Safe zone radius updated.')} className="w-full bg-white border border-blue-200 text-blue-600 hover:bg-blue-50 py-1.5 rounded-lg text-[11px] font-semibold outline-none text-center transition-all duration-300 cursor-pointer" disabled={!config?.safeLat}>
                   {RADIUS_OPTIONS.map((value) => <option key={value} value={value}>{formatRadius(value)}</option>)}
                 </select>
               </div>
-              <div className="text-[10px] text-slate-500 mt-1 mb-3">Recommended: 2 - 10 km</div>
             </div>
 
-            <div className="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm flex flex-col items-center text-center">
+            <div className="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm flex flex-col items-center text-center h-full">
               <div className="text-xs font-semibold text-slate-700 mb-2">Alert Preference</div>
               <div className="w-8 h-8 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mb-1.5"><Bell className="w-4 h-4" /></div>
               <div className="font-medium text-xs text-slate-800 mb-0.5">Instant Alerts</div>
               <div className="text-[10px] text-slate-500 mb-3">{[config?.pushAlertsEnabled && 'Push', config?.smsAlertsEnabled && 'SMS', config?.emailAlertsEnabled && 'Email'].filter(Boolean).join(' - ') || 'No channels'}</div>
-              <button onClick={() => setEditingAlerts((v) => !v)} className="mt-auto w-full border border-blue-200 text-blue-600 hover:bg-blue-50 py-1 rounded-lg text-[10px] font-semibold">Manage Alerts</button>
+              <button onClick={() => setEditingAlerts((v) => !v)} className="mt-auto w-full bg-white border border-blue-200 text-blue-600 hover:text-white hover:bg-gradient-to-r hover:from-blue-700 hover:to-blue-400 py-1.5 rounded-lg text-[11px] font-semibold transition-all duration-300">Manage Alerts</button>
             </div>
 
-            <div className="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm flex flex-col items-center text-center">
+            <div className="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm flex flex-col items-center text-center h-full">
               <div className="text-xs font-semibold text-slate-700 mb-2">Quiet Hours</div>
               <div className="w-8 h-8 bg-slate-100 text-slate-500 rounded-full flex items-center justify-center mb-1.5"><Moon className="w-4 h-4" /></div>
               <div className="font-medium text-xs text-slate-800 mb-0.5">{config?.quietHoursEnabled ? `${config?.quietHoursStart || '22:00'} - ${config?.quietHoursEnd || '06:00'}` : 'Disabled'}</div>
               <div className="text-[10px] text-slate-500 mb-3">No alerts during this time</div>
-              <button onClick={() => setEditingQuietHours((v) => !v)} className="mt-auto w-full border border-slate-200 text-slate-600 hover:bg-slate-50 py-1 rounded-lg text-[10px] font-semibold">Edit</button>
+              <button onClick={() => setEditingQuietHours((v) => !v)} className="mt-auto w-full bg-white border border-slate-200 text-slate-600 hover:text-white hover:bg-gradient-to-r hover:from-slate-600 hover:to-slate-400 hover:border-slate-400 py-1.5 rounded-lg text-[11px] font-semibold transition-all duration-300">Edit</button>
             </div>
           </div>
 

@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import { Bot, ArrowRight, MessageSquare } from 'lucide-react';
 
 const AiAssistant = () => {
@@ -76,11 +77,11 @@ const AiAssistant = () => {
                 Your smart assistant for all vehicle & transport related queries. Fast. Accurate. Always available. Just ask or type.
               </p>
               
-              <button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl font-medium transition-all shadow-lg shadow-blue-600/20 inline-flex items-center justify-center gap-2">
+              <Link to="/auth" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl font-medium transition-all shadow-lg shadow-blue-600/20 inline-flex items-center justify-center gap-2">
                 <Bot className="w-5 h-5" />
                 Chat with AI Assistant
                 <ArrowRight className="w-4 h-4 ml-2" />
-              </button>
+              </Link>
             </div>
 
           </div>

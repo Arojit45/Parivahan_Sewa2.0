@@ -1,9 +1,11 @@
-﻿import React from "react";
+import React from "react";
 import { Receipt, Leaf, CheckCircle, AlertTriangle } from "lucide-react";
 import { useDashboard } from "../../contexts/DashboardContext";
+import { useLanguage } from "../../contexts/LanguageContext";
 
 const AttentionWidget = () => {
   const { dashboard } = useDashboard();
+  const { t } = useLanguage();
   const alerts = dashboard?.alerts ?? [];
   const challans = dashboard?.pendingChallans ?? [];
 
@@ -12,15 +14,15 @@ const AttentionWidget = () => {
     return (
       <div className="bg-white rounded-[1.25rem] border border-slate-200 p-6 shadow-sm">
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-[15px] font-bold text-[#1e293b]">Things That Need Your Attention</h2>
+          <h2 className="text-[15px] font-bold text-[#1e293b]">{t.dash?.attentionNeeded || "Things That Need Your Attention"}</h2>
         </div>
         <div className="flex flex-col items-center justify-center py-6 gap-3">
           <div className="w-14 h-14 rounded-full bg-emerald-50 border border-emerald-100 flex items-center justify-center">
             <CheckCircle className="w-7 h-7 text-emerald-500" />
           </div>
-          <h3 className="font-bold text-slate-800 text-[14px]">You are all set!</h3>
+          <h3 className="font-bold text-slate-800 text-[14px]">{t.dash?.allSet || "You are all set!"}</h3>
           <p className="text-[12px] text-slate-500 text-center leading-relaxed">
-            No pending challans or expiring documents.<br />Your vehicle is in great shape.
+            {t.dash?.noPendingActions || "No pending challans or expiring documents."}<br />{t.dash?.vehicleGreatShape || "Your vehicle is in great shape."}
           </p>
         </div>
       </div>
@@ -30,8 +32,8 @@ const AttentionWidget = () => {
   return (
     <div className="bg-white rounded-[1.25rem] border border-slate-200 p-6 shadow-sm">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-[15px] font-bold text-[#1e293b]">Things That Need Your Attention</h2>
-        <button className="text-[13px] font-bold text-blue-600 hover:underline">View All &rsaquo;</button>
+        <h2 className="text-[15px] font-bold text-[#1e293b]">{t.dash?.attentionNeeded || "Things That Need Your Attention"}</h2>
+        <button className="text-[13px] font-bold text-blue-600 hover:underline">{t.dash?.viewAll || "View All"} &rsaquo;</button>
       </div>
 
       <div className="space-y-4">
@@ -43,16 +45,16 @@ const AttentionWidget = () => {
               <Receipt className="w-5 h-5" />
             </div>
             <div className="flex-1">
-              <h4 className="text-[13px] font-bold text-red-700">Pending Challan</h4>
+              <h4 className="text-[13px] font-bold text-red-700">{t.dash?.pendingChallan || "Pending Challan"}</h4>
               <p className="text-[11px] text-red-600/80 font-medium mt-0.5">
-                {challans.length} challan{challans.length > 1 ? "s" : ""} pending
+                {challans.length} {t.dash?.challanPending || "challans pending"}
               </p>
               <p className="text-[11px] text-slate-700 font-bold mt-1">
-                Amount: ₹{challans.reduce((s, c) => s + Number(c.amount), 0).toLocaleString("en-IN")}
+                {t.dash?.amount || "Amount"}: ₹{challans.reduce((s, c) => s + Number(c.amount), 0).toLocaleString("en-IN")}
               </p>
             </div>
             <button className="bg-white border border-red-200 text-red-600 text-[11px] font-bold px-4 py-2 rounded-lg hover:bg-red-50 transition-colors">
-              View Challan
+              {t.dash?.viewChallan || "View Challan"}
             </button>
           </div>
         )}
@@ -80,7 +82,7 @@ const AttentionWidget = () => {
                   <p className={`text-[11px] ${msgColor} font-medium mt-0.5`}>{alert.message}</p>
                 </div>
                 <button className={`bg-white border text-[11px] font-bold px-4 py-2 rounded-lg transition-colors ${btnColor}`}>
-                  {isWarning ? "Renew" : "View"}
+                  {isWarning ? (t.dash?.renew || "Renew") : (t.dash?.view || "View")}
                 </button>
               </div>
             );

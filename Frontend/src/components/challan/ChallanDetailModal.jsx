@@ -28,6 +28,7 @@ const StatusBadge = ({ status }) => {
 const ChallanDetailModal = () => {
   const { detailModal, closeDetailModal, openPaymentModal, openDisputeModal } = useChallan();
   const { t } = useLanguage();
+  const c = t.challan || {};
   const { open, challan } = detailModal;
 
   if (!open || !challan) return null;
@@ -40,7 +41,7 @@ const ChallanDetailModal = () => {
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-slate-50/50">
           <div>
-            <h2 className="font-bold text-slate-800 text-lg">Challan Details</h2>
+            <h2 className="font-bold text-slate-800 text-lg">{c.challanDetails || "Challan Details"}</h2>
             <p className="text-xs text-slate-500 mt-0.5">CH-{String(challan.id).padStart(8, '0')}</p>
           </div>
           <div className="flex items-center gap-3">
