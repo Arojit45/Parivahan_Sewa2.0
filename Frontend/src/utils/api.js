@@ -3,7 +3,7 @@
  * Reads the JWT token from localStorage and injects it into every request.
  */
 
-const BASE_URL = '/api/v1';
+const BASE_URL = 'https://parivahan-sewa2-0-backend.onrender.com/api/v1';
 
 function getToken() {
   return localStorage.getItem('token');
@@ -86,7 +86,7 @@ export async function getCitizenGuideDetail(guideId) {
 
 export async function updateProfile(payload) {
   const token = getToken();
-  const res = await fetch('/api/user/profile', {
+  const res = await fetch('https://parivahan-sewa2-0-backend.onrender.com/api/user/profile', {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
