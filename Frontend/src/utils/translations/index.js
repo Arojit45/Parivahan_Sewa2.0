@@ -1,4 +1,4 @@
-﻿import { en } from './en';
+import { en } from './en';
 import { hi } from './hi';
 import { bn } from './bn';
 import { mr } from './mr';

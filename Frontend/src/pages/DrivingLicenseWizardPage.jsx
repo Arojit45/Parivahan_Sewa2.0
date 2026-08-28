@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import Sidebar from '../components/dashboard/Sidebar';
 import Topbar from '../components/dashboard/Topbar';
 import { DLWizardProvider, useDLWizard } from '../contexts/DLWizardContext';
@@ -57,12 +57,12 @@ const WizardContent = () => {
           {isResuming && (
             <div className="bg-blue-600 text-white text-center py-2 px-4 text-sm font-semibold flex items-center justify-center gap-2 shrink-0">
               <RotateCcw className="w-4 h-4" />
-              Resuming your previous application from Step {currentStep} â€” your progress has been restored.
+              Resuming your previous application from Step {currentStep} — your progress has been restored.
             </div>
           )}
 
           <div className="flex-1 flex overflow-hidden">
-            {/* Left Rail â€” Steps Progress */}
+            {/* Left Rail — Steps Progress */}
             <div className="w-56 xl:w-64 bg-white border-r border-slate-100 flex flex-col shrink-0 overflow-hidden">
               {/* Header */}
               <div className="px-4 pt-5 pb-3 border-b border-slate-100 flex justify-between items-start">
@@ -84,7 +84,7 @@ const WizardContent = () => {
               </div>
             </div>
 
-            {/* Right â€” Active Step */}
+            {/* Right — Active Step */}
             <div className="flex-1 flex flex-col overflow-hidden bg-slate-50">
               <div id="dl-step-content" className="flex-1 overflow-hidden bg-white m-4 rounded-2xl shadow-sm border border-slate-100 flex flex-col">
                 <ActiveStep />

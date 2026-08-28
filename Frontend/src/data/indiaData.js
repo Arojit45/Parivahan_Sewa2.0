@@ -1,4 +1,4 @@
-﻿// All 36 Indian States and Union Territories with their codes and RTOs
+// All 36 Indian States and Union Territories with their codes and RTOs
 
 export const INDIA_STATES = [
   { name: "Andaman & Nicobar Islands", code: "AN" },
@@ -255,7 +255,7 @@ export const VEHICLE_CLASSES = [
     code: "MCWOG",
     name: "Motorcycle without Gear",
     description: "Scooters, mopeds (up to 50cc)",
-    icon: "ðŸ›µ",
+    icon: "🛵",
     minAge: 16,
     fee: 500,
     examples: "Honda Activa, TVS Jupiter, Suzuki Access",
@@ -264,7 +264,7 @@ export const VEHICLE_CLASSES = [
     code: "MCWG",
     name: "Motorcycle with Gear",
     description: "Bikes with manual gear system",
-    icon: "ðŸï¸",
+    icon: "🏍️",
     minAge: 18,
     fee: 500,
     examples: "Royal Enfield, Bajaj Pulsar, Hero Splendor",
@@ -273,7 +273,7 @@ export const VEHICLE_CLASSES = [
     code: "LMV",
     name: "Light Motor Vehicle",
     description: "Cars, jeeps, taxis (up to 7.5 tonnes)",
-    icon: "ðŸš—",
+    icon: "🚗",
     minAge: 18,
     fee: 700,
     examples: "Maruti Swift, Honda City, Hyundai i20",
@@ -282,7 +282,7 @@ export const VEHICLE_CLASSES = [
     code: "TRANS",
     name: "Transport Vehicle",
     description: "Commercial light transport vehicles",
-    icon: "ðŸš",
+    icon: "🚐",
     minAge: 18,
     fee: 800,
     examples: "Tata Ace, Mahindra Bolero Pickup",
@@ -291,7 +291,7 @@ export const VEHICLE_CLASSES = [
     code: "HMV",
     name: "Heavy Motor Vehicle",
     description: "Trucks, lorries (above 7.5 tonnes)",
-    icon: "ðŸš›",
+    icon: "🚛",
     minAge: 20,
     fee: 1000,
     examples: "Tata 407, Ashok Leyland trucks",
@@ -300,7 +300,7 @@ export const VEHICLE_CLASSES = [
     code: "HPMV",
     name: "Heavy Passenger Motor Vehicle",
     description: "Buses, coaches for public transport",
-    icon: "ðŸšŒ",
+    icon: "🚌",
     minAge: 20,
     fee: 1000,
     examples: "KSRTC Bus, Volvo Coach",
@@ -309,7 +309,7 @@ export const VEHICLE_CLASSES = [
     code: "HTV",
     name: "Heavy Transport Vehicle",
     description: "Heavy haulage / articulated vehicles",
-    icon: "ðŸšš",
+    icon: "🚚",
     minAge: 20,
     fee: 1000,
     examples: "Semi-trailers, tankers",
@@ -323,7 +323,7 @@ export const REQUIRED_DOCUMENTS = [
   { id: "dob_proof", label: "Date of Birth Proof (Birth Certificate / 10th Mark sheet)", required: true },
   { id: "address", label: "Address Proof (Electricity bill / Ration card)", required: false },
   { id: "ll", label: "Learner's Licence (if applicable)", required: false },
-  { id: "medical", label: "Medical Certificate (Form 1 & 1A) â€” for HMV/HPMV", required: false },
+  { id: "medical", label: "Medical Certificate (Form 1 & 1A) — for HMV/HPMV", required: false },
   { id: "signature", label: "Applicant Signature", required: true },
 ];
 

@@ -1,4 +1,4 @@
-﻿/**
+/**
  * api.js - Centralized API client for Parivahan Sewa 2.0
  * Reads the JWT token from localStorage and injects it into every request.
  */

@@ -32,7 +32,7 @@ export async function getChallanDetail(challanId) {
   return request(`${BASE}/${challanId}`);
 }
 
-/** Pay a challan â€” returns PaymentReceiptDto */
+/** Pay a challan — returns PaymentReceiptDto */
 export async function payChallan(challanId) {
   return request(`${BASE}/${challanId}/pay`, { method: 'POST' });
 }

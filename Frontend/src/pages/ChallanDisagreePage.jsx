@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { ArrowLeft, Scale, UploadCloud, X, CheckCircle2, Loader2, Image as ImageIcon } from 'lucide-react';
 import { useChallan } from '../contexts/ChallanContext';
@@ -360,10 +360,10 @@ const ChallanDisagreePage = () => {
       {/* Bottom Nav */}
       <div className="flex justify-between mt-4 border-t border-slate-200 pt-8">
         <Link to={challan ? `/challan/how-to-pay?id=${challan.id}` : '/challan/how-to-pay'} className="text-blue-600 font-semibold hover:underline">
-          â† {g.payTitle || 'How to pay your challan'}
+          ← {g.payTitle || 'How to pay your challan'}
         </Link>
         <Link to={challan ? `/challan/why-do-i-have-this-challan?id=${challan.id}` : '/challan/why-do-i-have-this-challan'} className="text-blue-600 font-semibold hover:underline">
-          {g.understandTitle || 'Understand this challan'} â†’
+          {g.understandTitle || 'Understand this challan'} →
         </Link>
       </div>
 

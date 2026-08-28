@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { X, Calendar, MapPin, AlertCircle, Scale, ShieldAlert, Download, Printer, Info } from 'lucide-react';
 import { useChallan } from '../../contexts/ChallanContext';
@@ -59,7 +59,7 @@ const ChallanDetailModal = () => {
             <div className="bg-blue-50/50 rounded-xl p-5 border border-blue-100/50 flex flex-col items-center justify-center text-center">
               <ShieldAlert className="w-8 h-8 text-blue-500 mb-3" />
               <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wide">Fine Amount</h3>
-              <div className="text-4xl font-bold text-slate-800 mt-1 mb-2">â‚¹{Number(challan.amount).toLocaleString('en-IN')}</div>
+              <div className="text-4xl font-bold text-slate-800 mt-1 mb-2">₹{Number(challan.amount).toLocaleString('en-IN')}</div>
               <p className="text-slate-700 font-medium mb-3">{challan.offence}</p>
               
               <Link 
@@ -159,7 +159,7 @@ const ChallanDetailModal = () => {
               }}
               className="flex-[2] flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 transition-colors text-sm shadow-sm"
             >
-              Pay â‚¹{Number(challan.amount).toLocaleString('en-IN')}
+              Pay ₹{Number(challan.amount).toLocaleString('en-IN')}
             </button>
           )}
         </div>

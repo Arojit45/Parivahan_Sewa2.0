@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { ArrowLeft, Search, CheckCircle2, CreditCard, ShieldCheck, Download, AlertCircle, FileText } from 'lucide-react';
 import { useChallan } from '../contexts/ChallanContext';
@@ -93,7 +93,7 @@ const ChallanHowToPayPage = () => {
             <h3 className="font-bold text-slate-700 text-sm uppercase tracking-wider mb-2">Selected Challan</h3>
             <p className="text-2xl font-bold text-slate-800 mb-1">CH-{String(challan.id).padStart(8, '0')}</p>
             <p className="text-slate-500 mb-4">{challan.offence}</p>
-            <div className="text-3xl font-bold text-blue-600 mb-6">â‚¹{Number(challan.amount).toLocaleString('en-IN')}</div>
+            <div className="text-3xl font-bold text-blue-600 mb-6">₹{Number(challan.amount).toLocaleString('en-IN')}</div>
             
             {challan.status === 'PENDING' ? (
               <button 
@@ -185,10 +185,10 @@ const ChallanHowToPayPage = () => {
       {/* Bottom Nav */}
       <div className="flex flex-col sm:flex-row justify-between gap-4 mt-4 border-t border-slate-200 pt-8">
         <Link to={challan ? `/challan/why-do-i-have-this-challan?id=${challan.id}` : '/challan/why-do-i-have-this-challan'} className="text-blue-600 font-semibold hover:underline">
-          â† {g.understandTitle || 'Why do I have this challan?'}
+          ← {g.understandTitle || 'Why do I have this challan?'}
         </Link>
         <Link to={challan ? `/challan/disagree?id=${challan.id}` : '/challan/disagree'} className="text-blue-600 font-semibold hover:underline sm:text-right">
-          {g.disagreeTitle || 'Do you disagree with this challan?'} â†’
+          {g.disagreeTitle || 'Do you disagree with this challan?'} →
         </Link>
       </div>
 

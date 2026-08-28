@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { MessageSquare } from 'lucide-react';
 

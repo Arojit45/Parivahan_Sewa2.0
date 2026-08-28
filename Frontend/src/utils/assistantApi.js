@@ -25,7 +25,7 @@ const resolveLanguage = (language) => {
  * @returns {Promise<{answer, intent, actions, sources, fallback}>}
  */
 export async function askVehicle(vehicleId, message, history = [], language) {
-  // Token key must match what AuthContext saves â€” it saves as 'token'
+  // Token key must match what AuthContext saves — it saves as 'token'
   const token = localStorage.getItem('token');
   const responseLanguage = resolveLanguage(language);
 

@@ -1,4 +1,4 @@
-﻿import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Bot, Send, Maximize2, Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { askVehicle } from "../../utils/assistantApi";
@@ -24,7 +24,7 @@ const AiAssistantWidget = () => {
   const [messages, setMessages] = useState([
     {
       role: "assistant",
-      text: (t.dash?.greetingMsg || "Hello! ðŸ‘‹ Ask me anything about {vehicle} â€” health, documents, challans, or live location.").replace("{vehicle}", vehicleName),
+      text: (t.dash?.greetingMsg || "Hello! 👋 Ask me anything about {vehicle} — health, documents, challans, or live location.").replace("{vehicle}", vehicleName),
     },
   ]);
   const [input, setInput] = useState("");
@@ -44,7 +44,7 @@ const AiAssistantWidget = () => {
     setMessages([
       {
         role: "assistant",
-        text: (t.dash?.greetingMsg || "Hello! ðŸ‘‹ Ask me anything about {vehicle} â€” health, documents, challans, or live location.").replace("{vehicle}", vehicleName),
+        text: (t.dash?.greetingMsg || "Hello! 👋 Ask me anything about {vehicle} — health, documents, challans, or live location.").replace("{vehicle}", vehicleName),
       },
     ]);
   }, [selectedVehicleId, vehicleName, t.dash?.greetingMsg]);
@@ -123,7 +123,7 @@ const AiAssistantWidget = () => {
           </div>
           <div>
             <h2 className="text-[14px] font-bold text-slate-900 leading-tight">{t.dash?.askMyVehicle || "Ask My Vehicle"}</h2>
-            <p className="text-[10px] text-slate-500 font-medium leading-[1.2] mt-0.5">{t.dash?.aiAssistant || "AI Assistant"} Â· Powered by Gemini</p>
+            <p className="text-[10px] text-slate-500 font-medium leading-[1.2] mt-0.5">{t.dash?.aiAssistant || "AI Assistant"} · Powered by Gemini</p>
           </div>
         </div>
 

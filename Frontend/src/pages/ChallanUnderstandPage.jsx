@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { ArrowLeft, AlertTriangle, ShieldCheck, CheckCircle2, ChevronDown, ChevronUp } from 'lucide-react';
 import { useChallan } from '../contexts/ChallanContext';
@@ -70,7 +70,7 @@ const ChallanUnderstandPage = () => {
             </div>
             <div>
               <p className="text-xs text-slate-500 mb-1">Amount</p>
-              <p className="font-semibold text-red-600">â‚¹{Number(challan.amount).toLocaleString('en-IN')}</p>
+              <p className="font-semibold text-red-600">₹{Number(challan.amount).toLocaleString('en-IN')}</p>
             </div>
             <div>
               <p className="text-xs text-slate-500 mb-1">Violation</p>
@@ -161,13 +161,13 @@ const ChallanUnderstandPage = () => {
             to={challan ? `/challan/how-to-pay?id=${challan.id}` : '/challan/how-to-pay'} 
             className="flex flex-col p-5 rounded-xl border border-emerald-200 bg-emerald-50 hover:bg-emerald-100 transition-colors group text-left"
           >
-            <span className="text-xs font-bold text-emerald-600 tracking-wider mb-2">ðŸŸ¢ {g.iAgree || 'I AGREE'}</span>
+            <span className="text-xs font-bold text-emerald-600 tracking-wider mb-2">🟢 {g.iAgree || 'I AGREE'}</span>
             <span className="font-semibold text-slate-800 mb-1">{g.payChallan || 'Pay Challan'}</span>
             <span className="text-xs text-slate-600">{g.iAgreeDesc || 'Pay your challan online securely'}</span>
           </Link>
 
           <div className="flex flex-col p-5 rounded-xl border border-blue-200 bg-blue-50 text-left opacity-70">
-            <span className="text-xs font-bold text-blue-600 tracking-wider mb-2">ðŸŸ¡ {g.iDontUnderstand || "I DON'T UNDERSTAND"}</span>
+            <span className="text-xs font-bold text-blue-600 tracking-wider mb-2">🟡 {g.iDontUnderstand || "I DON'T UNDERSTAND"}</span>
             <span className="font-semibold text-slate-800 mb-1">You are here</span>
             <span className="text-xs text-slate-600">Reading the violation guide</span>
           </div>
@@ -176,7 +176,7 @@ const ChallanUnderstandPage = () => {
             to={challan ? `/challan/disagree?id=${challan.id}` : '/challan/disagree'} 
             className="flex flex-col p-5 rounded-xl border border-red-200 bg-red-50 hover:bg-red-100 transition-colors group text-left"
           >
-            <span className="text-xs font-bold text-red-600 tracking-wider mb-2">ðŸ”´ {g.iDisagree || 'I DISAGREE'}</span>
+            <span className="text-xs font-bold text-red-600 tracking-wider mb-2">🔴 {g.iDisagree || 'I DISAGREE'}</span>
             <span className="font-semibold text-slate-800 mb-1">{g.raiseGrievance || 'Challenge / Raise Grievance'}</span>
             <span className="text-xs text-slate-600">{g.iDisagreeDesc || 'Submit a formal dispute request'}</span>
           </Link>

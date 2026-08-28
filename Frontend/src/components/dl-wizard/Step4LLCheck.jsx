@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { CreditCard, Navigation, CheckCircle2, AlertCircle } from 'lucide-react';
 import { useDLWizard } from '../../contexts/DLWizardContext';
 import WizardNav from './WizardNav';
@@ -115,7 +115,7 @@ const Step4LLCheck = () => {
                 className={`px-4 py-2.5 rounded-xl text-sm font-bold transition-colors shrink-0 
                   ${verified ? 'bg-emerald-600 text-white' : 'bg-blue-600 hover:bg-blue-700 text-white disabled:opacity-60'}`}
               >
-                {verifying ? 'Verifying...' : verified ? 'âœ“ Verified' : 'Verify'}
+                {verifying ? 'Verifying...' : verified ? '✓ Verified' : 'Verify'}
               </button>
             </div>
             <p className="text-[11px] text-slate-400 mt-2 font-medium">Format: 2 letters followed by 13 digits, for example DL0120240012345.</p>
@@ -142,7 +142,7 @@ const Step4LLCheck = () => {
                   rel="noreferrer"
                   className="inline-block text-xs font-bold bg-amber-600 text-white px-4 py-2 rounded-lg hover:bg-amber-700 transition-colors"
                 >
-                  Go to Sarathi Portal â†’
+                  Go to Sarathi Portal →
                 </a>
               </div>
             </div>

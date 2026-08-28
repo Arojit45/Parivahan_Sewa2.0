@@ -1,4 +1,4 @@
-﻿import React, { useState } from "react";
+import React, { useState } from "react";
 import { Home, PlusCircle, Shield, AlertTriangle, MapPin, Bell, Share2, BookOpen, MessageSquare, Truck, Activity, FileText, CheckSquare, Settings, HelpCircle, ChevronLeft, ChevronRight, CreditCard, Receipt, LogOut, Car, Zap } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
@@ -21,7 +21,7 @@ const Sidebar = () => {
   const navigate = useNavigate();
   const { logout } = useAuth();
 
-  // DashboardContext â€” may not be mounted outside dashboard, so guard
+  // DashboardContext — may not be mounted outside dashboard, so guard
   let vehicleCtx = null;
   try { vehicleCtx = useDashboard(); } catch (_) {}
   const vehicles = vehicleCtx?.vehicles ?? [];

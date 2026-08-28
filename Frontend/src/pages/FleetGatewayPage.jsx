@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Truck, CheckCircle2, Clock, XCircle, AlertCircle, ArrowRight, Loader2, RefreshCw, ArrowLeft } from 'lucide-react';
 import { getMyFleets, submitFleetRegistration } from '../utils/fleetApi';
@@ -34,7 +34,7 @@ const FleetGatewayPage = () => {
     );
   }
 
-  // CASE 4: Approved fleet â†’ go to dashboard
+  // CASE 4: Approved fleet → go to dashboard
   if (fleet && fleet.status === 'APPROVED') {
     navigate(`/fleet/dashboard/${fleet.id}`, { replace: true });
     return null;
@@ -75,9 +75,9 @@ const NoFleetView = () => {
 
         <div className="grid grid-cols-3 gap-4 mb-10">
           {[
-            { label: 'Live GPS Tracking', icon: 'ðŸ›°ï¸' },
-            { label: 'Route Monitoring', icon: 'ðŸ—ºï¸' },
-            { label: 'Instant Alerts', icon: 'ðŸ””' },
+            { label: 'Live GPS Tracking', icon: '🛰️' },
+            { label: 'Route Monitoring', icon: '🗺️' },
+            { label: 'Instant Alerts', icon: '🔔' },
           ].map((f) => (
             <div key={f.label} className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
               <div className="text-2xl mb-2">{f.icon}</div>
@@ -118,7 +118,7 @@ const FleetPendingView = ({ fleet }) => {
         </div>
         <h1 className="text-3xl font-bold text-slate-900 mb-2">Fleet Registration Under Review</h1>
         <p className="text-slate-600 mb-2">Your application for <span className="font-semibold text-slate-900">{fleet.fleetName || 'your fleet'}</span> is being processed.</p>
-        <p className="text-slate-500 text-sm mb-10">This typically takes 1â€“3 business days.</p>
+        <p className="text-slate-500 text-sm mb-10">This typically takes 1–3 business days.</p>
 
         <div className="bg-white border border-slate-200 rounded-2xl p-6 mb-8 text-left shadow-sm">
           <h3 className="text-slate-800 font-bold mb-5 text-sm uppercase tracking-wider">Application Timeline</h3>

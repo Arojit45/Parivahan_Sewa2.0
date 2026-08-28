@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CreditCard, FileText, AlertCircle, Loader2, CheckCircle2 } from 'lucide-react';
 import Topbar from '../components/dashboard/Topbar';
 import Sidebar from '../components/dashboard/Sidebar';

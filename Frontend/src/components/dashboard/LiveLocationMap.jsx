@@ -1,4 +1,4 @@
-﻿import React from "react";
+import React from "react";
 import { MapContainer, TileLayer, Marker, Circle } from "react-leaflet";
 import L from "leaflet";
 import { BarChart2, MapPin } from "lucide-react";
@@ -71,10 +71,10 @@ const LiveLocationMap = () => {
         <h3 className="font-bold text-slate-900 text-sm">{twin.address ?? (t.dash?.unknownLocation || "Unknown location")}</h3>
         <div className="flex justify-between items-end mt-1">
           <p className="text-xs text-slate-500 font-medium">
-            {twin.speed != null ? `${twin.speed} ${t.dash?.kmh || "km/h"}` : "â€”"} â€¢ {twin.heading ?? "â€”"}
+            {twin.speed != null ? `${twin.speed} ${t.dash?.kmh || "km/h"}` : "—"} • {twin.heading ?? "—"}
           </p>
           <p className="text-xs text-slate-400 font-medium flex items-center gap-1">
-            {lastUpdatedLabel ?? "â€”"} <BarChart2 className="w-3 h-3 text-emerald-500" />
+            {lastUpdatedLabel ?? "—"} <BarChart2 className="w-3 h-3 text-emerald-500" />
           </p>
         </div>
       </div>

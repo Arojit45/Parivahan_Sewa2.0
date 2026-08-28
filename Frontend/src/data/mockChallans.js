@@ -1,4 +1,4 @@
-﻿export const mockChallans = [
+export const mockChallans = [
   {
     id: "1",
     challanNumber: "WB-CH-2025-00012345",

@@ -67,20 +67,20 @@ const Step5Fees = () => {
               <div className="p-4 space-y-3">
                 <div className="flex justify-between items-center text-sm">
                   <span className="text-slate-600">Registration Fee</span>
-                  <span className="font-medium text-slate-800">â‚¹{wizard.feeAmount || 0}</span>
+                  <span className="font-medium text-slate-800">₹{wizard.feeAmount || 0}</span>
                 </div>
                 <div className="flex justify-between items-center text-sm">
                   <span className="text-slate-600">Smart Card Fee</span>
-                  <span className="font-medium text-slate-800">â‚¹200</span>
+                  <span className="font-medium text-slate-800">₹200</span>
                 </div>
                 <div className="flex justify-between items-center text-sm">
                   <span className="text-slate-600">Postal Charges</span>
-                  <span className="font-medium text-slate-800">â‚¹50</span>
+                  <span className="font-medium text-slate-800">₹50</span>
                 </div>
                 
                 <div className="border-t border-slate-100 pt-3 mt-3 flex justify-between items-center">
                   <span className="font-bold text-slate-800">Total Estimated Amount</span>
-                  <span className="text-xl font-bold text-blue-600">â‚¹{((wizard.feeAmount || 0) + 250).toLocaleString()}</span>
+                  <span className="text-xl font-bold text-blue-600">₹{((wizard.feeAmount || 0) + 250).toLocaleString()}</span>
                 </div>
               </div>
             </div>

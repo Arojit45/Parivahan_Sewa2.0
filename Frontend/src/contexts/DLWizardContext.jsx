@@ -29,7 +29,7 @@ const getAuthHeader = () => {
   return token ? { Authorization: `Bearer ${token}` } : {};
 };
 
-/** Fetch wrapper that never throws â€” returns { ok, status, data, networkError } */
+/** Fetch wrapper that never throws — returns { ok, status, data, networkError } */
 const safeFetch = async (url, options = {}) => {
   try {
     const res = await fetch(url, { ...options });
@@ -50,11 +50,11 @@ const makeMockTxn = () =>
 export const DLWizardProvider = ({ children }) => {
   const [wizard, setWizard] = useState(INITIAL_STATE);
 
-  // On mount: try to resume an in-progress application â€” non-blocking, never crashes
+  // On mount: try to resume an in-progress application — non-blocking, never crashes
   useEffect(() => {
     const checkResume = async () => {
       const token = localStorage.getItem('token') || sessionStorage.getItem('token');
-      if (!token) return; // not logged in â€” wizard works locally
+      if (!token) return; // not logged in — wizard works locally
 
       const result = await safeFetch(`${API_BASE}/application/in-progress`, {
         headers: { ...getAuthHeader(), 'Content-Type': 'application/json' },
@@ -103,7 +103,7 @@ export const DLWizardProvider = ({ children }) => {
     setWizard(prev => ({ ...prev, ...fields }));
   }, []);
 
-  /** Advance locally â€” used when backend is unavailable or user has no token */
+  /** Advance locally — used when backend is unavailable or user has no token */
   const advanceLocally = (stepData, currentStep, lastCompleted) => {
     setWizard(prev => ({
       ...prev,
@@ -122,7 +122,7 @@ export const DLWizardProvider = ({ children }) => {
     const { currentStep, lastCompletedStep, applicationId, backendAvailable } = wizard;
     const token = localStorage.getItem('token') || sessionStorage.getItem('token');
 
-    // No token or backend down â€” work 100% locally
+    // No token or backend down — work 100% locally
     if (!token || !backendAvailable) {
       advanceLocally(stepData, currentStep, lastCompletedStep);
       return;
@@ -198,7 +198,7 @@ export const DLWizardProvider = ({ children }) => {
 
     const token = localStorage.getItem('token') || sessionStorage.getItem('token');
 
-    // Local mock payment â€” no token or backend down
+    // Local mock payment — no token or backend down
     if (!token || !wizard.applicationId || !wizard.backendAvailable) {
       setWizard(prev => ({
         ...prev,
@@ -225,7 +225,7 @@ export const DLWizardProvider = ({ children }) => {
     });
 
     if (result.networkError || !result.ok) {
-      // Backend failed â€” mock locally anyway so UX completes
+      // Backend failed — mock locally anyway so UX completes
       setWizard(prev => ({
         ...prev,
         isSaving: false,

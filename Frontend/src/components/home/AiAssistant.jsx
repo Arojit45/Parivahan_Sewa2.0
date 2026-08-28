@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Bot, ArrowRight, MessageSquare } from 'lucide-react';
@@ -57,7 +57,7 @@ const AiAssistant = () => {
                   transition={{ delay: 0.8 }}
                   className="absolute bottom-4 -right-4 md:right-8 bg-blue-600/95 backdrop-blur-md px-5 py-3 rounded-2xl rounded-tr-sm shadow-xl shadow-blue-600/20 max-w-[220px] z-20"
                 >
-                  <p className="text-sm font-medium text-white">You have 1 pending challan of â‚¹1,000.</p>
+                  <p className="text-sm font-medium text-white">You have 1 pending challan of ₹1,000.</p>
                 </motion.div>
 
               </div>

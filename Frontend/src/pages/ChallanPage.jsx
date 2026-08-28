@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import ChallanHeader from '../components/challan/ChallanHeader';
 import ChallanStatsRow from '../components/challan/ChallanStatsRow';
 import ChallanTable from '../components/challan/ChallanTable';

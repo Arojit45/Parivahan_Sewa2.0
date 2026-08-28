@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { FileText, CheckSquare, Shield, Share2, MessageSquare, LayoutGrid, Receipt, AlertTriangle } from 'lucide-react';
 import { useLanguage } from '../../contexts/LanguageContext';
 

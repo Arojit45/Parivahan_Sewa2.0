@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { FileText, Scale } from 'lucide-react';
 import { useChallan } from '../../contexts/ChallanContext';

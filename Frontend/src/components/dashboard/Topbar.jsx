@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { Search, Bell, HelpCircle, ChevronDown, Globe } from 'lucide-react';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { useAuth } from '../../contexts/AuthContext';
@@ -9,16 +9,16 @@ const Topbar = () => {
 
   const languages = [
     { code: 'en', label: 'English' },
-    { code: 'hi', label: 'à¤¹à¤¿à¤¨à¥à¤¦à¥€' },
-    { code: 'bn', label: 'à¦¬à¦¾à¦‚à¦²à¦¾' },
-    { code: 'mr', label: 'à¤®à¤°à¤¾à¤ à¥€' },
-    { code: 'ta', label: 'à®¤à®®à®¿à®´à¯' },
-    { code: 'te', label: 'à°¤à±†à°²à±à°—à±' },
-    { code: 'kn', label: 'à²•à²¨à³à²¨à²¡' },
-    { code: 'ml', label: 'à´®à´²à´¯à´¾à´³à´‚' },
-    { code: 'gu', label: 'àª—à«àªœàª°àª¾àª¤à«€' },
-    { code: 'pa', label: 'à¨ªà©°à¨œà¨¾à¨¬à©€' },
-    { code: 'or', label: 'à¬“à¬¡à¬¼à¬¿à¬†' },
+    { code: 'hi', label: 'हिन्दी' },
+    { code: 'bn', label: 'বাংলা' },
+    { code: 'mr', label: 'मराठी' },
+    { code: 'ta', label: 'தமிழ்' },
+    { code: 'te', label: 'తెలుగు' },
+    { code: 'kn', label: 'ಕನ್ನಡ' },
+    { code: 'ml', label: 'മലയാളം' },
+    { code: 'gu', label: 'ગુજરાતી' },
+    { code: 'pa', label: 'ਪੰਜਾਬੀ' },
+    { code: 'or', label: 'ଓଡ଼ିଆ' },
   ];
 
   const currentLabel = languages.find(l => l.code === language)?.label || 'English';
@@ -75,7 +75,7 @@ const Topbar = () => {
       {/* Right Actions */}
       <div className="flex items-center gap-6 ml-4">
 
-        {/* Language Selector â€” 11 languages */}
+        {/* Language Selector — 11 languages */}
         <div className="relative group">
           <button
             id="language-selector-btn"

@@ -1,4 +1,4 @@
-﻿/**
+/**
  * fleetApi.js - Fleet-specific API helpers
  * All calls use the centralized apiFetch (JWT is injected automatically)
  */

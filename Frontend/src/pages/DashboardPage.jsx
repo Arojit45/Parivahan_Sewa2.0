@@ -1,4 +1,4 @@
-﻿import React from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import { Car, PlusCircle, AlertCircle, Loader2 } from "lucide-react";
 import { DashboardProvider, useDashboard } from "../contexts/DashboardContext";
@@ -18,7 +18,7 @@ import GuidedProcesses from "../components/dashboard/GuidedProcesses";
 import GovtPosterWidget from "../components/dashboard/GovtPosterWidget";
 
 // --------------------------------------------------------------------------
-// Empty state â€” shown when user has no registered vehicles
+// Empty state — shown when user has no registered vehicles
 // --------------------------------------------------------------------------
 const EmptyState = () => {
   const { t } = useLanguage();
@@ -30,7 +30,7 @@ const EmptyState = () => {
       </div>
       <h2 className="text-2xl font-bold text-slate-900 mb-3">{t.dash?.noVehiclesTitle || "No Vehicles Found"}</h2>
       <p className="text-slate-500 text-sm leading-relaxed mb-8">
-        {t.dash?.noVehiclesDesc || "You have not linked any vehicles yet. Add your vehicle to unlock your personal dashboard â€” track compliance, challans, live location and more."}
+        {t.dash?.noVehiclesDesc || "You have not linked any vehicles yet. Add your vehicle to unlock your personal dashboard — track compliance, challans, live location and more."}
       </p>
       <Link
         to="/add-vehicle"
@@ -78,7 +78,7 @@ const LoadingSkeleton = () => (
 );
 
 // --------------------------------------------------------------------------
-// Inner layout â€” consumed after DashboardProvider is mounted
+// Inner layout — consumed after DashboardProvider is mounted
 // --------------------------------------------------------------------------
 const DashboardInner = () => {
   const { loadingVehicles, errorVehicles, vehicles, loadingDashboard, errorDashboard } = useDashboard();
@@ -148,7 +148,7 @@ const DashboardInner = () => {
 };
 
 // --------------------------------------------------------------------------
-// Page root â€” wraps everything in the provider
+// Page root — wraps everything in the provider
 // --------------------------------------------------------------------------
 const DashboardPage = () => (
   <DashboardProvider>

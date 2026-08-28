@@ -1,4 +1,4 @@
-﻿import React, { useState, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Truck, ArrowLeft, ArrowRight, CheckCircle2, Upload, Loader2, AlertCircle, X, Car, FileText, Briefcase, ClipboardList } from 'lucide-react';
 import { submitFleetRegistration } from '../utils/fleetApi';
@@ -86,7 +86,7 @@ const FleetRegistrationPage = () => {
           <p className="text-slate-600 mb-2">Your fleet registration for <span className="font-bold text-slate-900">{form.fleetName}</span> has been submitted.</p>
           <p className="text-slate-500 text-sm mb-10">Your application is now under authority review. You'll be notified once it's approved.</p>
           <div className="bg-white border border-slate-200 shadow-sm rounded-xl p-4 mb-8 text-left space-y-3">
-            {[{ label: 'âœ… Application Received', done: true }, { label: 'ðŸ” Document Verification', done: false, active: true }, { label: 'âœ… Authority Approval', done: false }, { label: 'ðŸšš Fleet Approved', done: false }].map((s, i) => (
+            {[{ label: '✅ Application Received', done: true }, { label: '🔍 Document Verification', done: false, active: true }, { label: '✅ Authority Approval', done: false }, { label: '🚚 Fleet Approved', done: false }].map((s, i) => (
               <div key={i} className="flex items-center gap-3">
                 <span className={`text-sm font-semibold ${s.done ? 'text-emerald-600' : s.active ? 'text-amber-600' : 'text-slate-400'}`}>{s.label}</span>
               </div>
@@ -194,7 +194,7 @@ const FleetRegistrationPage = () => {
           {step === 2 && (
             <div className="bg-white border border-slate-200 shadow-sm rounded-2xl p-8">
               <h2 className="text-xl font-bold text-slate-900 mb-2">Vehicle Documents</h2>
-              <p className="text-slate-500 text-sm mb-6">Upload vehicle-related documents (RC copy, fitness certificate, etc.) JPG, PNG, or PDF â€” max 5MB each.</p>
+              <p className="text-slate-500 text-sm mb-6">Upload vehicle-related documents (RC copy, fitness certificate, etc.) JPG, PNG, or PDF — max 5MB each.</p>
 
               <div className="space-y-5">
                 <FileUploadField label="Vehicle Document 1" name={form.document1Name}
@@ -218,7 +218,7 @@ const FleetRegistrationPage = () => {
           {step === 3 && (
             <div className="bg-white border border-slate-200 shadow-sm rounded-2xl p-8">
               <h2 className="text-xl font-bold text-slate-900 mb-2">Business Verification</h2>
-              <p className="text-slate-500 text-sm mb-6">Upload your business license or commercial trade certificate. JPG, PNG, or PDF â€” max 5MB.</p>
+              <p className="text-slate-500 text-sm mb-6">Upload your business license or commercial trade certificate. JPG, PNG, or PDF — max 5MB.</p>
 
               <FileUploadField label="Business License / Trade Proof" name={form.businessProofName}
                 onFile={f => handleFile('businessProofBase64', 'businessProofName', f)}
@@ -283,7 +283,7 @@ const FileUploadField = ({ label, name, onFile, onRemove }) => {
         >
           <Upload className="w-8 h-8 text-slate-400 mx-auto mb-2" />
           <p className="text-sm text-slate-700 font-bold">Click to upload</p>
-          <p className="text-xs text-slate-500 mt-1 font-medium">JPG, PNG, PDF Â· Max 5MB</p>
+          <p className="text-xs text-slate-500 mt-1 font-medium">JPG, PNG, PDF · Max 5MB</p>
           <input ref={inputRef} type="file" accept=".jpg,.jpeg,.png,.pdf" className="hidden"
             onChange={e => onFile(e.target.files[0])} />
         </div>

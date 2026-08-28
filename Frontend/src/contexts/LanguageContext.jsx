@@ -1,4 +1,4 @@
-﻿import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import { translations } from '../utils/translations';
 
 const LanguageContext = createContext();
@@ -33,7 +33,7 @@ export const LanguageProvider = ({ children }) => {
           setLanguageState(data.language);
         }
       })
-      .catch(() => { /* silent â€” default to English */ });
+      .catch(() => { /* silent — default to English */ });
   }, []);
 
   const changeLanguage = (lang) => {

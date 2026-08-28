@@ -1,4 +1,4 @@
-﻿import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Circle, MapContainer, Marker, TileLayer, useMap } from 'react-leaflet';
 import L from 'leaflet';

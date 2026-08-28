@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { FileText, MapPin, Receipt, CheckCircle2, Loader2, ArrowRight } from 'lucide-react';
 import { useVRWizard } from '../../contexts/VRWizardContext';
 
@@ -84,7 +84,7 @@ const Step7Application = () => {
             <div className="space-y-3">
               <div className="flex justify-between">
                 <p className="text-sm text-slate-600">Total Fees</p>
-                <p className="text-sm font-bold text-slate-900">â‚¹{((feeAmount || 0) + 250).toLocaleString()}</p>
+                <p className="text-sm font-bold text-slate-900">₹{((feeAmount || 0) + 250).toLocaleString()}</p>
               </div>
             </div>
           </div>

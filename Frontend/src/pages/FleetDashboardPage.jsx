@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import {
   Truck, MapPin, Wifi, WifiOff, AlertTriangle, Navigation, Square, ArrowLeft, Loader2,
@@ -49,7 +49,7 @@ const alertTypeStyle = (type) => {
 };
 
 const timeAgo = (dt) => {
-  if (!dt) return 'â€”';
+  if (!dt) return '—';
   const diff = Math.floor((Date.now() - new Date(dt).getTime()) / 60000);
   if (diff < 1) return 'Just now';
   if (diff < 60) return `${diff} min ago`;
@@ -222,7 +222,7 @@ const FleetDashboardPage = () => {
               <div className="h-8 w-px bg-slate-200 mx-1"></div>
               <div className="text-left">
                 <p className="text-xs text-emerald-600 font-bold flex items-center gap-1"><CheckCircle2 className="w-3 h-3" /> Active</p>
-                <p className="text-xs text-slate-500 font-mono">{data?.fleetRegistrationNumber || 'â€”'}</p>
+                <p className="text-xs text-slate-500 font-mono">{data?.fleetRegistrationNumber || '—'}</p>
               </div>
               <ChevronDown className="w-4 h-4 text-slate-400 ml-2" />
             </div>
@@ -287,7 +287,7 @@ const FleetDashboardPage = () => {
                               <p className="font-bold text-slate-800 text-base">{v.registrationNumber}</p>
                               <p className="text-slate-500 text-xs mb-2">{v.manufacturer} {v.model}</p>
                               <div className="space-y-1">
-                                <p className="flex items-center justify-between gap-4"><span className="text-slate-400">Speed</span> <span className="font-semibold">{v.speed != null ? `${v.speed} km/h` : 'â€”'}</span></p>
+                                <p className="flex items-center justify-between gap-4"><span className="text-slate-400">Speed</span> <span className="font-semibold">{v.speed != null ? `${v.speed} km/h` : '—'}</span></p>
                                 {v.routeInfo && <p className="flex items-center justify-between gap-4"><span className="text-slate-400">Route</span> <span className="font-semibold text-blue-600">{v.routeInfo}</span></p>}
                               </div>
                             </div>
@@ -374,9 +374,9 @@ const FleetDashboardPage = () => {
                                 <span className="text-slate-800 font-medium">{v.routeInfo}</span>
                                 {v.hasAlert && <span className="text-red-500 text-xs font-semibold mt-0.5 flex items-center gap-1">Route Deviation</span>}
                               </div>
-                            ) : <span className="text-slate-400">â€”</span>}
+                            ) : <span className="text-slate-400">—</span>}
                           </td>
-                          <td className="px-6 py-4 font-semibold text-slate-700">{v.speed != null ? `${v.speed} km/h` : 'â€”'}</td>
+                          <td className="px-6 py-4 font-semibold text-slate-700">{v.speed != null ? `${v.speed} km/h` : '—'}</td>
                           <td className="px-6 py-4 text-slate-500 text-xs">{timeAgo(v.lastUpdated)}</td>
                         </tr>
                       ))}

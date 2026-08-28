@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { Calendar, Clock, ChevronLeft, ChevronRight, Info } from 'lucide-react';
 import { useDLWizard } from '../../contexts/DLWizardContext';
 import { APPOINTMENT_SLOTS } from '../../data/indiaData';
@@ -156,9 +156,9 @@ const Step7Appointment = () => {
             <div>
               <p className="text-sm font-bold text-blue-800">Appointment Confirmed</p>
               <p className="text-xs text-blue-700 font-medium mt-0.5">
-                ðŸ“… {new Date(wizard.appointmentDate).toLocaleDateString('en-IN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })} at â° {wizard.appointmentSlot}
+                📅 {new Date(wizard.appointmentDate).toLocaleDateString('en-IN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })} at ⏰ {wizard.appointmentSlot}
               </p>
-              <p className="text-xs text-blue-600 mt-1">ðŸ“ {wizard.rtoName}</p>
+              <p className="text-xs text-blue-600 mt-1">📍 {wizard.rtoName}</p>
             </div>
           </div>
         )}

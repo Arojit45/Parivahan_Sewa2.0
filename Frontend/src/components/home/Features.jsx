@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { ShieldCheck, Zap, Globe, Users } from 'lucide-react';
 
 const Features = () => {

@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { ShieldCheck, Info } from 'lucide-react';
 import { useVRWizard } from '../../contexts/VRWizardContext';
 import WizardNav from './WizardNav';

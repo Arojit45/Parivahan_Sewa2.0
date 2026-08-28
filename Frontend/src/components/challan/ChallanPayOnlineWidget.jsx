@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { useLanguage } from '../../contexts/LanguageContext';
 
 const ChallanPayOnlineWidget = () => {
@@ -23,7 +23,7 @@ const ChallanPayOnlineWidget = () => {
             <div className="w-10 h-1 bg-slate-200 mt-2 rounded"></div>
             <div className="w-6 h-1 bg-slate-200 mt-1 rounded"></div>
             <div className="absolute -left-4 -bottom-2 w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center text-white font-bold border-2 border-white shadow-sm">
-               â‚¹
+               ₹
             </div>
          </div>
       </div>
