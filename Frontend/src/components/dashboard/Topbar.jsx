@@ -24,19 +24,28 @@ const Topbar = () => {
   const currentLabel = languages.find(l => l.code === language)?.label || 'English';
 
   return (
-    <header className="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 sticky top-0 z-40 shrink-0">
+    <>
+      <style>
+        {`
+          @keyframes gradientFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+          }
+          .animate-gradient-flow {
+            background-size: 200% auto;
+            animation: gradientFlow 4s linear infinite;
+          }
+        `}
+      </style>
+      <header className="h-16 bg-white border-b border-slate-200 flex items-center justify-between pl-6 pr-10 sticky top-0 z-40 shrink-0">
 
-      {/* Search */}
-      <div className="flex-1 max-w-2xl">
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-          <input
-            type="text"
-            placeholder="Search anything..."
-            className="w-full bg-slate-50 border border-slate-200 rounded-lg pl-10 pr-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-300 transition-all"
-          />
+        {/* Animated Text replacing search bar */}
+        <div className="flex-1">
+          <span className="text-[17px] font-extrabold bg-gradient-to-r from-blue-800 via-indigo-500 to-blue-800 bg-clip-text text-transparent animate-gradient-flow tracking-[0.15em] uppercase drop-shadow-sm">
+            Government of India
+          </span>
         </div>
-      </div>
 
       {/* Right Actions */}
       <div className="flex items-center gap-6 ml-4">
@@ -83,8 +92,8 @@ const Topbar = () => {
 
         {/* Profile */}
         <button className="flex items-center gap-3 group">
-          <div className="w-8 h-8 rounded-full bg-indigo-100 border border-indigo-200 overflow-hidden">
-            <img src="https://i.pravatar.cc/150?img=11" alt="Profile" className="w-full h-full object-cover" />
+          <div className="w-8 h-8 rounded-full bg-slate-100 border border-slate-200 overflow-hidden flex items-center justify-center">
+            <img src={user?.profilePhoto || "/userIcon.png"} alt="Profile" className="w-full h-full object-cover" />
           </div>
           <div className="flex items-center gap-1 text-sm font-semibold text-slate-700 group-hover:text-blue-600 transition-colors">
             {user?.fullName || 'Citizen'} <ChevronDown className="w-4 h-4 text-slate-400" />
@@ -93,6 +102,7 @@ const Topbar = () => {
 
       </div>
     </header>
+    </>
   );
 };
 

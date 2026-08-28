@@ -11,6 +11,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
+import com.parivahan.backend.user.dto.ProfileUpdateRequest;
+import com.parivahan.backend.user.dto.AuthResponse;
 
 /**
  * User profile/preferences controller.
@@ -54,6 +56,33 @@ public class UserController {
         User user = getCurrentUser();
         String lang = user.getPreferredLanguage() != null ? user.getPreferredLanguage() : "en";
         return ResponseEntity.ok(new LanguageResponse(lang));
+    }
+
+    /**
+     * PUT /api/user/profile
+     * Body: ProfileUpdateRequest
+     * Updates the user's profile information.
+     */
+    @PutMapping("/profile")
+    public ResponseEntity<AuthResponse> updateProfile(@RequestBody ProfileUpdateRequest request) {
+        User user = getCurrentUser();
+        
+        if (request.getFullName() != null && !request.getFullName().isBlank()) {
+            user.setFullName(request.getFullName());
+        }
+        if (request.getProfilePhoto() != null) {
+            user.setProfilePhoto(request.getProfilePhoto());
+        }
+        
+        userRepository.save(user);
+        
+        return ResponseEntity.ok(AuthResponse.builder()
+                .userId(user.getId())
+                .fullName(user.getFullName())
+                .email(user.getEmail())
+                .role(user.getRole())
+                .profilePhoto(user.getProfilePhoto())
+                .build());
     }
 
     // -----------------------------------------------------------------------

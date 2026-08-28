@@ -83,3 +83,22 @@ export async function getCitizenGuide(params = {}) {
 export async function getCitizenGuideDetail(guideId) {
   return apiFetch(`/citizen-guide/guides/${encodeURIComponent(guideId)}`);
 }
+
+export async function updateProfile(payload) {
+  const token = getToken();
+  const res = await fetch('/api/user/profile', {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (!res.ok) {
+    const text = await res.text().catch(() => '');
+    throw new Error(text || `Server error ${res.status}`);
+  }
+
+  return res.json();
+}

@@ -3,6 +3,7 @@ import { Home, PlusCircle, Shield, AlertTriangle, MapPin, Bell, Share2, BookOpen
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import { useDashboard } from "../../contexts/DashboardContext";
+import SettingsModal from "./SettingsModal";
 
 const fuelIcon = (fuelType) => {
   if (!fuelType) return <Car className="w-4 h-4" />;
@@ -13,6 +14,7 @@ const fuelIcon = (fuelType) => {
 
 const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const { logout } = useAuth();
@@ -34,10 +36,6 @@ const Sidebar = () => {
       title: "SECURITY & SAFETY",
       items: [
         { icon: <Shield className="w-5 h-5" />, label: "Guardian Mode", badge: "New", path: "/guardian-mode" },
-        { icon: <AlertTriangle className="w-5 h-5" />, label: "Stolen Vehicle Mode", badge: "New", badgeColor: "text-red-600 bg-red-100", path: "#" },
-        { icon: <MapPin className="w-5 h-5" />, label: "Live Tracking", path: "#" },
-        { icon: <Bell className="w-5 h-5" />, label: "Alerts & Notifications", path: "#" },
-        { icon: <Share2 className="w-5 h-5" />, label: "Sharing & Access", path: "#" },
       ],
     },
     {
@@ -191,9 +189,9 @@ const Sidebar = () => {
       <div className="mt-auto p-4 border-t border-slate-100 shrink-0 bg-white">
         <ul className="space-y-1">
           <li>
-            <a href="#" className={`flex items-center rounded-lg text-sm font-medium text-slate-600 hover:text-blue-600 hover:bg-slate-50 transition-colors ${isCollapsed ? "justify-center p-2.5 mx-auto w-10 h-10" : "gap-3 px-4 py-2"}`} title={isCollapsed ? "Settings" : undefined}>
+            <button onClick={() => setShowSettings(true)} className={`w-full flex items-center rounded-lg text-sm font-medium text-slate-600 hover:text-blue-600 hover:bg-slate-50 transition-colors ${isCollapsed ? "justify-center p-2.5 mx-auto w-10 h-10" : "gap-3 px-4 py-2"}`} title={isCollapsed ? "Settings" : undefined}>
               <Settings className="w-5 h-5 text-slate-400 shrink-0" /> {!isCollapsed && "Settings"}
-            </a>
+            </button>
           </li>
           <li>
             <a href="#" className={`flex items-center rounded-lg text-sm font-medium text-slate-600 hover:text-blue-600 hover:bg-slate-50 transition-colors ${isCollapsed ? "justify-center p-2.5 mx-auto w-10 h-10" : "gap-3 px-4 py-2"}`} title={isCollapsed ? "Help & Support" : undefined}>
@@ -211,6 +209,8 @@ const Sidebar = () => {
           </li>
         </ul>
       </div>
+
+      {showSettings && <SettingsModal onClose={() => setShowSettings(false)} />}
     </aside>
   );
 };
