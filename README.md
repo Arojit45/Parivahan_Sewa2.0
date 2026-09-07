@@ -2,6 +2,10 @@
 
 Parivahan Sewa 2.0 is a modern, comprehensive digital platform designed to streamline vehicle and driving-related services for citizens of India. It serves as a unified portal for vehicle registration, driving licenses, challan management, and fleet operations, bringing the traditional RTO (Regional Transport Office) services into a seamless, user-friendly digital experience.
 
+## DEMO VIDEO
+<img width="1600" height="752" alt="image" src="https://github.com/user-attachments/assets/adde0dc4-3bbc-44b2-86df-93e688519c35" />
+#VIDEO LINK: https://youtu.be/PD4lTZGOHfo?si=Aeri-ELZbY3MCYkc
+
 ## 🌟 Key Features
 
 ### For Citizens
