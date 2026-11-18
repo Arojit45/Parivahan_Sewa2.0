@@ -6,6 +6,19 @@ Parivahan Sewa 2.0 is a modern, comprehensive digital platform designed to strea
 <img width="1600" height="752" alt="image" src="https://github.com/user-attachments/assets/adde0dc4-3bbc-44b2-86df-93e688519c35" />
 #VIDEO LINK: https://youtu.be/PD4lTZGOHfo?si=Aeri-ELZbY3MCYkc
 
+## ⚠️ Disclaimer & Security Notice
+
+Parivahan Sewa 2.0 is an independent educational and hackathon project developed as a web-based prototype.
+
+- This project is not an official application of the Government of India, Ministry of Road Transport and Highways, or any Regional Transport Office (RTO).
+- It is not affiliated with, endorsed by, or operated by any government authority.
+- This project was developed for educational, demonstration, and hackathon purposes.
+- The project is not intended to process real government challan payments or provide official vehicle-related services.
+- The author does not authorize the use of this project's name, identity, branding, or source code to impersonate government services, distribute malicious software, or conduct fraudulent activities.
+- Any unauthorized modification, repackaging, impersonation, or fraudulent distribution by third parties is outside the author's control and is not endorsed by the author.
+
+**Security Notice:** Always verify traffic challans and vehicle-related services through official government portals. Never install APK files or applications from unverified sources.
+
 ## 🌟 Key Features
 
 ### For Citizens
