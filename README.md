@@ -1,4 +1,4 @@
-# Parivahan Sewa 2.0
+# Parivahan Sewa 2.0 (New Name: TransPort Sewa)
 
 Parivahan Sewa 2.0 is a modern, comprehensive digital platform designed to streamline vehicle and driving-related services for citizens of India. It serves as a unified portal for vehicle registration, driving licenses, challan management, and fleet operations, bringing the traditional RTO (Regional Transport Office) services into a seamless, user-friendly digital experience.
 
@@ -8,7 +8,7 @@ Parivahan Sewa 2.0 is a modern, comprehensive digital platform designed to strea
 
 ## ⚠️ Disclaimer & Security Notice
 
-Parivahan Sewa 2.0 is an independent educational and hackathon project developed as a web-based prototype.
+Parivahan Sewa(TransPort Sewa) 2.0 is an independent educational and hackathon project developed as a web-based prototype.
 
 - This project is not an official application of the Government of India, Ministry of Road Transport and Highways, or any Regional Transport Office (RTO).
 - It is not affiliated with, endorsed by, or operated by any government authority.
